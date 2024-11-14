@@ -1,0 +1,5 @@
+Module necesare:
+
+OpenCV
+NumPy
+
