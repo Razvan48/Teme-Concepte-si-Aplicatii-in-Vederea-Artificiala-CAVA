@@ -1,50 +1,136 @@
 import numpy as np
 import cv2 as cv
 
-dimImgAfisare = (512, 512)
-
-# Citire Imagine
-imgInit = cv.imread('fisiere/antrenare/4_50.jpg')
-
-cv.imshow('Imagine Initiala', cv.resize(imgInit, dimImgAfisare))
-cv.waitKey(0)
-
-# Aplicam Filtrul Median si Gaussian
-img = imgInit.copy()
-img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-img = cv.medianBlur(img, 7)
-img = cv.GaussianBlur(img, (5, 5), 0)
-
-cv.imshow('Imagine Filtrata', cv.resize(img, dimImgAfisare))
-cv.waitKey(0)
+class Task_1:
 
 
-# Eroziune + Identificare Muchii + Dilatare
-img = cv.erode(img, np.ones((5, 5), np.uint8), iterations=2)
-img = cv.Canny(img, 200, 400)
-img = cv.dilate(img, np.ones((5, 5), np.uint8), iterations=2)
+    def __init__(self, adresaDirectorImagini : str, adresaImagineStart : str, nrJoc : int, nrImaginiPerJoc : int):
+        self.adresaDirectorImagini = adresaDirectorImagini
+        self.adresaImagineStart = adresaImagineStart
+        self.nrJoc = nrJoc
+        self.nrImaginiPerJoc = nrImaginiPerJoc
+        self.dimImgAfisare = (512, 512)
+        self.imaginiCareu = []
 
-cv.imshow('Muchii Imagine', cv.resize(img, dimImgAfisare))
-cv.waitKey(0)
+
+    def incarcaCareuImagine(self, nrImagine : int):
+        if nrImagine == 0:
+            imgInit = cv.imread(self.adresaImagineStart)
+        elif nrImagine < 10:
+            imgInit = cv.imread(f'{self.adresaDirectorImagini}/{self.nrJoc}_0{nrImagine}.jpg')
+        else:
+            imgInit = cv.imread(f'{self.adresaDirectorImagini}/{self.nrJoc}_{nrImagine}.jpg')
+
+        img = imgInit.copy()
+        img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+        img = cv.medianBlur(img, 7)
+        img = cv.GaussianBlur(img, (5, 5), 0)
+
+        img = cv.erode(img, np.ones((5, 5), np.uint8), iterations=2)
+        img = cv.Canny(img, 200, 400)
+        img = cv.dilate(img, np.ones((5, 5), np.uint8), iterations=2)
+
+        contururi, _ = cv.findContours(img, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+
+        xMin = imgInit.shape[1] - 1
+        yMin = imgInit.shape[0] - 1
+        xMax = 0
+        yMax = 0
+        for contur in contururi:
+            xStangaSus, yStangaSus, latime, inaltime = cv.boundingRect(contur)
+            xMin = min(xMin, xStangaSus)
+            yMin = min(yMin, yStangaSus)
+            xMax = max(xMax, xStangaSus + latime)
+            yMax = max(yMax, yStangaSus + inaltime)
+
+        imgCareu = imgInit[yMin:yMax, xMin:xMax].copy()
+
+        # self.afiseazaImagine(imgCareu)
+
+        self.imaginiCareu.append(imgCareu)
 
 
-# Identificare Contur Careu Joc
-contururi, _ = cv.findContours(img, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+    def compara2Imagini(self, indexAnt : int, indexCrt : int):
+        if indexAnt >= len(self.imaginiCareu) or indexCrt >= len(self.imaginiCareu):
+            print('Nu sunt suficiente imagini')
+            return
 
-xMin = imgInit.shape[1] - 1
-yMin = imgInit.shape[0] - 1
-xMax = 0
-yMax = 0
-for contur in contururi:
-    xStangaSus, yStangaSus, latime, inaltime = cv.boundingRect(contur)
-    xMin = min(xMin, xStangaSus)
-    yMin = min(yMin, yStangaSus)
-    xMax = max(xMax, xStangaSus + latime)
-    yMax = max(yMax, yStangaSus + inaltime)
+        imgAnt = self.imaginiCareu[indexAnt]
+        imgCrt = self.imaginiCareu[indexCrt]
 
-# Decupam Careul
-imgCareu = imgInit[yMin:yMax, xMin:xMax].copy()
+        latimeCelulaImgAnt = imgAnt.shape[1] / 14
+        inaltimeCelulaImgAnt = imgAnt.shape[0] / 14
+        latimeCelulaImgCrt = imgCrt.shape[1] / 14
+        inaltimeCelulaImgCrt = imgCrt.shape[0] / 14
 
+        difMaxima = -1.0
+        iMaxim = -1
+        jMaxim = -1
+
+        yImgAnt = 0.0
+        yImgCrt = 0.0
+        for i in range(14):
+            xImgAnt = 0.0
+            xImgCrt = 0.0
+
+            for j in range(14):
+                celulaImgAnt = imgAnt[int(yImgAnt):int(yImgAnt + inaltimeCelulaImgAnt), int(xImgAnt):int(xImgAnt + latimeCelulaImgAnt)].copy()
+                celulaImgCrt = imgCrt[int(yImgCrt):int(yImgCrt + inaltimeCelulaImgCrt), int(xImgCrt):int(xImgCrt + latimeCelulaImgCrt)].copy()
+
+                celulaImgAnt = cv.resize(celulaImgAnt, (int(latimeCelulaImgCrt), int(inaltimeCelulaImgCrt)))
+                xPragProcent = 0.075
+                yPragProcent = 0.075
+                celulaImgAntFaraContur = celulaImgAnt[int(yPragProcent * inaltimeCelulaImgCrt):int((1.0 - yPragProcent) * inaltimeCelulaImgCrt), int(xPragProcent * latimeCelulaImgCrt):int((1.0 - xPragProcent) * latimeCelulaImgCrt)].copy()
+                celulaImgCrtFaraContur = celulaImgCrt[int(yPragProcent * inaltimeCelulaImgCrt):int((1.0 - yPragProcent) * inaltimeCelulaImgCrt), int(xPragProcent * latimeCelulaImgCrt):int((1.0 - xPragProcent) * latimeCelulaImgCrt)].copy()
+                difCurenta = cv.norm(celulaImgAntFaraContur, celulaImgCrtFaraContur, cv.NORM_L2)
+
+                if difCurenta > difMaxima:
+                    difMaxima = difCurenta
+                    iMaxim = i
+                    jMaxim = j
+
+                xImgAnt += latimeCelulaImgAnt
+                xImgCrt += latimeCelulaImgCrt
+
+            yImgAnt += inaltimeCelulaImgAnt
+            yImgCrt += inaltimeCelulaImgCrt
+
+        # iMaxim = rand, jMaxim = coloana
+        return ''.join([str(1 + iMaxim), str(chr(jMaxim + ord('A')))])
+
+
+    def afiseazaImagine(self, img):
+        cv.imshow('Imagine', cv.resize(img, self.dimImgAfisare))
+        cv.moveWindow("Imagine", 200, 200)
+        cv.waitKey(0)
+        cv.destroyAllWindows()
+
+
+    def afiseazaImagini(self, imagini : list):
+        imaginiRedim = [cv.resize(img, self.dimImgAfisare) for img in imagini]
+        cv.imshow('Imagine', np.hstack(imaginiRedim))
+        cv.moveWindow("Imagine", 200, 200)
+        cv.waitKey(0)
+        cv.destroyAllWindows()
+
+
+    def ruleaza(self):
+        self.incarcaCareuImagine(0)
+
+        for i in range(1, self.nrImaginiPerJoc + 1):
+            self.incarcaCareuImagine(i)
+
+        for i in range(1, len(self.imaginiCareu)):
+            print(f'Imaginea {i} - {self.compara2Imagini(i - 1, i)}')
+            self.afiseazaImagini(self.imaginiCareu[i - 1:i + 1])
+
+
+
+task1 = Task_1('fisiere/antrenare/', 'fisiere/imagini_auxiliare/01.jpg', 1, 10)
+task1.ruleaza()
+
+
+'''
 # Afisam Careu
 cv.imshow('Careu', cv.resize(imgCareu, dimImgAfisare))
 cv.waitKey(0)
@@ -98,5 +184,6 @@ cv.waitKey(0)
 
 
 cv.destroyAllWindows()
+'''
 
 
