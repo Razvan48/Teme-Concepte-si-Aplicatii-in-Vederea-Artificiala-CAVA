@@ -30,6 +30,8 @@ class Task_1:
         img = cv.Canny(img, 200, 400)
         img = cv.dilate(img, np.ones((5, 5), np.uint8), iterations=2)
 
+        # self.afiseazaImagine(img)
+
         contururi, _ = cv.findContours(img, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
 
         xMin = imgInit.shape[1] - 1
@@ -55,13 +57,23 @@ class Task_1:
             print('Nu sunt suficiente imagini')
             return
 
-        imgAnt = self.imaginiCareu[indexAnt]
-        imgCrt = self.imaginiCareu[indexCrt]
+        # Copie ca sa putem modifica fara sa afectam imaginile originale
+        imgAnt = self.imaginiCareu[indexAnt].copy()
+        imgCrt = self.imaginiCareu[indexCrt].copy()
 
         latimeCelulaImgAnt = imgAnt.shape[1] / 14
         inaltimeCelulaImgAnt = imgAnt.shape[0] / 14
         latimeCelulaImgCrt = imgCrt.shape[1] / 14
         inaltimeCelulaImgCrt = imgCrt.shape[0] / 14
+
+        # Doar pentru debug
+        xStangaSusSol = -1.0
+        yStangaSusSol = -1.0
+        latimeSol = -1.0
+        inaltimeSol = -1.0
+
+        xPragProcent = 0.082
+        yPragProcent = 0.082
 
         difMaxima = -1.0
         iMaxim = -1
@@ -78,8 +90,6 @@ class Task_1:
                 celulaImgCrt = imgCrt[int(yImgCrt):int(yImgCrt + inaltimeCelulaImgCrt), int(xImgCrt):int(xImgCrt + latimeCelulaImgCrt)].copy()
 
                 celulaImgAnt = cv.resize(celulaImgAnt, (int(latimeCelulaImgCrt), int(inaltimeCelulaImgCrt)))
-                xPragProcent = 0.075
-                yPragProcent = 0.075
                 celulaImgAntFaraContur = celulaImgAnt[int(yPragProcent * inaltimeCelulaImgCrt):int((1.0 - yPragProcent) * inaltimeCelulaImgCrt), int(xPragProcent * latimeCelulaImgCrt):int((1.0 - xPragProcent) * latimeCelulaImgCrt)].copy()
                 celulaImgCrtFaraContur = celulaImgCrt[int(yPragProcent * inaltimeCelulaImgCrt):int((1.0 - yPragProcent) * inaltimeCelulaImgCrt), int(xPragProcent * latimeCelulaImgCrt):int((1.0 - xPragProcent) * latimeCelulaImgCrt)].copy()
                 difCurenta = cv.norm(celulaImgAntFaraContur, celulaImgCrtFaraContur, cv.NORM_L2)
@@ -89,11 +99,24 @@ class Task_1:
                     iMaxim = i
                     jMaxim = j
 
+                    # Debug
+                    xStangaSusSol = xImgCrt
+                    yStangaSusSol = yImgCrt
+                    latimeSol = latimeCelulaImgCrt
+                    inaltimeSol = inaltimeCelulaImgCrt
+
                 xImgAnt += latimeCelulaImgAnt
                 xImgCrt += latimeCelulaImgCrt
 
             yImgAnt += inaltimeCelulaImgAnt
             yImgCrt += inaltimeCelulaImgCrt
+
+
+        # Debug pentru a vedea care este celula care a dat cea mai mare diferenta (incluzand si procentul de micsorare)
+        #cv.rectangle(imgAnt, (int(xStangaSusSol + xPragProcent * latimeSol), int(yStangaSusSol + yPragProcent * inaltimeSol)), (int(xStangaSusSol + (1.0 - xPragProcent) * latimeSol), int(yStangaSusSol + (1.0 - yPragProcent) * inaltimeSol)), (0, 0, 255), -1)
+        #cv.rectangle(imgCrt, (int(xStangaSusSol + xPragProcent * latimeSol), int(yStangaSusSol + yPragProcent * inaltimeSol)), (int(xStangaSusSol + (1.0 - xPragProcent) * latimeSol), int(yStangaSusSol + (1.0 - yPragProcent) * inaltimeSol)), (0, 0, 255), -1)
+        # self.afiseazaImagini([imgAnt, imgCrt])
+
 
         # iMaxim = rand, jMaxim = coloana
         return ''.join([str(1 + iMaxim), str(chr(jMaxim + ord('A')))])
