@@ -22,6 +22,9 @@ class EvaluatorSabloane:
                 imgInit = cv.imread(f'{adresaDirectorImagini}/{fisier}')
                 imgCareu = utilitar.extrageCareuImagine(imgInit)
 
+                cv.imshow('Imagine', cv.resize(imgCareu, (512, 512)))
+                cv.waitKey(0)
+
                 fisierSolutieImagine = open(adresaDirectorImagini + '/' + fisier[:fisier.rfind('.')] + '.txt', 'rt') # rt = read text
 
                 continutFisierSolutieImagine = fisierSolutieImagine.readline()
@@ -30,11 +33,11 @@ class EvaluatorSabloane:
 
                 pozitionareSablonInImagine = continutFisierSolutieImagine.split(' ')[0]
                 if len(pozitionareSablonInImagine) == 2:
-                    xSablon = int(pozitionareSablonInImagine[0]) - 1
-                    ySablon = int(ord(pozitionareSablonInImagine[1]) - ord('A'))
+                    iSablon = int(pozitionareSablonInImagine[0]) - 1
+                    jSablon = int(ord(pozitionareSablonInImagine[1]) - ord('A'))
                 elif len(pozitionareSablonInImagine) == 3:
-                    xSablon = int(pozitionareSablonInImagine[0:2]) - 1
-                    ySablon = int(ord(pozitionareSablonInImagine[2]) - ord('A'))
+                    iSablon = int(pozitionareSablonInImagine[0:2]) - 1
+                    jSablon = int(ord(pozitionareSablonInImagine[2]) - ord('A'))
                 else:
                     print('Pozitionare sablon incorecta')
                     return
@@ -44,14 +47,18 @@ class EvaluatorSabloane:
                 latimeSablon = imgCareu.shape[1] / 14
                 inaltimeSablon = imgCareu.shape[0] / 14
 
-                xPragProcent = 0.082
-                yPragProcent = 0.082
+                iPragProcent = 0.082
+                jPragProcent = 0.082
 
-                imgSablon = imgCareu[int((ySablon + yPragProcent) * inaltimeSablon):int((ySablon + 1 - yPragProcent) * inaltimeSablon), int((xSablon + xPragProcent) * latimeSablon):int((xSablon + 1 - xPragProcent) * latimeSablon)].copy()
+                imgSablon = imgCareu[int((iSablon + iPragProcent) * inaltimeSablon):int((iSablon + 1 - iPragProcent) * inaltimeSablon), int((jSablon + jPragProcent) * latimeSablon):int((jSablon + 1 - jPragProcent) * latimeSablon)].copy()
 
                 if etichetaSablon not in self.colectiiSabloane:
                     self.colectiiSabloane[etichetaSablon] = []
                 self.colectiiSabloane[etichetaSablon].append(imgSablon)
+
+                print(iSablon, jSablon)
+                cv.imshow('Sablon', cv.resize(imgSablon, (512, 512)))
+                cv.waitKey(0)
 
                 os.makedirs(adresaDirectorSabloane + '/' + str(etichetaSablon), exist_ok=True)
                 cv.imwrite(adresaDirectorSabloane + '/' + str(etichetaSablon) + '/' + fisier, imgSablon)
