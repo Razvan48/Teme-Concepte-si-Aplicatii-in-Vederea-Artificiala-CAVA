@@ -1,6 +1,7 @@
 import numpy as np
 import cv2 as cv
 
+
 class GeneratorSabloane:
 
 
@@ -12,4 +13,7 @@ class GeneratorSabloane:
 
     def ruleaza(self):
         pass
+
+
+
 
