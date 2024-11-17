@@ -22,9 +22,6 @@ class EvaluatorSabloane:
                 imgInit = cv.imread(f'{adresaDirectorImagini}/{fisier}')
                 imgCareu = utilitar.extrageCareuImagine(imgInit)
 
-                cv.imshow('Imagine', cv.resize(imgCareu, (512, 512)))
-                cv.waitKey(0)
-
                 fisierSolutieImagine = open(adresaDirectorImagini + '/' + fisier[:fisier.rfind('.')] + '.txt', 'rt') # rt = read text
 
                 continutFisierSolutieImagine = fisierSolutieImagine.readline()
@@ -55,10 +52,6 @@ class EvaluatorSabloane:
                 if etichetaSablon not in self.colectiiSabloane:
                     self.colectiiSabloane[etichetaSablon] = []
                 self.colectiiSabloane[etichetaSablon].append(imgSablon)
-
-                print(iSablon, jSablon)
-                cv.imshow('Sablon', cv.resize(imgSablon, (512, 512)))
-                cv.waitKey(0)
 
                 os.makedirs(adresaDirectorSabloane + '/' + str(etichetaSablon), exist_ok=True)
                 cv.imwrite(adresaDirectorSabloane + '/' + str(etichetaSablon) + '/' + fisier, imgSablon)
