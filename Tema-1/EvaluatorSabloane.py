@@ -56,7 +56,7 @@ class EvaluatorSabloane:
                 os.makedirs(adresaDirectorSabloane + '/' + str(etichetaSablon), exist_ok=True)
                 cv.imwrite(adresaDirectorSabloane + '/' + str(etichetaSablon) + '/' + fisier, imgSablon)
 
-                print(f'Incarcat sablon cu eticheta {etichetaSablon} din imaginea {fisier}')
+                print(f'Generat si incarcat sablon cu eticheta {etichetaSablon} din imaginea {fisier}')
 
 
     def incarcaSabloane(self, adresaDirectorSabloane: str):
