@@ -1,6 +1,9 @@
 import numpy as np
 import cv2 as cv
 
+import EvaluatorSabloane
+import utilitar
+
 
 class Task_1:
 
@@ -10,6 +13,9 @@ class Task_1:
         self.adresaImagineStart = adresaImagineStart
         self.nrJoc = nrJoc
         self.nrImaginiPerJoc = nrImaginiPerJoc
+
+        self.evaluatorSabloane = EvaluatorSabloane.EvaluatorSabloane(adresaDirectorImagini, '.jpg')
+
         self.dimImgAfisare = (512, 512)
         self.imaginiCareu = []
 
@@ -22,31 +28,7 @@ class Task_1:
         else:
             imgInit = cv.imread(f'{self.adresaDirectorImagini}/{self.nrJoc}_{nrImagine}.jpg')
 
-        img = imgInit.copy()
-        img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-        img = cv.medianBlur(img, 7)
-        img = cv.GaussianBlur(img, (5, 5), 0)
-
-        img = cv.erode(img, np.ones((5, 5), np.uint8), iterations=2)
-        img = cv.Canny(img, 200, 400)
-        img = cv.dilate(img, np.ones((5, 5), np.uint8), iterations=2)
-
-        # self.afiseazaImagine(img)
-
-        contururi, _ = cv.findContours(img, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-
-        xMin = imgInit.shape[1] - 1
-        yMin = imgInit.shape[0] - 1
-        xMax = 0
-        yMax = 0
-        for contur in contururi:
-            xStangaSus, yStangaSus, latime, inaltime = cv.boundingRect(contur)
-            xMin = min(xMin, xStangaSus)
-            yMin = min(yMin, yStangaSus)
-            xMax = max(xMax, xStangaSus + latime)
-            yMax = max(yMax, yStangaSus + inaltime)
-
-        imgCareu = imgInit[yMin:yMax, xMin:xMax].copy()
+        imgCareu = utilitar.extrageCareuImagine(imgInit)
 
         # self.afiseazaImagine(imgCareu)
 
@@ -67,7 +49,7 @@ class Task_1:
         latimeCelulaImgCrt = imgCrt.shape[1] / 14
         inaltimeCelulaImgCrt = imgCrt.shape[0] / 14
 
-        # Doar pentru debug
+        # Debug
         xStangaSusSol = -1.0
         yStangaSusSol = -1.0
         latimeSol = -1.0
@@ -79,6 +61,7 @@ class Task_1:
         difMaxima = -1.0
         iMaxim = -1
         jMaxim = -1
+        imgCelulaMaximaFaraContur = None
 
         yImgAnt = 0.0
         yImgCrt = 0.0
@@ -99,6 +82,7 @@ class Task_1:
                     difMaxima = difCurenta
                     iMaxim = i
                     jMaxim = j
+                    imgCelulaMaximaFaraContur = celulaImgCrtFaraContur
 
                     # Debug
                     xStangaSusSol = xImgCrt
@@ -116,11 +100,11 @@ class Task_1:
         # Debug pentru a vedea care este celula care a dat cea mai mare diferenta (incluzand si procentul de micsorare)
         #cv.rectangle(imgAnt, (int(xStangaSusSol + xPragProcent * latimeSol), int(yStangaSusSol + yPragProcent * inaltimeSol)), (int(xStangaSusSol + (1.0 - xPragProcent) * latimeSol), int(yStangaSusSol + (1.0 - yPragProcent) * inaltimeSol)), (0, 0, 255), -1)
         #cv.rectangle(imgCrt, (int(xStangaSusSol + xPragProcent * latimeSol), int(yStangaSusSol + yPragProcent * inaltimeSol)), (int(xStangaSusSol + (1.0 - xPragProcent) * latimeSol), int(yStangaSusSol + (1.0 - yPragProcent) * inaltimeSol)), (0, 0, 255), -1)
-        # self.afiseazaImagini([imgAnt, imgCrt])
+        #self.afiseazaImagini([imgAnt, imgCrt])
 
 
         # iMaxim = rand, jMaxim = coloana
-        return ''.join([str(1 + iMaxim), str(chr(jMaxim + ord('A')))])
+        return str(1 + iMaxim) + str(chr(jMaxim + ord('A'))) + ' ' + str(self.evaluatorSabloane.evalueazaImagine(imgCelulaMaximaFaraContur))
 
 
     def afiseazaImagine(self, img):

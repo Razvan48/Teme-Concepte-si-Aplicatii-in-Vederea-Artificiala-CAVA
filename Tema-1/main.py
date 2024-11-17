@@ -1,13 +1,12 @@
 import numpy as np
 import cv2 as cv
 
-from Task_1 import *
-from Task_2 import *
-from Task_3 import *
+import Task_1
+import Task_2
+import Task_3
 
 
-
-task1 = Task_1('fisiere/antrenare/', 'fisiere/imagini_auxiliare/01.jpg', 1, 10)
+task1 = Task_1.Task_1('fisiere/antrenare/', 'fisiere/imagini_auxiliare/01.jpg', 1, 10)
 task1.ruleaza()
 
 
