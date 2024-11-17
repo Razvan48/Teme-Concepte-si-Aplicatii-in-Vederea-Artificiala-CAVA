@@ -8,26 +8,21 @@ import utilitar
 class EvaluatorSabloane:
 
 
-    def __init__(self, adresaDirectorImagini : str, extensieImagini : str):
-        self.adresaDirectorImagini = adresaDirectorImagini
-        self.extensieImagini = extensieImagini
-
+    def __init__(self,):
         self.colectiiSabloane = dict()
 
-        self._genereazaSabloane()
 
-
-    def _genereazaSabloane(self):
-        fisiere = sorted(os.listdir(self.adresaDirectorImagini))
+    def genereazaSiIncarcaSabloane(self, adresaDirectorImagini: str, extensieImagini: str, adresaDirectorSabloane: str):
+        fisiere = sorted(os.listdir(adresaDirectorImagini))
 
         for fisier in fisiere:
 
-            if fisier.endswith(self.extensieImagini):
+            if fisier.endswith(extensieImagini):
 
-                imgInit = cv.imread(f'{self.adresaDirectorImagini}/{fisier}')
+                imgInit = cv.imread(f'{adresaDirectorImagini}/{fisier}')
                 imgCareu = utilitar.extrageCareuImagine(imgInit)
 
-                fisierSolutieImagine = open(self.adresaDirectorImagini + '/' + fisier[:fisier.rfind('.')] + '.txt', 'rt') # rt = read text
+                fisierSolutieImagine = open(adresaDirectorImagini + '/' + fisier[:fisier.rfind('.')] + '.txt', 'rt') # rt = read text
 
                 continutFisierSolutieImagine = fisierSolutieImagine.readline()
 
@@ -58,7 +53,27 @@ class EvaluatorSabloane:
                     self.colectiiSabloane[etichetaSablon] = []
                 self.colectiiSabloane[etichetaSablon].append(imgSablon)
 
+                os.makedirs(adresaDirectorSabloane + '/' + str(etichetaSablon), exist_ok=True)
+                cv.imwrite(adresaDirectorSabloane + '/' + str(etichetaSablon) + '/' + fisier, imgSablon)
+
                 print(f'Incarcat sablon cu eticheta {etichetaSablon} din imaginea {fisier}')
+
+
+    def incarcaSabloane(self, adresaDirectorSabloane: str):
+        self.colectiiSabloane = dict()
+        etichete = sorted(os.listdir(adresaDirectorSabloane))
+
+        for eticheta in etichete:
+            sabloane = sorted(os.listdir(adresaDirectorSabloane + '/' + eticheta))
+
+            for sablon in sabloane:
+                imgSablon = cv.imread(adresaDirectorSabloane + '/' + eticheta + '/' + sablon)
+
+                if int(eticheta) not in self.colectiiSabloane:
+                    self.colectiiSabloane[int(eticheta)] = []
+                self.colectiiSabloane[int(eticheta)].append(imgSablon)
+
+                print(f'Incarcat sablon cu eticheta {eticheta} din imaginea {sablon}')
 
 
     def _distantaImagini(self, img, sablon):

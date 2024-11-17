@@ -8,19 +8,24 @@ import utilitar
 class Task_1:
 
 
-    def __init__(self, adresaDirectorImagini : str, adresaImagineStart : str, nrJoc : int, nrImaginiPerJoc : int):
+    def __init__(self, adresaDirectorImagini: str, adresaImagineStart: str, nrJoc: int, nrImaginiPerJoc: int, adresaDirectorSabloane: str, sabloaneDejaGenerate: bool):
         self.adresaDirectorImagini = adresaDirectorImagini
         self.adresaImagineStart = adresaImagineStart
         self.nrJoc = nrJoc
         self.nrImaginiPerJoc = nrImaginiPerJoc
 
-        self.evaluatorSabloane = EvaluatorSabloane.EvaluatorSabloane(adresaDirectorImagini, '.jpg')
+        self.evaluatorSabloane = EvaluatorSabloane.EvaluatorSabloane()
+
+        if sabloaneDejaGenerate:
+            self.evaluatorSabloane.incarcaSabloane(adresaDirectorSabloane)
+        else:
+            self.evaluatorSabloane.genereazaSiIncarcaSabloane(adresaDirectorImagini, '.jpg', adresaDirectorSabloane)
 
         self.dimImgAfisare = (512, 512)
         self.imaginiCareu = []
 
 
-    def incarcaCareuImagine(self, nrImagine : int):
+    def incarcaCareuImagine(self, nrImagine: int):
         if nrImagine == 0:
             imgInit = cv.imread(self.adresaImagineStart)
         elif nrImagine < 10:
@@ -35,7 +40,7 @@ class Task_1:
         self.imaginiCareu.append(imgCareu)
 
 
-    def compara2Imagini(self, indexAnt : int, indexCrt : int):
+    def compara2Imagini(self, indexAnt: int, indexCrt: int):
         if indexAnt >= len(self.imaginiCareu) or indexCrt >= len(self.imaginiCareu):
             print('Nu sunt suficiente imagini')
             return
@@ -114,7 +119,7 @@ class Task_1:
         cv.destroyAllWindows()
 
 
-    def afiseazaImagini(self, imagini : list):
+    def afiseazaImagini(self, imagini: list):
         imaginiRedim = [cv.resize(img, self.dimImgAfisare) for img in imagini]
         cv.imshow('Imagine', np.hstack(imaginiRedim))
         cv.moveWindow("Imagine", 200, 200)

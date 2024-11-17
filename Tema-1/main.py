@@ -6,7 +6,7 @@ import Task_2
 import Task_3
 
 
-task1 = Task_1.Task_1('fisiere/antrenare/', 'fisiere/imagini_auxiliare/01.jpg', 1, 10)
+task1 = Task_1.Task_1('fisiere/antrenare/', 'fisiere/imagini_auxiliare/01.jpg', 1, 10, 'fisiere/sabloane/', False)
 task1.ruleaza()
 
 
