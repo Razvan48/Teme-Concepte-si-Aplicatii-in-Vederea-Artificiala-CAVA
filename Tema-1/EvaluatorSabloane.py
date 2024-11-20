@@ -49,12 +49,14 @@ class EvaluatorSabloane:
 
                 imgSablon = imgCareu[int((iSablon + iPragProcent) * inaltimeSablon):int((iSablon + 1 - iPragProcent) * inaltimeSablon), int((jSablon + jPragProcent) * latimeSablon):int((jSablon + 1 - jPragProcent) * latimeSablon)].copy()
 
+                imgSablonPrelucrat = utilitar.prelucreazaSablon(imgSablon)
+
                 if etichetaSablon not in self.colectiiSabloane:
                     self.colectiiSabloane[etichetaSablon] = []
-                self.colectiiSabloane[etichetaSablon].append(imgSablon)
+                self.colectiiSabloane[etichetaSablon].append(imgSablonPrelucrat)
 
                 os.makedirs(adresaDirectorSabloane + '/' + str(etichetaSablon), exist_ok=True)
-                cv.imwrite(adresaDirectorSabloane + '/' + str(etichetaSablon) + '/' + fisier, imgSablon)
+                cv.imwrite(adresaDirectorSabloane + '/' + str(etichetaSablon) + '/' + fisier, imgSablonPrelucrat)
 
                 print(f'Generat si incarcat sablon cu eticheta {etichetaSablon} din imaginea {fisier}')
 
@@ -77,20 +79,24 @@ class EvaluatorSabloane:
 
 
     def _distantaImagini(self, img, sablon):
-        sablon = cv.resize(sablon, (img.shape[1], img.shape[0]))
+        img = cv.cvtColor(img, cv.COLOR_GRAY2BGR)
+        return np.mean(np.abs(img - sablon) ** 2)
+        #sablon = cv.resize(sablon, (img.shape[1], img.shape[0]))
         #return np.mean(np.abs(img - sablon))
-        _, valoareMaxima, _, _ = cv.minMaxLoc(cv.matchTemplate(img, sablon, cv.TM_CCOEFF_NORMED))
-        return -valoareMaxima
+        #_, valoareMaxima, _, _ = cv.minMaxLoc(cv.matchTemplate(img, sablon, cv.TM_CCOEFF_NORMED))
+        #return -valoareMaxima
 
 
     def evalueazaImagine(self, img):
+        imgPrelucrat = utilitar.prelucreazaSablon(img)
+
         etichetaSolutie = -1
         distantaMinima = float('inf')
 
         for eticheta, sabloane in self.colectiiSabloane.items():
             distanceSablon = []
             for sablon in sabloane:
-                distanceSablon.append(self._distantaImagini(img, sablon))
+                distanceSablon.append(self._distantaImagini(imgPrelucrat, sablon))
 
             distantaCurenta = np.mean(distanceSablon)
 
