@@ -81,13 +81,16 @@ class Task_1:
                 celulaImgAnt = cv.resize(celulaImgAnt, (int(latimeCelulaImgCrt), int(inaltimeCelulaImgCrt)))
                 celulaImgAntFaraContur = celulaImgAnt[int(yPragProcent * inaltimeCelulaImgCrt):int((1.0 - yPragProcent) * inaltimeCelulaImgCrt), int(xPragProcent * latimeCelulaImgCrt):int((1.0 - xPragProcent) * latimeCelulaImgCrt)].copy()
                 celulaImgCrtFaraContur = celulaImgCrt[int(yPragProcent * inaltimeCelulaImgCrt):int((1.0 - yPragProcent) * inaltimeCelulaImgCrt), int(xPragProcent * latimeCelulaImgCrt):int((1.0 - xPragProcent) * latimeCelulaImgCrt)].copy()
+
+                # difCurenta = np.mean((celulaImgCrtFaraContur - celulaImgAntFaraContur) ** 2)
+                # difCurenta = np.mean(np.abs(celulaImgCrtFaraContur - celulaImgAntFaraContur))
                 difCurenta = cv.norm(celulaImgAntFaraContur, celulaImgCrtFaraContur, cv.NORM_L2)
 
                 if difCurenta > difMaxima:
                     difMaxima = difCurenta
                     iMaxim = i
                     jMaxim = j
-                    imgCelulaMaximaFaraContur = celulaImgCrtFaraContur
+                    imgCelulaMaximaFaraContur = celulaImgCrtFaraContur.copy()
 
                     # Debug
                     xStangaSusSol = xImgCrt
