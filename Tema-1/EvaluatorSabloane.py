@@ -85,7 +85,8 @@ class EvaluatorSabloane:
 
 
     def _distantaImagini(self, img, sablon):
-        return np.mean((img - sablon) ** 2)
+        #return np.mean((img - sablon) ** 2)
+        return cv.norm(img, sablon, cv.NORM_L2)
         #return np.mean(np.abs(img - sablon))
         #_, valoareMaxima, _, _ = cv.minMaxLoc(cv.matchTemplate(img, sablon, cv.TM_CCOEFF_NORMED))
         #return -valoareMaxima

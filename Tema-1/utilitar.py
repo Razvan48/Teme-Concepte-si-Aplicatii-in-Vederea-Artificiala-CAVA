@@ -32,8 +32,9 @@ def extrageCareuImagine(imgInit):
 
 
 def prelucreazaSablon(imgInit):
-    imgInitGray = cv.cvtColor(imgInit, cv.COLOR_BGR2GRAY)
-    img = cv.medianBlur(imgInitGray, 7)
+    #imgInit = cv.cvtColor(imgInit, cv.COLOR_BGR2GRAY)
+
+    img = cv.medianBlur(imgInit, 7)
     img = cv.GaussianBlur(img, (5, 5), 0)
 
     #img = cv.erode(img, np.ones((5, 5), np.uint8), iterations=2)
@@ -57,12 +58,12 @@ def prelucreazaSablon(imgInit):
             xMax = max(xMax, xStangaSus + latime)
             yMax = max(yMax, yStangaSus + inaltime)
 
-        imgSablonPrelucrat = imgInitGray[yMin:yMax, xMin:xMax].copy()
+        imgSablonPrelucrat = imgInit[yMin:yMax, xMin:xMax].copy()
     else:
-        imgSablonPrelucrat = imgInitGray.copy()
+        imgSablonPrelucrat = imgInit.copy()
 
     #_, imgSablonPrelucrat = cv.threshold(imgSablonPrelucrat, 127, 255, cv.THRESH_BINARY)
-    imgSablonPrelucrat = cv.resize(imgSablonPrelucrat, (16, 16))
+    imgSablonPrelucrat = cv.resize(imgSablonPrelucrat, (64, 64))
 
     return imgSablonPrelucrat
 
