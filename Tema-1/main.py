@@ -11,8 +11,11 @@ task1.ruleaza()
 
 # TODO:
 # de testat si restul jocurilor (inca 150 de imagini)
+# task3
 
-# de exploatat la maxim contextul jocului (numarul de piese, numarul de celule deja ocupate)
+# de verificat ca structurile pentru celule deja ocupate si piese deja folosite se populeaza corect
+
+
 
 
 

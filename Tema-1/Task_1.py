@@ -24,6 +24,13 @@ class Task_1:
         self.dimImgAfisare = (512, 512)
         self.imaginiCareu = []
 
+        self.celuleDejaOcupate = [[False for j in range(14)] for i in range(14)]
+
+
+    def __reseteaza(self):
+        self.celuleDejaOcupate = [[False for j in range(14)] for i in range(14)]
+        self.evaluatorSabloane.reseteazaPieseIncaFolosibile()
+
 
     def incarcaCareuImagine(self, nrImagine: int):
         if nrImagine == 0:
@@ -40,7 +47,7 @@ class Task_1:
         self.imaginiCareu.append(imgCareu)
 
 
-    def _numarPixeliNegri(self, img):
+    def __numarPixeliNegri(self, img):
         img = cv.resize(img, (16, 16))
         numPixeli = 0
         threshold = 89
@@ -93,7 +100,7 @@ class Task_1:
                 celulaImgAntFaraContur = celulaImgAnt[int(yPragProcent * inaltimeCelulaImgCrt):int((1.0 - yPragProcent) * inaltimeCelulaImgCrt), int(xPragProcent * latimeCelulaImgCrt):int((1.0 - xPragProcent) * latimeCelulaImgCrt)].copy()
                 celulaImgCrtFaraContur = celulaImgCrt[int(yPragProcent * inaltimeCelulaImgCrt):int((1.0 - yPragProcent) * inaltimeCelulaImgCrt), int(xPragProcent * latimeCelulaImgCrt):int((1.0 - xPragProcent) * latimeCelulaImgCrt)].copy()
 
-                if filtrareStrictaCelule and self._numarPixeliNegri(celulaImgAntFaraContur) > 12 or self._numarPixeliNegri(celulaImgCrtFaraContur) < 4:
+                if self.celuleDejaOcupate[i][j] or (filtrareStrictaCelule and (self.__numarPixeliNegri(celulaImgAntFaraContur) > 12 or self.__numarPixeliNegri(celulaImgCrtFaraContur) < 4)):
                     xImgAnt += latimeCelulaImgAnt
                     xImgCrt += latimeCelulaImgCrt
                     continue
@@ -130,6 +137,7 @@ class Task_1:
         if imgCelulaMaximaFaraContur is None:
             return self.compara2Imagini(indexAnt, indexCrt, False)
 
+        self.celuleDejaOcupate[iMaxim][jMaxim] = True
 
         # iMaxim = rand, jMaxim = coloana
         return str(1 + iMaxim) + str(chr(jMaxim + ord('A'))) + ' ' + str(self.evaluatorSabloane.evalueazaImagine(imgCelulaMaximaFaraContur))
@@ -151,6 +159,8 @@ class Task_1:
 
 
     def ruleaza(self):
+        self.__reseteaza()
+
         self.incarcaCareuImagine(0)
 
         for i in range(1, self.nrImaginiPerJoc + 1):
