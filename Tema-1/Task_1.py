@@ -40,7 +40,18 @@ class Task_1:
         self.imaginiCareu.append(imgCareu)
 
 
-    def compara2Imagini(self, indexAnt: int, indexCrt: int):
+    def _numarPixeliNegri(self, img):
+        img = cv.resize(img, (16, 16))
+        numPixeli = 0
+        threshold = 89
+        for i in range(img.shape[0]):
+            for j in range(img.shape[1]):
+                if img[i, j, 0] < threshold and img[i, j, 1] < threshold and img[i, j, 2] < threshold:
+                    numPixeli += 1
+        return numPixeli
+
+
+    def compara2Imagini(self, indexAnt: int, indexCrt: int, filtrareStrictaCelule: bool):
         if indexAnt >= len(self.imaginiCareu) or indexCrt >= len(self.imaginiCareu):
             print('Nu sunt suficiente imagini')
             return
@@ -82,6 +93,11 @@ class Task_1:
                 celulaImgAntFaraContur = celulaImgAnt[int(yPragProcent * inaltimeCelulaImgCrt):int((1.0 - yPragProcent) * inaltimeCelulaImgCrt), int(xPragProcent * latimeCelulaImgCrt):int((1.0 - xPragProcent) * latimeCelulaImgCrt)].copy()
                 celulaImgCrtFaraContur = celulaImgCrt[int(yPragProcent * inaltimeCelulaImgCrt):int((1.0 - yPragProcent) * inaltimeCelulaImgCrt), int(xPragProcent * latimeCelulaImgCrt):int((1.0 - xPragProcent) * latimeCelulaImgCrt)].copy()
 
+                if filtrareStrictaCelule and self._numarPixeliNegri(celulaImgAntFaraContur) > 12 or self._numarPixeliNegri(celulaImgCrtFaraContur) < 4:
+                    xImgAnt += latimeCelulaImgAnt
+                    xImgCrt += latimeCelulaImgCrt
+                    continue
+
                 # difCurenta = np.mean((celulaImgCrtFaraContur - celulaImgAntFaraContur) ** 2)
                 # difCurenta = np.mean(np.abs(celulaImgCrtFaraContur - celulaImgAntFaraContur))
                 difCurenta = cv.norm(celulaImgAntFaraContur, celulaImgCrtFaraContur, cv.NORM_L2)
@@ -111,6 +127,10 @@ class Task_1:
         #self.afiseazaImagini([imgAnt, imgCrt])
 
 
+        if imgCelulaMaximaFaraContur is None:
+            return self.compara2Imagini(indexAnt, indexCrt, False)
+
+
         # iMaxim = rand, jMaxim = coloana
         return str(1 + iMaxim) + str(chr(jMaxim + ord('A'))) + ' ' + str(self.evaluatorSabloane.evalueazaImagine(imgCelulaMaximaFaraContur))
 
@@ -137,7 +157,7 @@ class Task_1:
             self.incarcaCareuImagine(i)
 
         for i in range(1, len(self.imaginiCareu)):
-            print(f'Imaginea {i} - {self.compara2Imagini(i - 1, i)}')
+            print(f'Imaginea {i} - {self.compara2Imagini(i - 1, i, True)}')
             self.afiseazaImagini(self.imaginiCareu[i - 1:i + 1])
 
 

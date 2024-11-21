@@ -75,8 +75,6 @@ class EvaluatorSabloane:
             for sablon in sabloane:
                 imgSablon = cv.imread(adresaDirectorSabloane + '/' + eticheta + '/' + sablon)
 
-                imgSablon = cv.cvtColor(imgSablon, cv.COLOR_BGR2GRAY)
-
                 if int(eticheta) not in self.colectiiSabloane:
                     self.colectiiSabloane[int(eticheta)] = []
                 self.colectiiSabloane[int(eticheta)].append(imgSablon)
