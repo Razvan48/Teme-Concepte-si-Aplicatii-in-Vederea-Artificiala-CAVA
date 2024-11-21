@@ -1,6 +1,7 @@
 import numpy as np
 import cv2 as cv
 import os
+import shutil
 
 import utilitar
 
@@ -14,6 +15,9 @@ class EvaluatorSabloane:
 
     def genereazaSiIncarcaSabloane(self, adresaDirectorImagini: str, extensieImagini: str, adresaDirectorSabloane: str):
         fisiere = sorted(os.listdir(adresaDirectorImagini))
+
+        if os.path.exists(adresaDirectorSabloane):
+            shutil.rmtree(adresaDirectorSabloane)
 
         for fisier in fisiere:
 
@@ -71,6 +75,8 @@ class EvaluatorSabloane:
             for sablon in sabloane:
                 imgSablon = cv.imread(adresaDirectorSabloane + '/' + eticheta + '/' + sablon)
 
+                imgSablon = cv.cvtColor(imgSablon, cv.COLOR_BGR2GRAY)
+
                 if int(eticheta) not in self.colectiiSabloane:
                     self.colectiiSabloane[int(eticheta)] = []
                 self.colectiiSabloane[int(eticheta)].append(imgSablon)
@@ -79,7 +85,6 @@ class EvaluatorSabloane:
 
 
     def _distantaImagini(self, img, sablon):
-        img = cv.cvtColor(img, cv.COLOR_GRAY2BGR)
         return np.mean(np.abs(img - sablon) ** 2)
         #sablon = cv.resize(sablon, (img.shape[1], img.shape[0]))
         #return np.mean(np.abs(img - sablon))

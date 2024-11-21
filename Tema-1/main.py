@@ -6,13 +6,13 @@ import Task_2
 import Task_3
 
 
-task1 = Task_1.Task_1('fisiere/antrenare/', 'fisiere/imagini_auxiliare/01.jpg', 1, 50, 'fisiere/sabloane/', True)
+task1 = Task_1.Task_1('fisiere/antrenare/', 'fisiere/imagini_auxiliare/01.jpg', 1, 50, 'fisiere/sabloane/', False)
 task1.ruleaza()
 
 # TODO:
+# Task1 mai greseste celula nou pusa uneori (grilajul nu e gresit niciodata)
+
 # de testat si restul jocurilor (inca 150 de imagini)
-# daca folder-erele deja exista sa le sterg, in cazul in care doresc sa recreez sabloanele
-# sa nu mai sterg manual
 
 # de jucat putin mai mult la metoda cu prelucrarea sablonului (de exemplu de facut imaginea ori alb ori negru, fara gri)
 
@@ -20,8 +20,6 @@ task1.ruleaza()
 # 6 cu 0
 # 5 cu 80
 # 10 confundat cu 18
-
-# Task1 mai greseste celula nou pusa uneori (grilajul nu e gresit niciodata)
 
 
 
