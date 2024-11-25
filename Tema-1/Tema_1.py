@@ -26,15 +26,36 @@ class Tema_1:
         self.dimImgAfisare = (512, 512)
         self.imaginiCareu = []
 
-        self.celuleDejaOcupate = [[False for j in range(14)] for i in range(14)]
+        self.numarDePeCelula = [[(-1) for j in range(14)] for i in range(14)]
+        self.numarDePeCelula[6][6] = 1
+        self.numarDePeCelula[6][7] = 2
+        self.numarDePeCelula[7][6] = 3
+        self.numarDePeCelula[7][7] = 4
+
+        self.PONDERE_SCOR_CELULA = [
+            [3, 1, 1, 1, 1, 1, 3, 3, 1, 1, 1, 1, 1, 3],
+            [1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1],
+            [1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1],
+            [1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1],
+            [1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3],
+            [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1],
+            [1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1],
+            [1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1],
+            [1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1],
+            [3, 1, 1, 1, 1, 1, 3, 3, 1, 1, 1, 1, 1, 3]
+        ]
 
 
     def __reseteaza(self):
-        self.celuleDejaOcupate = [[False for j in range(14)] for i in range(14)]
-        self.celuleDejaOcupate[6][6] = True
-        self.celuleDejaOcupate[6][7] = True
-        self.celuleDejaOcupate[7][6] = True
-        self.celuleDejaOcupate[7][7] = True
+        self.numarDePeCelula = [[(-1) for j in range(14)] for i in range(14)]
+        self.numarDePeCelula[6][6] = 1
+        self.numarDePeCelula[6][7] = 2
+        self.numarDePeCelula[7][6] = 3
+        self.numarDePeCelula[7][7] = 4
 
         self.evaluatorSabloane.reseteazaPieseIncaFolosibile()
 
@@ -107,7 +128,7 @@ class Tema_1:
                 celulaImgAntFaraContur = celulaImgAnt[int(yPragProcent * inaltimeCelulaImgCrt):int((1.0 - yPragProcent) * inaltimeCelulaImgCrt), int(xPragProcent * latimeCelulaImgCrt):int((1.0 - xPragProcent) * latimeCelulaImgCrt)].copy()
                 celulaImgCrtFaraContur = celulaImgCrt[int(yPragProcent * inaltimeCelulaImgCrt):int((1.0 - yPragProcent) * inaltimeCelulaImgCrt), int(xPragProcent * latimeCelulaImgCrt):int((1.0 - xPragProcent) * latimeCelulaImgCrt)].copy()
 
-                if self.celuleDejaOcupate[i][j] or (filtrareStrictaCelule and (self.__numarPixeliNegri(celulaImgAntFaraContur) > 12 or self.__numarPixeliNegri(celulaImgCrtFaraContur) < 4)):
+                if (self.numarDePeCelula[i][j] != -1) or (filtrareStrictaCelule and (self.__numarPixeliNegri(celulaImgAntFaraContur) > 12 or self.__numarPixeliNegri(celulaImgCrtFaraContur) < 4)):
                     xImgAnt += latimeCelulaImgAnt
                     xImgCrt += latimeCelulaImgCrt
                     continue
@@ -144,10 +165,12 @@ class Tema_1:
         if imgCelulaMaximaFaraContur is None:
             return self.compara2Imagini(indexAnt, indexCrt, False)
 
-        self.celuleDejaOcupate[iMaxim][jMaxim] = True
+        etichetaSolutie = self.evaluatorSabloane.evalueazaImagine(imgCelulaMaximaFaraContur)
+
+        self.numarDePeCelula[iMaxim][jMaxim] = etichetaSolutie
 
         # iMaxim = rand, jMaxim = coloana
-        return str(1 + iMaxim) + str(chr(jMaxim + ord('A'))) + ' ' + str(self.evaluatorSabloane.evalueazaImagine(imgCelulaMaximaFaraContur))
+        return str(1 + iMaxim) + str(chr(jMaxim + ord('A'))) + ' ' + str(etichetaSolutie)
 
 
     def afiseazaImagine(self, img):
