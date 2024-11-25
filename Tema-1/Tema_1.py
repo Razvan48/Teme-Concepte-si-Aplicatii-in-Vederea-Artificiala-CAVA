@@ -1,18 +1,20 @@
 import numpy as np
 import cv2 as cv
+import os
 
 import EvaluatorSabloane
-import utilitar
+import Utilitar
 
 
-class Task_1:
+class Tema_1:
 
 
-    def __init__(self, adresaDirectorImagini: str, adresaImagineStart: str, nrJoc: int, nrImaginiPerJoc: int, adresaDirectorSabloane: str, sabloaneDejaGenerate: bool):
+    def __init__(self, adresaDirectorImagini: str, adresaImagineStart: str, nrJoc: int, nrImaginiPerJoc: int, adresaDirectorIesire: str, adresaDirectorSabloane: str, sabloaneDejaGenerate: bool):
         self.adresaDirectorImagini = adresaDirectorImagini
         self.adresaImagineStart = adresaImagineStart
         self.nrJoc = nrJoc
         self.nrImaginiPerJoc = nrImaginiPerJoc
+        self.adresaDirectorIesire = adresaDirectorIesire
 
         self.evaluatorSabloane = EvaluatorSabloane.EvaluatorSabloane()
 
@@ -45,7 +47,7 @@ class Task_1:
         else:
             imgInit = cv.imread(f'{self.adresaDirectorImagini}/{self.nrJoc}_{nrImagine}.jpg')
 
-        imgCareu = utilitar.extrageCareuImagine(imgInit)
+        imgCareu = Utilitar.extrageCareuImagine(imgInit)
 
         # self.afiseazaImagine(imgCareu)
 
@@ -171,8 +173,21 @@ class Task_1:
         for i in range(1, self.nrImaginiPerJoc + 1):
             self.incarcaCareuImagine(i)
 
+        os.makedirs(self.adresaDirectorIesire, exist_ok=True)
+
         for i in range(1, len(self.imaginiCareu)):
-            print(f'Imaginea {i} - {self.compara2Imagini(i - 1, i, True)}')
+            raspuns = self.compara2Imagini(i - 1, i, True)
+            print(f'Imaginea {i} - {raspuns}')
             self.afiseazaImagini(self.imaginiCareu[i - 1:i + 1])
+
+            adresaFisierIesire = self.adresaDirectorIesire
+            if i > 9:
+                adresaFisierIesire += f'{self.nrJoc}_{i}.txt'
+            else:
+                adresaFisierIesire += f'{self.nrJoc}_0{i}.txt'
+
+            fisierIesire = open(adresaFisierIesire, 'w')
+            fisierIesire.write(raspuns)
+            fisierIesire.close()
 
 

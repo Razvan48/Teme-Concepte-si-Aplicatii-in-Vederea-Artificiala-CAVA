@@ -3,7 +3,7 @@ import cv2 as cv
 import os
 import shutil
 
-import utilitar
+import Utilitar
 
 
 class EvaluatorSabloane:
@@ -76,7 +76,7 @@ class EvaluatorSabloane:
             if fisier.endswith(extensieImagini):
 
                 imgInit = cv.imread(f'{adresaDirectorImagini}/{fisier}')
-                imgCareu = utilitar.extrageCareuImagine(imgInit)
+                imgCareu = Utilitar.extrageCareuImagine(imgInit)
 
                 fisierSolutieImagine = open(adresaDirectorImagini + '/' + fisier[:fisier.rfind('.')] + '.txt', 'rt') # rt = read text
 
@@ -105,7 +105,7 @@ class EvaluatorSabloane:
 
                 imgSablon = imgCareu[int((iSablon + iPragProcent) * inaltimeSablon):int((iSablon + 1 - iPragProcent) * inaltimeSablon), int((jSablon + jPragProcent) * latimeSablon):int((jSablon + 1 - jPragProcent) * latimeSablon)].copy()
 
-                imgSablonPrelucrat = utilitar.prelucreazaSablon(imgSablon)
+                imgSablonPrelucrat = Utilitar.prelucreazaSablon(imgSablon)
 
                 if etichetaSablon not in self.colectiiSabloane:
                     self.colectiiSabloane[etichetaSablon] = []
@@ -143,7 +143,7 @@ class EvaluatorSabloane:
 
 
     def evalueazaImagine(self, img):
-        imgPrelucrat = utilitar.prelucreazaSablon(img)
+        imgPrelucrat = Utilitar.prelucreazaSablon(img)
 
         etichetaSolutie = -1
         distantaMinima = float('inf')
