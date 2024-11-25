@@ -29,6 +29,11 @@ class Task_1:
 
     def __reseteaza(self):
         self.celuleDejaOcupate = [[False for j in range(14)] for i in range(14)]
+        self.celuleDejaOcupate[6][6] = True
+        self.celuleDejaOcupate[6][7] = True
+        self.celuleDejaOcupate[7][6] = True
+        self.celuleDejaOcupate[7][7] = True
+
         self.evaluatorSabloane.reseteazaPieseIncaFolosibile()
 
 
