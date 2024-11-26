@@ -49,6 +49,9 @@ class Tema_1:
             [3, 1, 1, 1, 1, 1, 3, 3, 1, 1, 1, 1, 1, 3]
         ]
 
+        self.indexCurentInListaRunde = -1
+        self.listaRunde = self.__incarcaRundeDinFisier()
+
 
     def __reseteaza(self):
         self.numarDePeCelula = [[(-1) for j in range(14)] for i in range(14)]
@@ -58,6 +61,103 @@ class Tema_1:
         self.numarDePeCelula[7][7] = 4
 
         self.evaluatorSabloane.reseteazaPieseIncaFolosibile()
+
+        self.indexCurentInListaRunde = -1
+        self.listaRunde = self.__incarcaRundeDinFisier()
+
+
+    def __incarcaRundeDinFisier(self):
+        fisierRunde = open(f'{self.adresaDirectorImagini}/{self.nrJoc}_turns.txt', 'r')
+        listaRunde = []
+
+        for linie in fisierRunde:
+            elementeLinie = linie.split(' ')
+            listaRunde.append([elementeLinie[0], int(elementeLinie[1]), 0])
+
+        fisierRunde.close()
+        return listaRunde
+
+
+    def __salveazaScoruriRundeInFisier(self):
+        fisierScoruri = open(f'{self.adresaDirectorIesire}/{self.nrJoc}_scores.txt', 'w')
+
+        rundaCurenta = 0
+        for runda in self.listaRunde:
+            fisierScoruri.write(f'{runda[0]} {runda[1]} {runda[2]}')
+            if rundaCurenta + 1 < len(self.listaRunde):
+                fisierScoruri.write('\n')
+            rundaCurenta += 1
+
+
+    def __calculeazaScorPiesaNoua(self, iPiesa: int, jPiesa: int):
+        valoarePiesa = self.PONDERE_SCOR_CELULA[iPiesa][jPiesa] * self.numarDePeCelula[iPiesa][jPiesa]
+        scorTotalPiesa = 0
+
+        # Linie Stanga
+        if jPiesa > 1 and self.numarDePeCelula[iPiesa][jPiesa - 1] != -1 and self.numarDePeCelula[iPiesa][jPiesa - 2] != -1:
+            if self.numarDePeCelula[iPiesa][jPiesa - 1] + self.numarDePeCelula[iPiesa][jPiesa - 2] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+            if self.numarDePeCelula[iPiesa][jPiesa - 1] * self.numarDePeCelula[iPiesa][jPiesa - 2] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+            if self.numarDePeCelula[iPiesa][jPiesa - 1] - self.numarDePeCelula[iPiesa][jPiesa - 2] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+            if self.numarDePeCelula[iPiesa][jPiesa - 2] - self.numarDePeCelula[iPiesa][jPiesa - 1] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+
+            if self.numarDePeCelula[iPiesa][jPiesa - 1] != 0 and self.numarDePeCelula[iPiesa][jPiesa - 2] % self.numarDePeCelula[iPiesa][jPiesa - 1] == 0 and self.numarDePeCelula[iPiesa][jPiesa - 2] // self.numarDePeCelula[iPiesa][jPiesa - 1] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+            elif self.numarDePeCelula[iPiesa][jPiesa - 2] != 0 and self.numarDePeCelula[iPiesa][jPiesa - 1] % self.numarDePeCelula[iPiesa][jPiesa - 2] == 0 and self.numarDePeCelula[iPiesa][jPiesa - 1] // self.numarDePeCelula[iPiesa][jPiesa - 2] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+
+        # Linie Dreapta
+        if jPiesa + 2 < 14 and self.numarDePeCelula[iPiesa][jPiesa + 1] != -1 and self.numarDePeCelula[iPiesa][jPiesa + 2] != -1:
+            if self.numarDePeCelula[iPiesa][jPiesa + 1] + self.numarDePeCelula[iPiesa][jPiesa + 2] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+            if self.numarDePeCelula[iPiesa][jPiesa + 1] * self.numarDePeCelula[iPiesa][jPiesa + 2] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+            if self.numarDePeCelula[iPiesa][jPiesa + 1] - self.numarDePeCelula[iPiesa][jPiesa + 2] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+            if self.numarDePeCelula[iPiesa][jPiesa + 2] - self.numarDePeCelula[iPiesa][jPiesa + 1] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+
+            if self.numarDePeCelula[iPiesa][jPiesa + 1] != 0 and self.numarDePeCelula[iPiesa][jPiesa + 2] % self.numarDePeCelula[iPiesa][jPiesa + 1] == 0 and self.numarDePeCelula[iPiesa][jPiesa + 2] // self.numarDePeCelula[iPiesa][jPiesa + 1] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+            elif self.numarDePeCelula[iPiesa][jPiesa + 2] != 0 and self.numarDePeCelula[iPiesa][jPiesa + 1] % self.numarDePeCelula[iPiesa][jPiesa + 2] == 0 and self.numarDePeCelula[iPiesa][jPiesa + 1] // self.numarDePeCelula[iPiesa][jPiesa + 2] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+
+        # Coloana Sus
+        if iPiesa > 1 and self.numarDePeCelula[iPiesa - 1][jPiesa] != -1 and self.numarDePeCelula[iPiesa - 2][jPiesa] != -1:
+            if self.numarDePeCelula[iPiesa - 1][jPiesa] + self.numarDePeCelula[iPiesa - 2][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+            if self.numarDePeCelula[iPiesa - 1][jPiesa] * self.numarDePeCelula[iPiesa - 2][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+            if self.numarDePeCelula[iPiesa - 1][jPiesa] - self.numarDePeCelula[iPiesa - 2][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+            if self.numarDePeCelula[iPiesa - 2][jPiesa] - self.numarDePeCelula[iPiesa - 1][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+
+            if self.numarDePeCelula[iPiesa - 1][jPiesa] != 0 and self.numarDePeCelula[iPiesa - 2][jPiesa] % self.numarDePeCelula[iPiesa - 1][jPiesa] == 0 and self.numarDePeCelula[iPiesa - 2][jPiesa] // self.numarDePeCelula[iPiesa - 1][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+            elif self.numarDePeCelula[iPiesa - 2][jPiesa] != 0 and self.numarDePeCelula[iPiesa - 1][jPiesa] % self.numarDePeCelula[iPiesa - 2][jPiesa] == 0 and self.numarDePeCelula[iPiesa - 1][jPiesa] // self.numarDePeCelula[iPiesa - 2][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+
+        # Coloana Jos
+        if iPiesa + 2 < 14 and self.numarDePeCelula[iPiesa + 1][jPiesa] != -1 and self.numarDePeCelula[iPiesa + 2][jPiesa] != -1:
+            if self.numarDePeCelula[iPiesa + 1][jPiesa] + self.numarDePeCelula[iPiesa + 2][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+            if self.numarDePeCelula[iPiesa + 1][jPiesa] * self.numarDePeCelula[iPiesa + 2][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+            if self.numarDePeCelula[iPiesa + 1][jPiesa] - self.numarDePeCelula[iPiesa + 2][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+            if self.numarDePeCelula[iPiesa + 2][jPiesa] - self.numarDePeCelula[iPiesa + 1][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+
+            if self.numarDePeCelula[iPiesa + 1][jPiesa] != 0 and self.numarDePeCelula[iPiesa + 2][jPiesa] % self.numarDePeCelula[iPiesa + 1][jPiesa] == 0 and self.numarDePeCelula[iPiesa + 2][jPiesa] // self.numarDePeCelula[iPiesa + 1][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+            elif self.numarDePeCelula[iPiesa + 2][jPiesa] != 0 and self.numarDePeCelula[iPiesa + 1][jPiesa] % self.numarDePeCelula[iPiesa + 2][jPiesa] == 0 and self.numarDePeCelula[iPiesa + 1][jPiesa] // self.numarDePeCelula[iPiesa + 2][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
+                scorTotalPiesa += valoarePiesa
+
+        return scorTotalPiesa
 
 
     def incarcaCareuImagine(self, nrImagine: int):
@@ -169,6 +269,8 @@ class Tema_1:
 
         self.numarDePeCelula[iMaxim][jMaxim] = etichetaSolutie
 
+        self.listaRunde[self.indexCurentInListaRunde][2] += self.__calculeazaScorPiesaNoua(iMaxim, jMaxim)
+
         # iMaxim = rand, jMaxim = coloana
         return str(1 + iMaxim) + str(chr(jMaxim + ord('A'))) + ' ' + str(etichetaSolutie)
 
@@ -199,6 +301,10 @@ class Tema_1:
         os.makedirs(self.adresaDirectorIesire, exist_ok=True)
 
         for i in range(1, len(self.imaginiCareu)):
+
+            if self.indexCurentInListaRunde + 1 < len(self.listaRunde) and i == self.listaRunde[self.indexCurentInListaRunde + 1][1]:
+                self.indexCurentInListaRunde += 1
+
             raspuns = self.compara2Imagini(i - 1, i, True)
             print(f'Imaginea {i} - {raspuns}')
             self.afiseazaImagini(self.imaginiCareu[i - 1:i + 1])
@@ -212,5 +318,8 @@ class Tema_1:
             fisierIesire = open(adresaFisierIesire, 'w')
             fisierIesire.write(raspuns)
             fisierIesire.close()
+
+        self.__salveazaScoruriRundeInFisier()
+
 
 
