@@ -71,6 +71,9 @@ class EvaluatorSabloane:
         if os.path.exists(adresaDirectorSabloane):
             shutil.rmtree(adresaDirectorSabloane)
 
+        iPragProcent = 0.082
+        jPragProcent = 0.082
+
         for fisier in fisiere:
 
             if fisier.endswith(extensieImagini):
@@ -100,9 +103,6 @@ class EvaluatorSabloane:
                 latimeSablon = imgCareu.shape[1] / 14
                 inaltimeSablon = imgCareu.shape[0] / 14
 
-                iPragProcent = 0.082
-                jPragProcent = 0.082
-
                 imgSablon = imgCareu[int((iSablon + iPragProcent) * inaltimeSablon):int((iSablon + 1 - iPragProcent) * inaltimeSablon), int((jSablon + jPragProcent) * latimeSablon):int((jSablon + 1 - jPragProcent) * latimeSablon)].copy()
 
                 imgSablonPrelucrat = Utilitar.prelucreazaSablon(imgSablon)
@@ -115,6 +115,140 @@ class EvaluatorSabloane:
                 cv.imwrite(adresaDirectorSabloane + '/' + str(etichetaSablon) + '/' + fisier, imgSablonPrelucrat)
 
                 print(f'Generat si incarcat sablon cu eticheta {etichetaSablon} din imaginea {fisier}')
+
+
+        sabloaneSuplimentare = dict()
+        sabloaneSuplimentare['03.jpg'] = []
+        sabloaneSuplimentare['03.jpg'].append([(5, 4), 0])
+        sabloaneSuplimentare['03.jpg'].append([(5, 5), 1])
+        sabloaneSuplimentare['03.jpg'].append([(5, 6), 2])
+        sabloaneSuplimentare['03.jpg'].append([(5, 7), 3])
+        sabloaneSuplimentare['03.jpg'].append([(5, 8), 4])
+        sabloaneSuplimentare['03.jpg'].append([(5, 9), 5])
+        sabloaneSuplimentare['03.jpg'].append([(5, 10), 6])
+        sabloaneSuplimentare['03.jpg'].append([(5, 11), 7])
+        sabloaneSuplimentare['03.jpg'].append([(6, 4), 8])
+        sabloaneSuplimentare['03.jpg'].append([(6, 5), 9])
+        sabloaneSuplimentare['03.jpg'].append([(6, 6), 10])
+        sabloaneSuplimentare['03.jpg'].append([(6, 7), 11])
+        sabloaneSuplimentare['03.jpg'].append([(6, 8), 12])
+        sabloaneSuplimentare['03.jpg'].append([(6, 9), 13])
+        sabloaneSuplimentare['03.jpg'].append([(6, 10), 14])
+        sabloaneSuplimentare['03.jpg'].append([(6, 11), 15])
+        sabloaneSuplimentare['03.jpg'].append([(7, 4), 16])
+        sabloaneSuplimentare['03.jpg'].append([(7, 5), 17])
+        sabloaneSuplimentare['03.jpg'].append([(7, 6), 18])
+        sabloaneSuplimentare['03.jpg'].append([(7, 7), 19])
+        sabloaneSuplimentare['03.jpg'].append([(7, 8), 20])
+        sabloaneSuplimentare['03.jpg'].append([(7, 9), 21])
+        sabloaneSuplimentare['03.jpg'].append([(7, 10), 24])
+        sabloaneSuplimentare['03.jpg'].append([(7, 11), 25])
+        sabloaneSuplimentare['03.jpg'].append([(8, 4), 27])
+        sabloaneSuplimentare['03.jpg'].append([(8, 5), 28])
+        sabloaneSuplimentare['03.jpg'].append([(8, 6), 30])
+        sabloaneSuplimentare['03.jpg'].append([(8, 7), 32])
+        sabloaneSuplimentare['03.jpg'].append([(8, 8), 35])
+        sabloaneSuplimentare['03.jpg'].append([(8, 9), 36])
+        sabloaneSuplimentare['03.jpg'].append([(8, 10), 40])
+        sabloaneSuplimentare['03.jpg'].append([(8, 11), 42])
+        sabloaneSuplimentare['03.jpg'].append([(9, 4), 45])
+        sabloaneSuplimentare['03.jpg'].append([(9, 5), 48])
+        sabloaneSuplimentare['03.jpg'].append([(9, 6), 49])
+        sabloaneSuplimentare['03.jpg'].append([(9, 7), 50])
+        sabloaneSuplimentare['03.jpg'].append([(9, 8), 54])
+        sabloaneSuplimentare['03.jpg'].append([(9, 9), 56])
+        sabloaneSuplimentare['03.jpg'].append([(9, 10), 60])
+        sabloaneSuplimentare['03.jpg'].append([(9, 11), 63])
+        sabloaneSuplimentare['03.jpg'].append([(10, 4), 64])
+        sabloaneSuplimentare['03.jpg'].append([(10, 5), 70])
+        sabloaneSuplimentare['03.jpg'].append([(10, 6), 72])
+        sabloaneSuplimentare['03.jpg'].append([(10, 7), 80])
+        sabloaneSuplimentare['03.jpg'].append([(10, 8), 81])
+        sabloaneSuplimentare['03.jpg'].append([(10, 9), 90])
+
+        sabloaneSuplimentare['04.jpg'] = []
+        sabloaneSuplimentare['04.jpg'].append([(0, 0), 0])
+        sabloaneSuplimentare['04.jpg'].append([(0, 2), 1])
+        sabloaneSuplimentare['04.jpg'].append([(0, 4), 2])
+        sabloaneSuplimentare['04.jpg'].append([(0, 6), 3])
+        sabloaneSuplimentare['04.jpg'].append([(0, 8), 4])
+        sabloaneSuplimentare['04.jpg'].append([(0, 10), 5])
+        sabloaneSuplimentare['04.jpg'].append([(0, 12), 6])
+        sabloaneSuplimentare['04.jpg'].append([(2, 0), 7])
+        sabloaneSuplimentare['04.jpg'].append([(2, 2), 8])
+        sabloaneSuplimentare['04.jpg'].append([(2, 4), 9])
+        sabloaneSuplimentare['04.jpg'].append([(2, 6), 10])
+        sabloaneSuplimentare['04.jpg'].append([(2, 8), 11])
+        sabloaneSuplimentare['04.jpg'].append([(2, 10), 12])
+        sabloaneSuplimentare['04.jpg'].append([(2, 12), 13])
+        sabloaneSuplimentare['04.jpg'].append([(4, 0), 14])
+        sabloaneSuplimentare['04.jpg'].append([(4, 2), 15])
+        sabloaneSuplimentare['04.jpg'].append([(4, 4), 16])
+        sabloaneSuplimentare['04.jpg'].append([(4, 6), 17])
+        sabloaneSuplimentare['04.jpg'].append([(4, 8), 18])
+        sabloaneSuplimentare['04.jpg'].append([(4, 10), 19])
+        sabloaneSuplimentare['04.jpg'].append([(4, 12), 20])
+        sabloaneSuplimentare['04.jpg'].append([(6, 0), 21])
+        sabloaneSuplimentare['04.jpg'].append([(6, 2), 24])
+        sabloaneSuplimentare['04.jpg'].append([(6, 4), 25])
+        sabloaneSuplimentare['04.jpg'].append([(6, 6), 27])
+        sabloaneSuplimentare['04.jpg'].append([(6, 8), 28])
+        sabloaneSuplimentare['04.jpg'].append([(6, 10), 30])
+        sabloaneSuplimentare['04.jpg'].append([(6, 12), 32])
+        sabloaneSuplimentare['04.jpg'].append([(8, 0), 35])
+        sabloaneSuplimentare['04.jpg'].append([(8, 2), 36])
+        sabloaneSuplimentare['04.jpg'].append([(8, 4), 40])
+        sabloaneSuplimentare['04.jpg'].append([(8, 6), 42])
+        sabloaneSuplimentare['04.jpg'].append([(8, 8), 45])
+        sabloaneSuplimentare['04.jpg'].append([(8, 10), 48])
+        sabloaneSuplimentare['04.jpg'].append([(8, 12), 49])
+        sabloaneSuplimentare['04.jpg'].append([(10, 0), 50])
+        sabloaneSuplimentare['04.jpg'].append([(10, 2), 54])
+        sabloaneSuplimentare['04.jpg'].append([(10, 4), 56])
+        sabloaneSuplimentare['04.jpg'].append([(10, 6), 60])
+        sabloaneSuplimentare['04.jpg'].append([(10, 8), 63])
+        sabloaneSuplimentare['04.jpg'].append([(10, 10), 64])
+        sabloaneSuplimentare['04.jpg'].append([(10, 12), 70])
+        sabloaneSuplimentare['04.jpg'].append([(12, 0), 72])
+        sabloaneSuplimentare['04.jpg'].append([(12, 2), 80])
+        sabloaneSuplimentare['04.jpg'].append([(12, 4), 81])
+        sabloaneSuplimentare['04.jpg'].append([(12, 6), 90])
+
+
+        adresaDirectorSabloaneSuplimentare = 'fisiere/imagini_auxiliare'
+        indexImagine = 0
+        # Adaugam sabloanele suplimentare
+        for adresaFisierSabloane, infoSabloane in sabloaneSuplimentare.items():
+            imgInit = cv.imread(adresaDirectorSabloaneSuplimentare + '/' + adresaFisierSabloane)
+            imgCareu = Utilitar.extrageCareuImagine(imgInit)
+
+            latimeSablon = imgCareu.shape[1] / 14
+            inaltimeSablon = imgCareu.shape[0] / 14
+
+            indexSablonAceeasiImagine = 0
+            for sablon in infoSabloane:
+                iSablon = sablon[0][0]
+                jSablon = sablon[0][1]
+                etichetaSablon = sablon[1]
+
+                imgSablon = imgCareu[int((iSablon + iPragProcent) * inaltimeSablon):int((iSablon + 1 - iPragProcent) * inaltimeSablon), int((jSablon + jPragProcent) * latimeSablon):int((jSablon + 1 - jPragProcent) * latimeSablon)].copy()
+
+                imgSablonPrelucrat = Utilitar.prelucreazaSablon(imgSablon)
+
+                if etichetaSablon not in self.colectiiSabloane:
+                    self.colectiiSabloane[etichetaSablon] = []
+                self.colectiiSabloane[etichetaSablon].append(imgSablonPrelucrat)
+
+                os.makedirs(adresaDirectorSabloane + '/' + str(etichetaSablon), exist_ok=True)
+                cv.imwrite(adresaDirectorSabloane + '/' + str(etichetaSablon) + '/' + 'extra' + str(indexImagine) + '_' + str(indexSablonAceeasiImagine) + extensieImagini, imgSablonPrelucrat)
+
+                print(f'Generat si incarcat sablon suplimentar cu eticheta {etichetaSablon} din imaginea {adresaFisierSabloane}')
+
+                indexSablonAceeasiImagine += 1
+
+            indexImagine += 1
+
+
 
 
     def incarcaSabloane(self, adresaDirectorSabloane: str):
