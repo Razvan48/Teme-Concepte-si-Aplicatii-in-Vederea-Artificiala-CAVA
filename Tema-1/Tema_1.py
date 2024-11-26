@@ -93,69 +93,75 @@ class Tema_1:
         valoarePiesa = self.PONDERE_SCOR_CELULA[iPiesa][jPiesa] * self.numarDePeCelula[iPiesa][jPiesa]
         scorTotalPiesa = 0
 
+        print('Pondere Piesa:', valoarePiesa)
+
         # Linie Stanga
         if jPiesa > 1 and self.numarDePeCelula[iPiesa][jPiesa - 1] != -1 and self.numarDePeCelula[iPiesa][jPiesa - 2] != -1:
             if self.numarDePeCelula[iPiesa][jPiesa - 1] + self.numarDePeCelula[iPiesa][jPiesa - 2] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
-            if self.numarDePeCelula[iPiesa][jPiesa - 1] * self.numarDePeCelula[iPiesa][jPiesa - 2] == self.numarDePeCelula[iPiesa][jPiesa]:
+            elif self.numarDePeCelula[iPiesa][jPiesa - 1] * self.numarDePeCelula[iPiesa][jPiesa - 2] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
-            if self.numarDePeCelula[iPiesa][jPiesa - 1] - self.numarDePeCelula[iPiesa][jPiesa - 2] == self.numarDePeCelula[iPiesa][jPiesa]:
+            elif self.numarDePeCelula[iPiesa][jPiesa - 1] - self.numarDePeCelula[iPiesa][jPiesa - 2] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
-            if self.numarDePeCelula[iPiesa][jPiesa - 2] - self.numarDePeCelula[iPiesa][jPiesa - 1] == self.numarDePeCelula[iPiesa][jPiesa]:
+            elif self.numarDePeCelula[iPiesa][jPiesa - 2] - self.numarDePeCelula[iPiesa][jPiesa - 1] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
 
-            if self.numarDePeCelula[iPiesa][jPiesa - 1] != 0 and self.numarDePeCelula[iPiesa][jPiesa - 2] % self.numarDePeCelula[iPiesa][jPiesa - 1] == 0 and self.numarDePeCelula[iPiesa][jPiesa - 2] // self.numarDePeCelula[iPiesa][jPiesa - 1] == self.numarDePeCelula[iPiesa][jPiesa]:
+            elif self.numarDePeCelula[iPiesa][jPiesa - 1] != 0 and self.numarDePeCelula[iPiesa][jPiesa - 2] % self.numarDePeCelula[iPiesa][jPiesa - 1] == 0 and self.numarDePeCelula[iPiesa][jPiesa - 2] // self.numarDePeCelula[iPiesa][jPiesa - 1] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
             elif self.numarDePeCelula[iPiesa][jPiesa - 2] != 0 and self.numarDePeCelula[iPiesa][jPiesa - 1] % self.numarDePeCelula[iPiesa][jPiesa - 2] == 0 and self.numarDePeCelula[iPiesa][jPiesa - 1] // self.numarDePeCelula[iPiesa][jPiesa - 2] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
+        print('Scor Piesa:', scorTotalPiesa)
 
         # Linie Dreapta
         if jPiesa + 2 < 14 and self.numarDePeCelula[iPiesa][jPiesa + 1] != -1 and self.numarDePeCelula[iPiesa][jPiesa + 2] != -1:
             if self.numarDePeCelula[iPiesa][jPiesa + 1] + self.numarDePeCelula[iPiesa][jPiesa + 2] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
-            if self.numarDePeCelula[iPiesa][jPiesa + 1] * self.numarDePeCelula[iPiesa][jPiesa + 2] == self.numarDePeCelula[iPiesa][jPiesa]:
+            elif self.numarDePeCelula[iPiesa][jPiesa + 1] * self.numarDePeCelula[iPiesa][jPiesa + 2] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
-            if self.numarDePeCelula[iPiesa][jPiesa + 1] - self.numarDePeCelula[iPiesa][jPiesa + 2] == self.numarDePeCelula[iPiesa][jPiesa]:
+            elif self.numarDePeCelula[iPiesa][jPiesa + 1] - self.numarDePeCelula[iPiesa][jPiesa + 2] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
-            if self.numarDePeCelula[iPiesa][jPiesa + 2] - self.numarDePeCelula[iPiesa][jPiesa + 1] == self.numarDePeCelula[iPiesa][jPiesa]:
+            elif self.numarDePeCelula[iPiesa][jPiesa + 2] - self.numarDePeCelula[iPiesa][jPiesa + 1] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
 
-            if self.numarDePeCelula[iPiesa][jPiesa + 1] != 0 and self.numarDePeCelula[iPiesa][jPiesa + 2] % self.numarDePeCelula[iPiesa][jPiesa + 1] == 0 and self.numarDePeCelula[iPiesa][jPiesa + 2] // self.numarDePeCelula[iPiesa][jPiesa + 1] == self.numarDePeCelula[iPiesa][jPiesa]:
+            elif self.numarDePeCelula[iPiesa][jPiesa + 1] != 0 and self.numarDePeCelula[iPiesa][jPiesa + 2] % self.numarDePeCelula[iPiesa][jPiesa + 1] == 0 and self.numarDePeCelula[iPiesa][jPiesa + 2] // self.numarDePeCelula[iPiesa][jPiesa + 1] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
             elif self.numarDePeCelula[iPiesa][jPiesa + 2] != 0 and self.numarDePeCelula[iPiesa][jPiesa + 1] % self.numarDePeCelula[iPiesa][jPiesa + 2] == 0 and self.numarDePeCelula[iPiesa][jPiesa + 1] // self.numarDePeCelula[iPiesa][jPiesa + 2] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
+        print('Scor Piesa:', scorTotalPiesa)
 
         # Coloana Sus
         if iPiesa > 1 and self.numarDePeCelula[iPiesa - 1][jPiesa] != -1 and self.numarDePeCelula[iPiesa - 2][jPiesa] != -1:
             if self.numarDePeCelula[iPiesa - 1][jPiesa] + self.numarDePeCelula[iPiesa - 2][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
-            if self.numarDePeCelula[iPiesa - 1][jPiesa] * self.numarDePeCelula[iPiesa - 2][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
+            elif self.numarDePeCelula[iPiesa - 1][jPiesa] * self.numarDePeCelula[iPiesa - 2][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
-            if self.numarDePeCelula[iPiesa - 1][jPiesa] - self.numarDePeCelula[iPiesa - 2][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
+            elif self.numarDePeCelula[iPiesa - 1][jPiesa] - self.numarDePeCelula[iPiesa - 2][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
-            if self.numarDePeCelula[iPiesa - 2][jPiesa] - self.numarDePeCelula[iPiesa - 1][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
+            elif self.numarDePeCelula[iPiesa - 2][jPiesa] - self.numarDePeCelula[iPiesa - 1][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
 
-            if self.numarDePeCelula[iPiesa - 1][jPiesa] != 0 and self.numarDePeCelula[iPiesa - 2][jPiesa] % self.numarDePeCelula[iPiesa - 1][jPiesa] == 0 and self.numarDePeCelula[iPiesa - 2][jPiesa] // self.numarDePeCelula[iPiesa - 1][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
+            elif self.numarDePeCelula[iPiesa - 1][jPiesa] != 0 and self.numarDePeCelula[iPiesa - 2][jPiesa] % self.numarDePeCelula[iPiesa - 1][jPiesa] == 0 and self.numarDePeCelula[iPiesa - 2][jPiesa] // self.numarDePeCelula[iPiesa - 1][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
             elif self.numarDePeCelula[iPiesa - 2][jPiesa] != 0 and self.numarDePeCelula[iPiesa - 1][jPiesa] % self.numarDePeCelula[iPiesa - 2][jPiesa] == 0 and self.numarDePeCelula[iPiesa - 1][jPiesa] // self.numarDePeCelula[iPiesa - 2][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
+        print('Scor Piesa:', scorTotalPiesa)
 
         # Coloana Jos
         if iPiesa + 2 < 14 and self.numarDePeCelula[iPiesa + 1][jPiesa] != -1 and self.numarDePeCelula[iPiesa + 2][jPiesa] != -1:
             if self.numarDePeCelula[iPiesa + 1][jPiesa] + self.numarDePeCelula[iPiesa + 2][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
-            if self.numarDePeCelula[iPiesa + 1][jPiesa] * self.numarDePeCelula[iPiesa + 2][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
+            elif self.numarDePeCelula[iPiesa + 1][jPiesa] * self.numarDePeCelula[iPiesa + 2][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
-            if self.numarDePeCelula[iPiesa + 1][jPiesa] - self.numarDePeCelula[iPiesa + 2][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
+            elif self.numarDePeCelula[iPiesa + 1][jPiesa] - self.numarDePeCelula[iPiesa + 2][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
-            if self.numarDePeCelula[iPiesa + 2][jPiesa] - self.numarDePeCelula[iPiesa + 1][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
+            elif self.numarDePeCelula[iPiesa + 2][jPiesa] - self.numarDePeCelula[iPiesa + 1][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
 
-            if self.numarDePeCelula[iPiesa + 1][jPiesa] != 0 and self.numarDePeCelula[iPiesa + 2][jPiesa] % self.numarDePeCelula[iPiesa + 1][jPiesa] == 0 and self.numarDePeCelula[iPiesa + 2][jPiesa] // self.numarDePeCelula[iPiesa + 1][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
+            elif self.numarDePeCelula[iPiesa + 1][jPiesa] != 0 and self.numarDePeCelula[iPiesa + 2][jPiesa] % self.numarDePeCelula[iPiesa + 1][jPiesa] == 0 and self.numarDePeCelula[iPiesa + 2][jPiesa] // self.numarDePeCelula[iPiesa + 1][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
             elif self.numarDePeCelula[iPiesa + 2][jPiesa] != 0 and self.numarDePeCelula[iPiesa + 1][jPiesa] % self.numarDePeCelula[iPiesa + 2][jPiesa] == 0 and self.numarDePeCelula[iPiesa + 1][jPiesa] // self.numarDePeCelula[iPiesa + 2][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
+        print('Scor Piesa:', scorTotalPiesa)
 
         return scorTotalPiesa
 
@@ -311,9 +317,9 @@ class Tema_1:
 
             adresaFisierIesire = self.adresaDirectorIesire
             if i > 9:
-                adresaFisierIesire += f'{self.nrJoc}_{i}.txt'
+                adresaFisierIesire += '/' + f'{self.nrJoc}_{i}.txt'
             else:
-                adresaFisierIesire += f'{self.nrJoc}_0{i}.txt'
+                adresaFisierIesire += '/' + f'{self.nrJoc}_0{i}.txt'
 
             fisierIesire = open(adresaFisierIesire, 'w')
             fisierIesire.write(raspuns)

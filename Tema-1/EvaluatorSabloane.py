@@ -66,7 +66,7 @@ class EvaluatorSabloane:
 
 
     def genereazaSiIncarcaSabloane(self, adresaDirectorImagini: str, extensieImagini: str, adresaDirectorSabloane: str):
-        fisiere = sorted(os.listdir(adresaDirectorImagini))
+        fisiere = sorted(os.listdir(adresaDirectorImagini + '/'))
 
         if os.path.exists(adresaDirectorSabloane):
             shutil.rmtree(adresaDirectorSabloane)
