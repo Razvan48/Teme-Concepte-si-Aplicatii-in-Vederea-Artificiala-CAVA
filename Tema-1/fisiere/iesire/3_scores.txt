@@ -4,7 +4,7 @@ Player1 9 106
 Player2 12 2
 Player1 14 172
 Player2 16 19
-Player1 19 70
+Player1 19 62
 Player2 22 50
 Player1 24 56
 Player2 31 124
