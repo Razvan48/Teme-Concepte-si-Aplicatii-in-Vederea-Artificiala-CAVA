@@ -342,6 +342,12 @@ class Tema_1:
             fisierIesire.write(raspuns)
             fisierIesire.close()
 
+            print('Configuratie Tabla:')
+            for i in range(14):
+                for j in range(14):
+                    print(self.numarDePeCelula[i][j], end=' ')
+                print()
+
         self.__salveazaScoruriRundeInFisier()
 
 

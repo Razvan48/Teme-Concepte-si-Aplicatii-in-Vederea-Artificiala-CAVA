@@ -1,12 +1,15 @@
 import Tema_1
 
 
-tema_1 = Tema_1.Tema_1('fisiere/antrenare', 'fisiere/imagini_auxiliare/01.jpg', 4, 50, 'fisiere/iesire', 'fisiere/sabloane', True)
+tema_1 = Tema_1.Tema_1('fisiere/antrenare', 'fisiere/imagini_auxiliare/01.jpg', 4, 50, 'fisiere/iesire', 'fisiere/sabloane', False)
 tema_1.ruleaza()
 
 # TODO:
 
-# inca sunt probleme la calculat scor
+# inca sunt probleme la calculat scor (e din cauza ca unele numere nu sunt recunoscute corect)
+
+
+# de adaugat sabloane cu piese rotite (-5 grade, ... , 5 grade)
 
 # 4 si 24 nu se genereaza ok din imaginile suplimentare
 
