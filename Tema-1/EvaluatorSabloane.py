@@ -71,8 +71,9 @@ class EvaluatorSabloane:
         if os.path.exists(adresaDirectorSabloane):
             shutil.rmtree(adresaDirectorSabloane)
 
-        iPragProcent = 0.082
-        jPragProcent = 0.082
+        iPragProcent = 0.095
+        jPragProcent = 0.095
+        unghiMaximRotire = 3
 
         for fisier in fisiere:
 
@@ -103,18 +104,24 @@ class EvaluatorSabloane:
                 latimeSablon = imgCareu.shape[1] / 14
                 inaltimeSablon = imgCareu.shape[0] / 14
 
-                imgSablon = imgCareu[int((iSablon + iPragProcent) * inaltimeSablon):int((iSablon + 1 - iPragProcent) * inaltimeSablon), int((jSablon + jPragProcent) * latimeSablon):int((jSablon + 1 - jPragProcent) * latimeSablon)].copy()
+                imgSablonIntreg = imgCareu[int(iSablon * inaltimeSablon):int((iSablon + 1) * inaltimeSablon), int(jSablon * latimeSablon):int((jSablon + 1) * latimeSablon)].copy()
 
-                imgSablonPrelucrat = Utilitar.prelucreazaSablon(imgSablon)
+                for unghiRotit in range(-unghiMaximRotire, unghiMaximRotire + 1):
 
-                if etichetaSablon not in self.colectiiSabloane:
-                    self.colectiiSabloane[etichetaSablon] = []
-                self.colectiiSabloane[etichetaSablon].append(imgSablonPrelucrat)
+                    imgSablonIntregRotit = cv.warpAffine(imgSablonIntreg, cv.getRotationMatrix2D((imgSablonIntreg.shape[1] / 2, imgSablonIntreg.shape[0] / 2), unghiRotit, 1.0), (imgSablonIntreg.shape[1], imgSablonIntreg.shape[0]))
 
-                os.makedirs(adresaDirectorSabloane + '/' + str(etichetaSablon), exist_ok=True)
-                cv.imwrite(adresaDirectorSabloane + '/' + str(etichetaSablon) + '/' + fisier, imgSablonPrelucrat)
+                    imgSablon = imgSablonIntregRotit[int(iPragProcent * imgSablonIntregRotit.shape[0]):int((1 - iPragProcent) * imgSablonIntregRotit.shape[0]), int(jPragProcent * imgSablonIntregRotit.shape[1]):int((1 - jPragProcent) * imgSablonIntregRotit.shape[1])].copy()
 
-                print(f'Generat si incarcat sablon cu eticheta {etichetaSablon} din imaginea {fisier}')
+                    imgSablonPrelucrat = Utilitar.prelucreazaSablon(imgSablon)
+
+                    if etichetaSablon not in self.colectiiSabloane:
+                        self.colectiiSabloane[etichetaSablon] = []
+                    self.colectiiSabloane[etichetaSablon].append(imgSablonPrelucrat)
+
+                    os.makedirs(adresaDirectorSabloane + '/' + str(etichetaSablon), exist_ok=True)
+                    cv.imwrite(adresaDirectorSabloane + '/' + str(etichetaSablon) + '/' + fisier[:fisier.rfind('.')] + '_' + str(unghiRotit + unghiMaximRotire) + extensieImagini, imgSablonPrelucrat)
+
+                    print(f'Generat si incarcat sablon cu eticheta {etichetaSablon} din imaginea {fisier} cu unghiul {unghiRotit}')
 
 
         sabloaneSuplimentare = dict()
@@ -226,25 +233,32 @@ class EvaluatorSabloane:
             inaltimeSablon = imgCareu.shape[0] / 14
 
             indexSablonAceeasiImagine = 0
+
             for sablon in infoSabloane:
                 iSablon = sablon[0][0]
                 jSablon = sablon[0][1]
                 etichetaSablon = sablon[1]
 
-                imgSablon = imgCareu[int((iSablon + iPragProcent) * inaltimeSablon):int((iSablon + 1 - iPragProcent) * inaltimeSablon), int((jSablon + jPragProcent) * latimeSablon):int((jSablon + 1 - jPragProcent) * latimeSablon)].copy()
+                imgSablonIntreg = imgCareu[int(iSablon * inaltimeSablon):int((iSablon + 1) * inaltimeSablon), int(jSablon * latimeSablon):int((jSablon + 1) * latimeSablon)].copy()
 
-                imgSablonPrelucrat = Utilitar.prelucreazaSablon(imgSablon)
+                for unghiRotit in range(-unghiMaximRotire, unghiMaximRotire + 1):
 
-                if etichetaSablon not in self.colectiiSabloane:
-                    self.colectiiSabloane[etichetaSablon] = []
-                self.colectiiSabloane[etichetaSablon].append(imgSablonPrelucrat)
+                    imgSablonIntregRotit = cv.warpAffine(imgSablonIntreg, cv.getRotationMatrix2D((imgSablonIntreg.shape[1] / 2, imgSablonIntreg.shape[0] / 2), unghiRotit, 1.0), (imgSablonIntreg.shape[1], imgSablonIntreg.shape[0]))
 
-                os.makedirs(adresaDirectorSabloane + '/' + str(etichetaSablon), exist_ok=True)
-                cv.imwrite(adresaDirectorSabloane + '/' + str(etichetaSablon) + '/' + 'extra' + str(indexImagine) + '_' + str(indexSablonAceeasiImagine) + extensieImagini, imgSablonPrelucrat)
+                    imgSablon = imgSablonIntregRotit[int(iPragProcent * imgSablonIntregRotit.shape[0]):int((1 - iPragProcent) * imgSablonIntregRotit.shape[0]), int(jPragProcent * imgSablonIntregRotit.shape[1]):int((1 - jPragProcent) * imgSablonIntregRotit.shape[1])].copy()
 
-                print(f'Generat si incarcat sablon suplimentar cu eticheta {etichetaSablon} din imaginea {adresaFisierSabloane}')
+                    imgSablonPrelucrat = Utilitar.prelucreazaSablon(imgSablon)
 
-                indexSablonAceeasiImagine += 1
+                    if etichetaSablon not in self.colectiiSabloane:
+                        self.colectiiSabloane[etichetaSablon] = []
+                    self.colectiiSabloane[etichetaSablon].append(imgSablonPrelucrat)
+
+                    os.makedirs(adresaDirectorSabloane + '/' + str(etichetaSablon), exist_ok=True)
+                    cv.imwrite(adresaDirectorSabloane + '/' + str(etichetaSablon) + '/' + 'extra' + '_' + str(indexImagine) + '_' + str(indexSablonAceeasiImagine) + '_' + str(unghiRotit + unghiMaximRotire) + extensieImagini, imgSablonPrelucrat)
+
+                    print(f'Generat si incarcat sablon suplimentar cu eticheta {etichetaSablon} din imaginea {adresaFisierSabloane} cu unghiul {unghiRotit}')
+
+                    indexSablonAceeasiImagine += 1
 
             indexImagine += 1
 
