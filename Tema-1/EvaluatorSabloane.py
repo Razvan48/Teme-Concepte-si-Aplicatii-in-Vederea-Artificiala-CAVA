@@ -290,7 +290,7 @@ class EvaluatorSabloane:
         #return -valoareMaxima
 
 
-    def evalueazaImagine(self, img):
+    def evalueazaImagine(self, img, sabloaneAcceptabile: set):
         imgPrelucrat = Utilitar.prelucreazaSablon(img)
 
         etichetaSolutie = -1
@@ -298,7 +298,7 @@ class EvaluatorSabloane:
 
         for eticheta, sabloane in self.colectiiSabloane.items():
 
-            if eticheta not in self.pieseIncaFolosibile:
+            if (eticheta not in self.pieseIncaFolosibile) or (eticheta not in sabloaneAcceptabile):
                 continue
 
             distanceSablon = []

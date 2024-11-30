@@ -12,7 +12,6 @@ def extrageCareuImagine(imgInit):
     img = cv.Canny(img, 200, 400)
     img = cv.dilate(img, np.ones((5, 5), np.uint8), iterations=2)
 
-    # Se presupune ca avem mereu macar un contur in imaginea initiala.
     contururi, _ = cv.findContours(img, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
 
     xMin = imgInit.shape[1] - 1
@@ -25,6 +24,20 @@ def extrageCareuImagine(imgInit):
         yMin = min(yMin, yStangaSus)
         xMax = max(xMax, xStangaSus + latime)
         yMax = max(yMax, yStangaSus + inaltime)
+
+
+    xMinImplicit = 873
+    xMaxImplicit = 2333
+    yMinImplicit = 1776
+    yMaxImplicit = 3243
+    pragExtragereCareuX = 25
+    pragExtragereCareuY = 25
+    if xMin > xMax or yMin > yMax or abs((xMax - xMin) - (xMaxImplicit - xMinImplicit)) > pragExtragereCareuX or abs((yMax - yMin) - (yMaxImplicit - yMinImplicit)) > pragExtragereCareuY:
+        xMin = xMinImplicit
+        xMax = xMaxImplicit
+        yMin = yMinImplicit
+        yMax = yMaxImplicit
+
 
     imgCareu = imgInit[yMin:yMax, xMin:xMax].copy()
 

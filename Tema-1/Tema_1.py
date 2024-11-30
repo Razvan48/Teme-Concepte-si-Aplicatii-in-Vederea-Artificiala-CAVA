@@ -209,6 +209,61 @@ class Tema_1:
         return numPixeli
 
 
+    def __candidatCorectCelulaLibera(self, i: int, j: int):
+        if self.numarDePeCelula[i][j] != -1:
+            return False
+
+        if i > 1 and self.numarDePeCelula[i - 1][j] != -1 and self.numarDePeCelula[i - 2][j] != -1:
+            return True
+        if i + 2 < 14 and self.numarDePeCelula[i + 1][j] != -1 and self.numarDePeCelula[i + 2][j] != -1:
+            return True
+        if j > 1 and self.numarDePeCelula[i][j - 1] != -1 and self.numarDePeCelula[i][j - 2] != -1:
+            return True
+        if j + 2 < 14 and self.numarDePeCelula[i][j + 1] != -1 and self.numarDePeCelula[i][j + 2] != -1:
+            return True
+
+        return False
+
+
+    def __identificareSingureleSabloaneAcceptabile(self, i : int, j : int):
+        sabloaneAcceptabile = set()
+
+        if i > 1 and self.numarDePeCelula[i - 1][j] != -1 and self.numarDePeCelula[i - 2][j] != -1:
+            sabloaneAcceptabile.add(self.numarDePeCelula[i - 1][j] + self.numarDePeCelula[i - 2][j])
+            sabloaneAcceptabile.add(self.numarDePeCelula[i - 1][j] * self.numarDePeCelula[i - 2][j])
+            sabloaneAcceptabile.add(abs(self.numarDePeCelula[i - 1][j] - self.numarDePeCelula[i - 2][j]))
+            if self.numarDePeCelula[i - 1][j] != 0 and self.numarDePeCelula[i - 2][j] % self.numarDePeCelula[i - 1][j] == 0:
+                sabloaneAcceptabile.add(self.numarDePeCelula[i - 2][j] // self.numarDePeCelula[i - 1][j])
+            if self.numarDePeCelula[i - 2][j] != 0 and self.numarDePeCelula[i - 1][j] % self.numarDePeCelula[i - 2][j] == 0:
+                sabloaneAcceptabile.add(self.numarDePeCelula[i - 1][j] // self.numarDePeCelula[i - 2][j])
+        if i + 2 < 14 and self.numarDePeCelula[i + 1][j] != -1 and self.numarDePeCelula[i + 2][j] != -1:
+            sabloaneAcceptabile.add(self.numarDePeCelula[i + 1][j] + self.numarDePeCelula[i + 2][j])
+            sabloaneAcceptabile.add(self.numarDePeCelula[i + 1][j] * self.numarDePeCelula[i + 2][j])
+            sabloaneAcceptabile.add(abs(self.numarDePeCelula[i + 1][j] - self.numarDePeCelula[i + 2][j]))
+            if self.numarDePeCelula[i + 1][j] != 0 and self.numarDePeCelula[i + 2][j] % self.numarDePeCelula[i + 1][j] == 0:
+                sabloaneAcceptabile.add(self.numarDePeCelula[i + 2][j] // self.numarDePeCelula[i + 1][j])
+            if self.numarDePeCelula[i + 2][j] != 0 and self.numarDePeCelula[i + 1][j] % self.numarDePeCelula[i + 2][j] == 0:
+                sabloaneAcceptabile.add(self.numarDePeCelula[i + 1][j] // self.numarDePeCelula[i + 2][j])
+        if j > 1 and self.numarDePeCelula[i][j - 1] != -1 and self.numarDePeCelula[i][j - 2] != -1:
+            sabloaneAcceptabile.add(self.numarDePeCelula[i][j - 1] + self.numarDePeCelula[i][j - 2])
+            sabloaneAcceptabile.add(self.numarDePeCelula[i][j - 1] * self.numarDePeCelula[i][j - 2])
+            sabloaneAcceptabile.add(abs(self.numarDePeCelula[i][j - 1] - self.numarDePeCelula[i][j - 2]))
+            if self.numarDePeCelula[i][j - 1] != 0 and self.numarDePeCelula[i][j - 2] % self.numarDePeCelula[i][j - 1] == 0:
+                sabloaneAcceptabile.add(self.numarDePeCelula[i][j - 2] // self.numarDePeCelula[i][j - 1])
+            if self.numarDePeCelula[i][j - 2] != 0 and self.numarDePeCelula[i][j - 1] % self.numarDePeCelula[i][j - 2] == 0:
+                sabloaneAcceptabile.add(self.numarDePeCelula[i][j - 1] // self.numarDePeCelula[i][j - 2])
+        if j + 2 < 14 and self.numarDePeCelula[i][j + 1] != -1 and self.numarDePeCelula[i][j + 2] != -1:
+            sabloaneAcceptabile.add(self.numarDePeCelula[i][j + 1] + self.numarDePeCelula[i][j + 2])
+            sabloaneAcceptabile.add(self.numarDePeCelula[i][j + 1] * self.numarDePeCelula[i][j + 2])
+            sabloaneAcceptabile.add(abs(self.numarDePeCelula[i][j + 1] - self.numarDePeCelula[i][j + 2]))
+            if self.numarDePeCelula[i][j + 1] != 0 and self.numarDePeCelula[i][j + 2] % self.numarDePeCelula[i][j + 1] == 0:
+                sabloaneAcceptabile.add(self.numarDePeCelula[i][j + 2] // self.numarDePeCelula[i][j + 1])
+            if self.numarDePeCelula[i][j + 2] != 0 and self.numarDePeCelula[i][j + 1] % self.numarDePeCelula[i][j + 2] == 0:
+                sabloaneAcceptabile.add(self.numarDePeCelula[i][j + 1] // self.numarDePeCelula[i][j + 2])
+
+        return sabloaneAcceptabile
+
+
     def compara2Imagini(self, indexAnt: int, indexCrt: int, filtrareStrictaCelule: bool):
         if indexAnt >= len(self.imaginiCareu) or indexCrt >= len(self.imaginiCareu):
             print('Nu sunt suficiente imagini')
@@ -251,7 +306,7 @@ class Tema_1:
                 celulaImgAntFaraContur = celulaImgAnt[int(yPragProcent * inaltimeCelulaImgCrt):int((1.0 - yPragProcent) * inaltimeCelulaImgCrt), int(xPragProcent * latimeCelulaImgCrt):int((1.0 - xPragProcent) * latimeCelulaImgCrt)].copy()
                 celulaImgCrtFaraContur = celulaImgCrt[int(yPragProcent * inaltimeCelulaImgCrt):int((1.0 - yPragProcent) * inaltimeCelulaImgCrt), int(xPragProcent * latimeCelulaImgCrt):int((1.0 - xPragProcent) * latimeCelulaImgCrt)].copy()
 
-                if (self.numarDePeCelula[i][j] != -1) or (filtrareStrictaCelule and (self.__numarPixeliNegri(celulaImgAntFaraContur) > 12 or self.__numarPixeliNegri(celulaImgCrtFaraContur) < 4)):
+                if (self.__candidatCorectCelulaLibera(i, j) == False) or (filtrareStrictaCelule and (self.__numarPixeliNegri(celulaImgAntFaraContur) > 12 or self.__numarPixeliNegri(celulaImgCrtFaraContur) < 4)):
                     xImgAnt += latimeCelulaImgAnt
                     xImgCrt += latimeCelulaImgCrt
                     continue
@@ -288,7 +343,7 @@ class Tema_1:
         if imgCelulaMaximaFaraContur is None:
             return self.compara2Imagini(indexAnt, indexCrt, False)
 
-        etichetaSolutie = self.evaluatorSabloane.evalueazaImagine(imgCelulaMaximaFaraContur)
+        etichetaSolutie = self.evaluatorSabloane.evalueazaImagine(imgCelulaMaximaFaraContur, self.__identificareSingureleSabloaneAcceptabile(iMaxim, jMaxim))
 
         self.numarDePeCelula[iMaxim][jMaxim] = etichetaSolutie
 
