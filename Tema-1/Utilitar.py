@@ -3,6 +3,11 @@ import cv2 as cv
 
 
 def extrageCareuImagine(imgInit):
+    latimeImplicita = 3072
+    inaltimeImplicita = 4080
+
+    imgInit = cv.resize(imgInit, (latimeImplicita, inaltimeImplicita))
+
     img = imgInit.copy()
     img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     img = cv.medianBlur(img, 7)
