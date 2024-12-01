@@ -2,8 +2,12 @@ Module necesare:
 
 numpy
 cv2
+
 os
 shutil
+
+
+
 
 
 
