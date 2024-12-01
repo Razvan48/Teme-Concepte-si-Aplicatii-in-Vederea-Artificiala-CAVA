@@ -106,6 +106,17 @@ class Tema_1:
             rundaCurenta += 1
 
 
+    def __salveazaRundeInFisier(self):
+        fisierRunde = open(f'{self.adresaDirectorIesire}/{self.nrJoc}_turns.txt', 'w')
+
+        rundaCurenta = 0
+        for runda in self.listaRunde:
+            fisierRunde.write(f'{runda[0]} {runda[1]}')
+            if rundaCurenta + 1 < len(self.listaRunde):
+                fisierRunde.write('\n')
+            rundaCurenta += 1
+
+
     def __calculeazaScorPiesaNoua(self, iPiesa: int, jPiesa: int):
         valoarePiesa = self.PONDERI_SCOR_CELULA[iPiesa][jPiesa] * self.numarDePeCelula[iPiesa][jPiesa]
         scorTotalPiesa = 0
@@ -404,6 +415,7 @@ class Tema_1:
                 print()
 
         self.__salveazaScoruriRundeInFisier()
+        self.__salveazaRundeInFisier()
 
 
 

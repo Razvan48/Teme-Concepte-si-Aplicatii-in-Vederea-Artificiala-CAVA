@@ -8,13 +8,20 @@ print('Versiune Python: ', sys.version)
 print('Versiune Numpy: ', np.__version__)
 print('Versiune OpenCV-Python: ', cv.__version__)
 
-tema_1 = Tema_1.Tema_1('fisiere/antrenare', 'fisiere/imagini_auxiliare/01.jpg', 4, 50, 'fisiere/iesire', 'fisiere/sabloane', True)
+tema_1 = Tema_1.Tema_1('fisiere/antrenare', 'fisiere/imagini_auxiliare/01.jpg', 5, 50, 'fisiere/iesire', 'fisiere/sabloane', True)
 tema_1.ruleaza()
 
 
 # TODO:
 
+# de completat mod utilizare/documentatie in readme
 
+# de verificat pdf-ul cu documentatia
+# de adaugat pdf-ul cu documentatia in repository
+
+# de rotit cu mai putine grade imaginile? (2 in loc de 3 de exemplu)
+
+# de testat inclusiv testul 5
 # de testat si restul jocurilor (inca 150 de imagini)
 # de verificat ca structurile pentru celule deja ocupate si piese deja folosite se populeaza corect
 
