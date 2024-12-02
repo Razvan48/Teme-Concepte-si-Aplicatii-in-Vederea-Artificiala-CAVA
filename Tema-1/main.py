@@ -14,6 +14,9 @@ tema_1.ruleaza()
 
 # TODO:
 
+# nu stiu daca merita, dar cand construim dataset-ul de templates am putea lua din imagine fiecare numar, nu doar cel nou aparut
+# (ca poate apar mici diferente de luminozitate, etc.)
+
 # de completat mod utilizare/documentatie in readme
 
 # de verificat pdf-ul cu documentatia
