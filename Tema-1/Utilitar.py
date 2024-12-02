@@ -35,8 +35,8 @@ def extrageCareuImagine(imgInit):
     xMaxImplicit = 2333
     yMinImplicit = 1776
     yMaxImplicit = 3243
-    pragExtragereCareuX = 25
-    pragExtragereCareuY = 25
+    pragExtragereCareuX = 275
+    pragExtragereCareuY = 275
     if xMin > xMax or yMin > yMax or abs((xMax - xMin) - (xMaxImplicit - xMinImplicit)) > pragExtragereCareuX or abs((yMax - yMin) - (yMaxImplicit - yMinImplicit)) > pragExtragereCareuY:
         xMin = xMinImplicit
         xMax = xMaxImplicit
