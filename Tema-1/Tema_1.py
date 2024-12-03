@@ -121,7 +121,7 @@ class Tema_1:
         valoarePiesa = self.PONDERI_SCOR_CELULA[iPiesa][jPiesa] * self.numarDePeCelula[iPiesa][jPiesa]
         scorTotalPiesa = 0
 
-        print('Pondere Piesa:', valoarePiesa)
+        #print('Pondere Piesa:', valoarePiesa)
 
         # Linie Stanga
         if jPiesa > 1 and self.numarDePeCelula[iPiesa][jPiesa - 1] != -1 and self.numarDePeCelula[iPiesa][jPiesa - 2] != -1:
@@ -138,7 +138,7 @@ class Tema_1:
                 scorTotalPiesa += valoarePiesa
             elif (self.CONSTRANGERI_CELULE[iPiesa][jPiesa] == ' ' or self.CONSTRANGERI_CELULE[iPiesa][jPiesa] == '/') and self.numarDePeCelula[iPiesa][jPiesa - 2] != 0 and self.numarDePeCelula[iPiesa][jPiesa - 1] % self.numarDePeCelula[iPiesa][jPiesa - 2] == 0 and self.numarDePeCelula[iPiesa][jPiesa - 1] // self.numarDePeCelula[iPiesa][jPiesa - 2] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
-        print('Scor Piesa:', scorTotalPiesa)
+        #print('Scor Piesa:', scorTotalPiesa)
 
         # Linie Dreapta
         if jPiesa + 2 < 14 and self.numarDePeCelula[iPiesa][jPiesa + 1] != -1 and self.numarDePeCelula[iPiesa][jPiesa + 2] != -1:
@@ -155,7 +155,7 @@ class Tema_1:
                 scorTotalPiesa += valoarePiesa
             elif (self.CONSTRANGERI_CELULE[iPiesa][jPiesa] == ' ' or self.CONSTRANGERI_CELULE[iPiesa][jPiesa] == '/') and self.numarDePeCelula[iPiesa][jPiesa + 2] != 0 and self.numarDePeCelula[iPiesa][jPiesa + 1] % self.numarDePeCelula[iPiesa][jPiesa + 2] == 0 and self.numarDePeCelula[iPiesa][jPiesa + 1] // self.numarDePeCelula[iPiesa][jPiesa + 2] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
-        print('Scor Piesa:', scorTotalPiesa)
+        #print('Scor Piesa:', scorTotalPiesa)
 
         # Coloana Sus
         if iPiesa > 1 and self.numarDePeCelula[iPiesa - 1][jPiesa] != -1 and self.numarDePeCelula[iPiesa - 2][jPiesa] != -1:
@@ -172,7 +172,7 @@ class Tema_1:
                 scorTotalPiesa += valoarePiesa
             elif (self.CONSTRANGERI_CELULE[iPiesa][jPiesa] == ' ' or self.CONSTRANGERI_CELULE[iPiesa][jPiesa] == '/') and self.numarDePeCelula[iPiesa - 2][jPiesa] != 0 and self.numarDePeCelula[iPiesa - 1][jPiesa] % self.numarDePeCelula[iPiesa - 2][jPiesa] == 0 and self.numarDePeCelula[iPiesa - 1][jPiesa] // self.numarDePeCelula[iPiesa - 2][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
-        print('Scor Piesa:', scorTotalPiesa)
+        #print('Scor Piesa:', scorTotalPiesa)
 
         # Coloana Jos
         if iPiesa + 2 < 14 and self.numarDePeCelula[iPiesa + 1][jPiesa] != -1 and self.numarDePeCelula[iPiesa + 2][jPiesa] != -1:
@@ -189,7 +189,7 @@ class Tema_1:
                 scorTotalPiesa += valoarePiesa
             elif (self.CONSTRANGERI_CELULE[iPiesa][jPiesa] == ' ' or self.CONSTRANGERI_CELULE[iPiesa][jPiesa] == '/') and self.numarDePeCelula[iPiesa + 2][jPiesa] != 0 and self.numarDePeCelula[iPiesa + 1][jPiesa] % self.numarDePeCelula[iPiesa + 2][jPiesa] == 0 and self.numarDePeCelula[iPiesa + 1][jPiesa] // self.numarDePeCelula[iPiesa + 2][jPiesa] == self.numarDePeCelula[iPiesa][jPiesa]:
                 scorTotalPiesa += valoarePiesa
-        print('Scor Piesa:', scorTotalPiesa)
+        #print('Scor Piesa:', scorTotalPiesa)
 
         return scorTotalPiesa
 
@@ -396,7 +396,7 @@ class Tema_1:
 
             raspuns = self.compara2Imagini(i - 1, i, True)
             print(f'Imaginea {i} - {raspuns}')
-            self.afiseazaImagini(self.imaginiCareu[i - 1:i + 1])
+            #self.afiseazaImagini(self.imaginiCareu[i - 1:i + 1])
 
             adresaFisierIesire = self.adresaDirectorIesire
             if i > 9:
@@ -408,11 +408,12 @@ class Tema_1:
             fisierIesire.write(raspuns)
             fisierIesire.close()
 
-            print('Configuratie Tabla:')
-            for i in range(14):
-                for j in range(14):
-                    print(self.numarDePeCelula[i][j], end=' ')
-                print()
+            #print('Configuratie Tabla:')
+            #for i in range(14):
+            #    for j in range(14):
+            #        print(self.numarDePeCelula[i][j], end=' ')
+            #    print()
+
 
         self.__salveazaScoruriRundeInFisier()
         self.__salveazaRundeInFisier()

@@ -1,24 +1,26 @@
 import Tema_1
 
-import numpy as np
-import cv2 as cv
-import sys
+#import numpy as np
+#import cv2 as cv
+#import sys
 
-print('Versiune Python: ', sys.version)
-print('Versiune Numpy: ', np.__version__)
-print('Versiune OpenCV-Python: ', cv.__version__)
+#print('Versiune Python: ', sys.version)
+#print('Versiune Numpy: ', np.__version__)
+#print('Versiune OpenCV-Python: ', cv.__version__)
 
-tema_1 = Tema_1.Tema_1('fisiere/antrenare', 'fisiere/imagini_auxiliare/01.jpg', 5, 50, 'fisiere/iesire', 'fisiere/sabloane', True)
+tema_1 = Tema_1.Tema_1('fisiere/testare', 'fisiere/imagini_auxiliare/01.jpg', 1, 50, 'fisiere/iesire/352_Capatina_Razvan', 'fisiere/sabloane', True)
+tema_1.ruleaza()
+
+tema_1 = Tema_1.Tema_1('fisiere/testare', 'fisiere/imagini_auxiliare/01.jpg', 2, 50, 'fisiere/iesire/352_Capatina_Razvan', 'fisiere/sabloane', True)
+tema_1.ruleaza()
+
+tema_1 = Tema_1.Tema_1('fisiere/testare', 'fisiere/imagini_auxiliare/01.jpg', 3, 50, 'fisiere/iesire/352_Capatina_Razvan', 'fisiere/sabloane', True)
+tema_1.ruleaza()
+
+tema_1 = Tema_1.Tema_1('fisiere/testare', 'fisiere/imagini_auxiliare/01.jpg', 4, 50, 'fisiere/iesire/352_Capatina_Razvan', 'fisiere/sabloane', True)
 tema_1.ruleaza()
 
 
-# TODO:
-
-# de testat inclusiv testul 5
-# de testat si restul jocurilor (inca 150 de imagini)
-# de verificat ca structurile pentru celule deja ocupate si piese deja folosite se populeaza corect
-
-# de eliminat comentariile din cod + de eliminat afisari, etc
 
 
 

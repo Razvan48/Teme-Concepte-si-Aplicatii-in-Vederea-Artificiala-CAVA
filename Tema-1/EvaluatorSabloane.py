@@ -315,6 +315,12 @@ class EvaluatorSabloane:
         self.pieseIncaFolosibile[etichetaSolutie] -= 1
         if self.pieseIncaFolosibile[etichetaSolutie] == 0:
             del self.pieseIncaFolosibile[etichetaSolutie]
+
+        #print('Piese Folosibile:')
+        #for eticheta, frecventa in self.pieseIncaFolosibile.items():
+        #    print(f'Eticheta {eticheta} are {frecventa} piese ramase')
+        #print()
+
         return etichetaSolutie
 
 
