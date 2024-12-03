@@ -14,19 +14,13 @@ tema_1.ruleaza()
 
 # TODO:
 
-# nu stiu daca merita, dar cand construim dataset-ul de templates am putea lua din imagine fiecare numar, nu doar cel nou aparut
-# (ca poate apar mici diferente de luminozitate, etc.)
-
-# de completat mod utilizare/documentatie in readme
-
-# de verificat pdf-ul cu documentatia
-# de adaugat pdf-ul cu documentatia in repository
-
-# de rotit cu mai putine grade imaginile? (2 in loc de 3 de exemplu)
-
 # de testat inclusiv testul 5
 # de testat si restul jocurilor (inca 150 de imagini)
 # de verificat ca structurile pentru celule deja ocupate si piese deja folosite se populeaza corect
+
+# de eliminat comentariile din cod + de eliminat afisari, etc
+
+
 
 
 
