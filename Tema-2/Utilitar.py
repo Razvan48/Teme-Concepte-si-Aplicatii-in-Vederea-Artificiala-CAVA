@@ -1,4 +1,6 @@
 import os
+import sklearn.cluster as cluster
+import numpy as np
 
 
 def genereazaHiperparametriFereastraGlisanta(adresaDirector: str, adresaHiperparametrii: str):
@@ -44,14 +46,35 @@ def genereazaHiperparametriFereastraGlisanta(adresaDirector: str, adresaHiperpar
 
     os.makedirs(adresaHiperparametrii, exist_ok=True)
 
+
+    NUM_CLUSTER_ASPECT_RATIO = 7
     for numePersonaj in aspectRatios:
         fisier = open(adresaHiperparametrii + '/' + numePersonaj + '_aspectRatios.txt', 'w')
         for aspectRatio in aspectRatios[numePersonaj]:
             fisier.write(str(aspectRatio) + '\n')
         fisier.close()
 
+        fisier = open(adresaHiperparametrii + '/' + numePersonaj + '_aspectRatiosClustered.txt', 'w')
+        aspectRatiosClustered = cluster.KMeans(n_clusters=NUM_CLUSTER_ASPECT_RATIO, random_state=7)
+        aspectRatiosClustered.fit(np.array(list(aspectRatios[numePersonaj])).reshape(-1, 1))
+        for clusterCenter in aspectRatiosClustered.cluster_centers_.flatten():
+            fisier.write(str(clusterCenter) + '\n')
+        fisier.close()
+
+
+    NUM_CLUSTER_INALTIME_FEREASTRA = 7
     for numePersonaj in inaltimiFereastra:
         fisier = open(adresaHiperparametrii + '/' + numePersonaj + '_inaltimiFereastra.txt', 'w')
         for inaltimeFereastra in inaltimiFereastra[numePersonaj]:
             fisier.write(str(inaltimeFereastra) + '\n')
         fisier.close()
+
+        fisier = open(adresaHiperparametrii + '/' + numePersonaj + '_inaltimiFereastraClustered.txt', 'w')
+        inaltimiFereastraClustered = cluster.KMeans(n_clusters=NUM_CLUSTER_INALTIME_FEREASTRA, random_state=7)
+        inaltimiFereastraClustered.fit(np.array(list(inaltimiFereastra[numePersonaj])).reshape(-1, 1))
+        for clusterCenter in inaltimiFereastraClustered.cluster_centers_.flatten():
+            fisier.write(str(clusterCenter) + '\n')
+        fisier.close()
+
+
+

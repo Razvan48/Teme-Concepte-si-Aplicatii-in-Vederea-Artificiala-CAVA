@@ -6,7 +6,6 @@ Utilitar.genereazaHiperparametriFereastraGlisanta('fisiere/antrenare', 'fisiere/
 
 # TODO:
 # augmentare cu exemple negative
-# k-means clustering pentru hiperparametrii
 
 
 # de facut documentatia (txt-ul) (momentan in documentatie trebuie scris doar ce module sunt necesare (nici asta nu e scris momentan))
