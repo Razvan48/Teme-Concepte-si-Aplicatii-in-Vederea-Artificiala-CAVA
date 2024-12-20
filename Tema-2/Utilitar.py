@@ -1,6 +1,8 @@
 import os
 import sklearn.cluster as cluster
 import numpy as np
+import cv2 as cv
+
 
 
 def genereazaHiperparametriFereastraGlisanta(adresaDirector: str, adresaHiperparametrii: str):
@@ -78,3 +80,16 @@ def genereazaHiperparametriFereastraGlisanta(adresaDirector: str, adresaHiperpar
 
 
 
+def genereazaExempleNegative(adresaDirector: str, adresaHiperparametrii: str, adresaExempleNegative: str, numarExemple: int):
+    numePersonaje = ['dad', 'deedee', 'dexter', 'mom']
+
+    NUMAR_EXEMPLE_ANTRENARE_PER_PERSONAJ = 1000
+    for _ in range(numarExemple):
+        numePersonaj = np.random.choice(numePersonaje)
+        indexImagine = np.random.randint(1, NUMAR_EXEMPLE_ANTRENARE_PER_PERSONAJ + 1)
+
+        print(indexImagine)
+
+
+    # TODO: de creat orice fel de fisier daca nu exista, folosind os.makedirs(adresaExempleNegative, exist_ok=True) si altele
+    # TODO: de implementat intersection over union si de ales exemple negative folosind asta
