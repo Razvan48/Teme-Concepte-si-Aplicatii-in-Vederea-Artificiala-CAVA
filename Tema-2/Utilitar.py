@@ -80,16 +80,120 @@ def genereazaHiperparametriFereastraGlisanta(adresaDirector: str, adresaHiperpar
 
 
 
+def intersectionOverUnion(xMin1, yMin1, xMax1, yMax1, xMin2, yMin2, xMax2, yMax2):
+    suprapunereX = min(xMax1, xMax2) - max(xMin1, xMin2)
+    suprapunereY = min(yMax1, yMax2) - max(yMin1, yMin2)
+
+    if suprapunereX < 0:
+        suprapunereX = 0
+    if suprapunereY < 0:
+        suprapunereY = 0
+
+    arieSuprapunere = suprapunereX * suprapunereY
+    arie1 = (xMax1 - xMin1) * (yMax1 - yMin1)
+    arie2 = (xMax2 - xMin2) * (yMax2 - yMin2)
+
+    if arie1 == 0 or arie2 == 0:
+        raise ValueError('intersectionOverUnion: arie1 sau arie2 este 0')
+
+    return arieSuprapunere / (arie1 + arie2 - arieSuprapunere)
+
+
+
+def ferestreleSeSuprapun(xMin1, yMin1, xMax1, yMax1, xMin2, yMin2, xMax2, yMax2):
+    suprapunereX = min(xMax1, xMax2) - max(xMin1, xMin2)
+    suprapunereY = min(yMax1, yMax2) - max(yMin1, yMin2)
+
+    return suprapunereX > 0 and suprapunereY > 0
+
+
 def genereazaExempleNegative(adresaDirector: str, adresaHiperparametrii: str, adresaExempleNegative: str, numarExemple: int):
     numePersonaje = ['dad', 'deedee', 'dexter', 'mom']
 
+    aspectRatiosUtilizabile = set()
+    inaltimiFereastraUtilizabile = set()
+
+    for numePersonaj in numePersonaje:
+        fisierAspectRatios = open(adresaHiperparametrii + '/' + numePersonaj + '_aspectRatiosClustered.txt', 'r')
+        for linie in fisierAspectRatios:
+            aspectRatiosUtilizabile.add(float(linie))
+        fisierAspectRatios.close()
+
+        fisierInaltimiFereastra = open(adresaHiperparametrii + '/' + numePersonaj + '_inaltimiFereastraClustered.txt', 'r')
+        for linie in fisierInaltimiFereastra:
+            inaltimiFereastraUtilizabile.add(float(linie))
+        fisierInaltimiFereastra.close()
+
+
+
+    os.makedirs(adresaExempleNegative, exist_ok=True)
+
     NUMAR_EXEMPLE_ANTRENARE_PER_PERSONAJ = 1000
-    for _ in range(numarExemple):
+    for indexExempluNegativ in range(numarExemple):
         numePersonaj = np.random.choice(numePersonaje)
         indexImagine = np.random.randint(1, NUMAR_EXEMPLE_ANTRENARE_PER_PERSONAJ + 1)
 
-        print(indexImagine)
+        strIndexImagine = str(indexImagine)
+        if indexImagine < 10:
+            strIndexImagine = '000' + strIndexImagine
+        elif indexImagine < 100:
+            strIndexImagine = '00' + strIndexImagine
+        elif indexImagine < 1000:
+            strIndexImagine = '0' + strIndexImagine
+
+        fisierAdnotari = open(adresaDirector + '/' + numePersonaj + '_annotations.txt', 'r')
+        zoneDeInteres = []
+
+        for linie in fisierAdnotari:
+            cuvinte = linie.split(' ')
+
+            # elimina \n
+            if cuvinte[-1][-1] == '\n':
+                cuvinte[-1] = cuvinte[-1][:-1]
+
+            numeFisierImagine = cuvinte[0]
+            xMin = int(cuvinte[1])
+            yMin = int(cuvinte[2])
+            xMax = int(cuvinte[3])
+            yMax = int(cuvinte[4])
+
+            if numeFisierImagine == strIndexImagine + '.jpg':
+                zoneDeInteres.append((xMin, yMin, xMax, yMax))
+
+        fisierAdnotari.close()
+
+        imagine = cv.imread(adresaDirector + '/' + numePersonaj + '/' + strIndexImagine + '.jpg')
+
+        exempluNegativGasit = False
+        while not exempluNegativGasit:
+            aspectRatioAles = np.random.choice(list(aspectRatiosUtilizabile))
+            inaltimeFereastraAleasa = int(np.random.choice(list(inaltimiFereastraUtilizabile)))
+
+            if aspectRatioAles * inaltimeFereastraAleasa > imagine.shape[1]: # nu trebuie verificata si inaltimea fata de imagine.shape[0]
+                continue
+
+            xMin = np.random.randint(0, imagine.shape[1] - int(aspectRatioAles * inaltimeFereastraAleasa) + 1)
+            yMin = np.random.randint(0, imagine.shape[0] - inaltimeFereastraAleasa + 1)
+            xMax = xMin + int(aspectRatioAles * inaltimeFereastraAleasa) - 1
+            yMax = yMin + inaltimeFereastraAleasa - 1
 
 
-    # TODO: de creat orice fel de fisier daca nu exista, folosind os.makedirs(adresaExempleNegative, exist_ok=True) si altele
-    # TODO: de implementat intersection over union si de ales exemple negative folosind asta
+            exempluNegativGasit = True
+            for zonaDeInteres in zoneDeInteres:
+                if ferestreleSeSuprapun(xMin, yMin, xMax, yMax, zonaDeInteres[0], zonaDeInteres[1], zonaDeInteres[2], zonaDeInteres[3]):
+                    exempluNegativGasit = False
+                    break
+
+            if exempluNegativGasit:
+                cv.imwrite(adresaExempleNegative + '/' + str(indexExempluNegativ) + '.jpg', imagine[yMin:yMax + 1, xMin:xMax + 1])
+
+
+    # TODO: de creat orice fel de fisier daca nu exista, folosind os.makedirs(adresaExempleNegative, exist_ok=True) si altele (de curatat daca deja exista ceva acolo si daca este nevoie de asta in primul rand)
+    # TODO: de verificat ca implementarea pentru intersection over union este corecta (de vazut daca avem nevoie de intersection over union)
+    # TODO: de verificat si pentru metoda de suprapunere a ferestrelor
+
+    # TODO: exista posibilitatea ca atunci cand generez exemple negative sa aleaga o imagine pentru care nu poate gasi o zona buna de extras exemplu negativ si sa se blocheze (de rezolvat)
+
+
+
+
