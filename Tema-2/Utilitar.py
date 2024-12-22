@@ -5,7 +5,7 @@ import cv2 as cv
 
 
 
-def genereazaHiperparametriFereastraGlisanta(adresaDirector: str, adresaHiperparametrii: str):
+def genereazaHiperparametriFereastraGlisanta(adresaAntrenare: str, adresaHiperparametrii: str):
 
     aspectRatios = dict()
     aspectRatios['dad'] = set()
@@ -21,9 +21,9 @@ def genereazaHiperparametriFereastraGlisanta(adresaDirector: str, adresaHiperpar
     inaltimiFereastra['mom'] = set()
     inaltimiFereastra['unknown'] = set()
 
-    for fisier in os.listdir(adresaDirector):
+    for fisier in os.listdir(adresaAntrenare):
         if fisier.endswith('.txt'):
-            fisierAdnotari = open(adresaDirector + '/' + fisier, 'r')
+            fisierAdnotari = open(adresaAntrenare + '/' + fisier, 'r')
             for linie in fisierAdnotari:
                 cuvinte = linie.split(' ')
 
@@ -107,7 +107,7 @@ def ferestreleSeSuprapun(xMin1, yMin1, xMax1, yMax1, xMin2, yMin2, xMax2, yMax2)
     return suprapunereX > 0 and suprapunereY > 0
 
 
-def genereazaExempleNegative(adresaDirector: str, adresaHiperparametrii: str, adresaExempleNegative: str, numarExemple: int):
+def genereazaExempleNegative(adresaAntrenare: str, adresaHiperparametrii: str, adresaExempleNegative: str, numarExemple: int):
     numePersonaje = ['dad', 'deedee', 'dexter', 'mom']
 
     aspectRatiosUtilizabile = set()
@@ -129,7 +129,8 @@ def genereazaExempleNegative(adresaDirector: str, adresaHiperparametrii: str, ad
     os.makedirs(adresaExempleNegative, exist_ok=True)
 
     NUMAR_EXEMPLE_ANTRENARE_PER_PERSONAJ = 1000
-    for indexExempluNegativ in range(numarExemple):
+    indexExempluNegativ = 0
+    while indexExempluNegativ < numarExemple:
         numePersonaj = np.random.choice(numePersonaje)
         indexImagine = np.random.randint(1, NUMAR_EXEMPLE_ANTRENARE_PER_PERSONAJ + 1)
 
@@ -141,7 +142,7 @@ def genereazaExempleNegative(adresaDirector: str, adresaHiperparametrii: str, ad
         elif indexImagine < 1000:
             strIndexImagine = '0' + strIndexImagine
 
-        fisierAdnotari = open(adresaDirector + '/' + numePersonaj + '_annotations.txt', 'r')
+        fisierAdnotari = open(adresaAntrenare + '/' + numePersonaj + '_annotations.txt', 'r')
         zoneDeInteres = []
 
         for linie in fisierAdnotari:
@@ -162,10 +163,12 @@ def genereazaExempleNegative(adresaDirector: str, adresaHiperparametrii: str, ad
 
         fisierAdnotari.close()
 
-        imagine = cv.imread(adresaDirector + '/' + numePersonaj + '/' + strIndexImagine + '.jpg')
+        imagine = cv.imread(adresaAntrenare + '/' + numePersonaj + '/' + strIndexImagine + '.jpg')
 
+        NUMAR_INCERCARI_EXEMPLU_NEGATIV = 5
         exempluNegativGasit = False
-        while not exempluNegativGasit:
+        indexIncercare = 0
+        while (not exempluNegativGasit) and indexIncercare < NUMAR_INCERCARI_EXEMPLU_NEGATIV:
             aspectRatioAles = np.random.choice(list(aspectRatiosUtilizabile))
             inaltimeFereastraAleasa = int(np.random.choice(list(inaltimiFereastraUtilizabile)))
 
@@ -187,12 +190,13 @@ def genereazaExempleNegative(adresaDirector: str, adresaHiperparametrii: str, ad
             if exempluNegativGasit:
                 cv.imwrite(adresaExempleNegative + '/' + str(indexExempluNegativ) + '.jpg', imagine[yMin:yMax + 1, xMin:xMax + 1])
 
+            indexIncercare += 1
 
-    # TODO: de creat orice fel de fisier daca nu exista, folosind os.makedirs(adresaExempleNegative, exist_ok=True) si altele (de curatat daca deja exista ceva acolo si daca este nevoie de asta in primul rand)
-    # TODO: de verificat ca implementarea pentru intersection over union este corecta (de vazut daca avem nevoie de intersection over union)
-    # TODO: de verificat si pentru metoda de suprapunere a ferestrelor
+        if exempluNegativGasit:
+            indexExempluNegativ += 1
 
-    # TODO: exista posibilitatea ca atunci cand generez exemple negative sa aleaga o imagine pentru care nu poate gasi o zona buna de extras exemplu negativ si sa se blocheze (de rezolvat)
+
+
 
 
 
