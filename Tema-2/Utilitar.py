@@ -36,12 +36,12 @@ def genereazaHiperparametriFereastraGlisanta(adresaAntrenare: str, adresaHiperpa
                 xMax = int(cuvinte[3])
                 yMax = int(cuvinte[4])
 
-                aspectRatios[cuvinte[5]].add((xMax - xMin) / (yMax - yMin))
-                inaltimiFereastra[cuvinte[5]].add(yMax - yMin)
+                aspectRatios[cuvinte[5]].add((xMax - xMin + 1.0) / (yMax - yMin + 1.0))
+                inaltimiFereastra[cuvinte[5]].add(yMax - yMin + 1)
 
                 if cuvinte[5] != 'unknown':
-                    aspectRatios['unknown'].add((xMax - xMin) / (yMax - yMin))
-                    inaltimiFereastra['unknown'].add(yMax - yMin)
+                    aspectRatios['unknown'].add((xMax - xMin + 1.0) / (yMax - yMin + 1.0))
+                    inaltimiFereastra['unknown'].add(yMax - yMin + 1)
 
             fisierAdnotari.close()
 
@@ -50,6 +50,7 @@ def genereazaHiperparametriFereastraGlisanta(adresaAntrenare: str, adresaHiperpa
 
 
     NUM_CLUSTER_ASPECT_RATIO = 7
+    NUM_CLUSTER_ASPECT_RATIO_UNKNOWN = 2 * NUM_CLUSTER_ASPECT_RATIO
     for numePersonaj in aspectRatios:
         fisier = open(adresaHiperparametrii + '/' + numePersonaj + '_aspectRatios.txt', 'w')
         for aspectRatio in aspectRatios[numePersonaj]:
@@ -57,7 +58,10 @@ def genereazaHiperparametriFereastraGlisanta(adresaAntrenare: str, adresaHiperpa
         fisier.close()
 
         fisier = open(adresaHiperparametrii + '/' + numePersonaj + '_aspectRatiosClustered.txt', 'w')
-        aspectRatiosClustered = cluster.KMeans(n_clusters=NUM_CLUSTER_ASPECT_RATIO, random_state=7)
+        numClusterAspectRatio = NUM_CLUSTER_ASPECT_RATIO
+        if numePersonaj == 'unknown':
+            numClusterAspectRatio = NUM_CLUSTER_ASPECT_RATIO_UNKNOWN
+        aspectRatiosClustered = cluster.KMeans(n_clusters=numClusterAspectRatio, random_state=7)
         aspectRatiosClustered.fit(np.array(list(aspectRatios[numePersonaj])).reshape(-1, 1))
         for clusterCenter in aspectRatiosClustered.cluster_centers_.flatten():
             fisier.write(str(clusterCenter) + '\n')
@@ -65,6 +69,7 @@ def genereazaHiperparametriFereastraGlisanta(adresaAntrenare: str, adresaHiperpa
 
 
     NUM_CLUSTER_INALTIME_FEREASTRA = 7
+    NUM_CLUSTER_INALTIME_FEREASTRA_UNKNOWN = 2 * NUM_CLUSTER_INALTIME_FEREASTRA
     for numePersonaj in inaltimiFereastra:
         fisier = open(adresaHiperparametrii + '/' + numePersonaj + '_inaltimiFereastra.txt', 'w')
         for inaltimeFereastra in inaltimiFereastra[numePersonaj]:
@@ -72,7 +77,10 @@ def genereazaHiperparametriFereastraGlisanta(adresaAntrenare: str, adresaHiperpa
         fisier.close()
 
         fisier = open(adresaHiperparametrii + '/' + numePersonaj + '_inaltimiFereastraClustered.txt', 'w')
-        inaltimiFereastraClustered = cluster.KMeans(n_clusters=NUM_CLUSTER_INALTIME_FEREASTRA, random_state=7)
+        numClusterInaltimeFereastra = NUM_CLUSTER_INALTIME_FEREASTRA
+        if numePersonaj == 'unknown':
+            numClusterInaltimeFereastra = NUM_CLUSTER_INALTIME_FEREASTRA_UNKNOWN
+        inaltimiFereastraClustered = cluster.KMeans(n_clusters=numClusterInaltimeFereastra, random_state=7)
         inaltimiFereastraClustered.fit(np.array(list(inaltimiFereastra[numePersonaj])).reshape(-1, 1))
         for clusterCenter in inaltimiFereastraClustered.cluster_centers_.flatten():
             fisier.write(str(clusterCenter) + '\n')
@@ -108,7 +116,7 @@ def ferestreleSeSuprapun(xMin1, yMin1, xMax1, yMax1, xMin2, yMin2, xMax2, yMax2)
 
 
 def genereazaExempleNegative(adresaAntrenare: str, adresaHiperparametrii: str, adresaExempleNegative: str, numarExemple: int):
-    numePersonaje = ['dad', 'deedee', 'dexter', 'mom']
+    numePersonaje = ['dad', 'deedee', 'dexter', 'mom'] # 'unknown' nu trebuie inclus aici
 
     aspectRatiosUtilizabile = set()
     inaltimiFereastraUtilizabile = set()
@@ -123,6 +131,18 @@ def genereazaExempleNegative(adresaAntrenare: str, adresaHiperparametrii: str, a
         for linie in fisierInaltimiFereastra:
             inaltimiFereastraUtilizabile.add(float(linie))
         fisierInaltimiFereastra.close()
+
+    # pentru unknown
+    fisierAspectRatios = open(adresaHiperparametrii + '/unknown_aspectRatiosClustered.txt', 'r')
+    for linie in fisierAspectRatios:
+        aspectRatiosUtilizabile.add(float(linie))
+    fisierAspectRatios.close()
+
+    fisierInaltimiFereastra = open(adresaHiperparametrii + '/unknown_inaltimiFereastraClustered.txt', 'r')
+    for linie in fisierInaltimiFereastra:
+        inaltimiFereastraUtilizabile.add(float(linie))
+    fisierInaltimiFereastra.close()
+
 
 
 
@@ -170,15 +190,15 @@ def genereazaExempleNegative(adresaAntrenare: str, adresaHiperparametrii: str, a
         indexIncercare = 0
         while (not exempluNegativGasit) and indexIncercare < NUMAR_INCERCARI_EXEMPLU_NEGATIV:
             aspectRatioAles = np.random.choice(list(aspectRatiosUtilizabile))
-            inaltimeFereastraAleasa = int(np.random.choice(list(inaltimiFereastraUtilizabile)))
+            inaltimeFereastraAleasa = np.random.choice(list(inaltimiFereastraUtilizabile))
 
-            if aspectRatioAles * inaltimeFereastraAleasa > imagine.shape[1]: # nu trebuie verificata si inaltimea fata de imagine.shape[0]
+            if int(aspectRatioAles * inaltimeFereastraAleasa) > imagine.shape[1]: # nu trebuie verificata si inaltimea fata de imagine.shape[0]
                 continue
 
             xMin = np.random.randint(0, imagine.shape[1] - int(aspectRatioAles * inaltimeFereastraAleasa) + 1)
-            yMin = np.random.randint(0, imagine.shape[0] - inaltimeFereastraAleasa + 1)
+            yMin = np.random.randint(0, imagine.shape[0] - int(inaltimeFereastraAleasa) + 1)
             xMax = xMin + int(aspectRatioAles * inaltimeFereastraAleasa) - 1
-            yMax = yMin + inaltimeFereastraAleasa - 1
+            yMax = yMin + int(inaltimeFereastraAleasa) - 1
 
 
             exempluNegativGasit = True
