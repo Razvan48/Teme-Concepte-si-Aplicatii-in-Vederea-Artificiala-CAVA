@@ -81,8 +81,8 @@ def genereazaHiperparametriFereastraGlisanta(adresaAntrenare: str, adresaHiperpa
 
 
 def intersectionOverUnion(xMin1, yMin1, xMax1, yMax1, xMin2, yMin2, xMax2, yMax2):
-    suprapunereX = min(xMax1, xMax2) - max(xMin1, xMin2)
-    suprapunereY = min(yMax1, yMax2) - max(yMin1, yMin2)
+    suprapunereX = min(xMax1, xMax2) - max(xMin1, xMin2) + 1
+    suprapunereY = min(yMax1, yMax2) - max(yMin1, yMin2) + 1
 
     if suprapunereX < 0:
         suprapunereX = 0
@@ -90,8 +90,8 @@ def intersectionOverUnion(xMin1, yMin1, xMax1, yMax1, xMin2, yMin2, xMax2, yMax2
         suprapunereY = 0
 
     arieSuprapunere = suprapunereX * suprapunereY
-    arie1 = (xMax1 - xMin1) * (yMax1 - yMin1)
-    arie2 = (xMax2 - xMin2) * (yMax2 - yMin2)
+    arie1 = (xMax1 - xMin1 + 1) * (yMax1 - yMin1 + 1)
+    arie2 = (xMax2 - xMin2 + 1) * (yMax2 - yMin2 + 1)
 
     if arie1 == 0 or arie2 == 0:
         raise ValueError('intersectionOverUnion: arie1 sau arie2 este 0')
@@ -101,8 +101,8 @@ def intersectionOverUnion(xMin1, yMin1, xMax1, yMax1, xMin2, yMin2, xMax2, yMax2
 
 
 def ferestreleSeSuprapun(xMin1, yMin1, xMax1, yMax1, xMin2, yMin2, xMax2, yMax2):
-    suprapunereX = min(xMax1, xMax2) - max(xMin1, xMin2)
-    suprapunereY = min(yMax1, yMax2) - max(yMin1, yMin2)
+    suprapunereX = min(xMax1, xMax2) - max(xMin1, xMin2) + 1
+    suprapunereY = min(yMax1, yMax2) - max(yMin1, yMin2) + 1
 
     return suprapunereX > 0 and suprapunereY > 0
 
