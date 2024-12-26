@@ -2,9 +2,8 @@ import Utilitar
 import Model
 
 
-Utilitar.genereazaHiperparametriFereastraGlisanta('fisiere/antrenare', 'fisiere/iesire/hiperparametrii')
-
-#Utilitar.genereazaExempleNegative('fisiere/antrenare', 'fisiere/iesire/hiperparametrii', 'fisiere/iesire/exempleNegative', 10)
+# Utilitar.genereazaHiperparametriFereastraGlisanta('fisiere/antrenare', 'fisiere/iesire/hiperparametrii')
+# Utilitar.genereazaExempleNegative('fisiere/antrenare', 'fisiere/iesire/hiperparametrii', 'fisiere/iesire/exempleNegative', 1000)
 
 model = Model.Model('unknown', 'fisiere/iesire/hiperparametrii')
 model.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')

@@ -49,8 +49,8 @@ def genereazaHiperparametriFereastraGlisanta(adresaAntrenare: str, adresaHiperpa
     os.makedirs(adresaHiperparametrii, exist_ok=True)
 
 
-    NUM_CLUSTER_ASPECT_RATIO = 7
-    NUM_CLUSTER_ASPECT_RATIO_UNKNOWN = 2 * NUM_CLUSTER_ASPECT_RATIO
+    NUM_CLUSTER_ASPECT_RATIO = 4
+    NUM_CLUSTER_ASPECT_RATIO_UNKNOWN = 1 * NUM_CLUSTER_ASPECT_RATIO
     for numePersonaj in aspectRatios:
         fisier = open(adresaHiperparametrii + '/' + numePersonaj + '_aspectRatios.txt', 'w')
         for aspectRatio in aspectRatios[numePersonaj]:
@@ -68,8 +68,8 @@ def genereazaHiperparametriFereastraGlisanta(adresaAntrenare: str, adresaHiperpa
         fisier.close()
 
 
-    NUM_CLUSTER_INALTIME_FEREASTRA = 7
-    NUM_CLUSTER_INALTIME_FEREASTRA_UNKNOWN = 2 * NUM_CLUSTER_INALTIME_FEREASTRA
+    NUM_CLUSTER_INALTIME_FEREASTRA = 6
+    NUM_CLUSTER_INALTIME_FEREASTRA_UNKNOWN = 1 * NUM_CLUSTER_INALTIME_FEREASTRA
     for numePersonaj in inaltimiFereastra:
         fisier = open(adresaHiperparametrii + '/' + numePersonaj + '_inaltimiFereastra.txt', 'w')
         for inaltimeFereastra in inaltimiFereastra[numePersonaj]:
@@ -113,6 +113,12 @@ def ferestreleSeSuprapun(xMin1, yMin1, xMax1, yMax1, xMin2, yMin2, xMax2, yMax2)
     suprapunereY = min(yMax1, yMax2) - max(yMin1, yMin2) + 1
 
     return suprapunereX > 0 and suprapunereY > 0
+
+
+
+def punctInDreptunghi(xPunct, yPunct, xMin, yMin, xMax, yMax):
+    return xMin < xPunct and xPunct < xMax and yMin < yPunct and yPunct < yMax
+
 
 
 def genereazaExempleNegative(adresaAntrenare: str, adresaHiperparametrii: str, adresaExempleNegative: str, numarExemple: int):

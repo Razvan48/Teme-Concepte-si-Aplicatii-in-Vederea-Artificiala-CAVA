@@ -23,6 +23,7 @@ class Model:
         self.dimensiuneImagine = (self.pixeliPerCelula[0] * self.celulePerImagine[0], self.pixeliPerCelula[1] * self.celulePerImagine[1])
 
         self.parametriiRegularizare = [(10 ** x) for x in range(-6, 0)]
+        self.NUMAR_ITERATII_ANTRENARE = 100
 
         self.modelInvatare = None
         self.descriptoriPozitivi = []
@@ -30,7 +31,7 @@ class Model:
 
         self.PRAG_INTERSECTION_OVER_UNION = 0.3
         self.PROCENT_SALT_FEREASTRA_GLISANTA = 0.2
-        self.PRAG_PREDICTIE_POZITIVA_SVM = 0.0
+        self.PRAG_PREDICTIE_POZITIVA_SVM = 3.0
 
         self.aspectRatiosUtilizabili = set()
         fisierAspectRatios = open(self.adresaHiperparametrii + '/' + self.numePersonaj + '_aspectRatiosClustered.txt', 'r')
@@ -130,19 +131,25 @@ class Model:
 
         for parametruRegularizare in self.parametriiRegularizare:
 
-            modelInvatare = svm.LinearSVC(C=parametruRegularizare)
+            modelInvatare = svm.LinearSVC(C=parametruRegularizare, max_iter=self.NUMAR_ITERATII_ANTRENARE)
             totiDescriptorii = np.concatenate((self.descriptoriPozitivi, self.descriptoriNegativi), axis=0)
             toateEtichetele = np.concatenate((np.ones(self.descriptoriPozitivi.shape[0]), np.zeros(self.descriptoriNegativi.shape[0])))
             modelInvatare.fit(totiDescriptorii, toateEtichetele)
 
             acurateteCurenta = modelInvatare.score(totiDescriptorii, toateEtichetele)
+            print('Acuratete Model: ', acurateteCurenta)
             if acurateteCurenta > acurateteMaxima:
                 acurateteMaxima = acurateteCurenta
                 self.modelInvatare = copy.deepcopy(modelInvatare)
 
+        print('Acuratete Maxima Model: ', acurateteMaxima)
+
 
 
     def suprimareNonMaxime(self, zoneDeInteres: list):
+        if len(zoneDeInteres) < 2:
+            return zoneDeInteres
+
         zoneDeInteres.sort(key=(lambda x: x[4]), reverse=True)
 
         zoneCeRaman = [True for _ in range(len(zoneDeInteres))]
@@ -165,7 +172,12 @@ class Model:
                 xMax2 = zoneDeInteres[j][2]
                 yMax2 = zoneDeInteres[j][3]
 
+                xCentru2 = (xMin2 + xMax2) / 2
+                yCentru2 = (yMin2 + yMax2) / 2
+
                 if Utilitar.intersectionOverUnion(xMin1, yMin1, xMax1, yMax1, xMin2, yMin2, xMax2, yMax2) > self.PRAG_INTERSECTION_OVER_UNION:
+                    zoneCeRaman[j] = False
+                elif Utilitar.punctInDreptunghi(xCentru2, yCentru2, xMin1, yMin1, xMax1, yMax1):
                     zoneCeRaman[j] = False
 
         return [zoneDeInteres[i] for i in range(len(zoneDeInteres)) if zoneCeRaman[i]]
@@ -180,6 +192,7 @@ class Model:
             print('Testare: ', adresaTestare + '/' + fisierImagine)
 
             imagineOriginala = cv.imread(adresaTestare + '/' + fisierImagine)
+            imagineRezultat = imagineOriginala.copy()
             imagineOriginala = cv.cvtColor(imagineOriginala, cv.COLOR_BGR2GRAY)
 
             zoneDeInteres = []
@@ -189,21 +202,23 @@ class Model:
                     if int(aspectRatio * inaltimeFereastra) > imagineOriginala.shape[1]:
                         continue
 
+                    print('Inaltime Fereastra: ', inaltimeFereastra, ' Aspect Ratio: ', aspectRatio)
+
                     latimeFereastra = int(aspectRatio * inaltimeFereastra)
 
                     saltXFereastra = int(self.PROCENT_SALT_FEREASTRA_GLISANTA * latimeFereastra)
                     saltYFereastra = int(self.PROCENT_SALT_FEREASTRA_GLISANTA * inaltimeFereastra)
 
-                    for xMin in range(0, imagineOriginala.shape[1] - latimeFereastra + 1, saltXFereastra):
-                        for yMin in range(0, imagineOriginala.shape[0] - inaltimeFereastra + 1, saltYFereastra):
+                    for yMin in range(0, imagineOriginala.shape[0] - int(inaltimeFereastra) + 1, saltYFereastra):
+                        for xMin in range(0, imagineOriginala.shape[1] - latimeFereastra + 1, saltXFereastra):
                             xMax = xMin + latimeFereastra - 1
-                            yMax = yMin + inaltimeFereastra - 1
+                            yMax = yMin + int(inaltimeFereastra) - 1
 
                             imagineDeInteres = imagineOriginala[yMin:yMax + 1, xMin:xMax + 1].copy()
                             imagineDeInteres = cv.resize(imagineDeInteres, self.dimensiuneImagine)
 
                             descriptori = feature.hog(imagineDeInteres, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
-                            descriptori = descriptori.flatten().shape(1, -1)
+                            descriptori = descriptori.flatten().reshape(1, -1)
 
                             scorPredictie = self.modelInvatare.decision_function(descriptori)
 
@@ -213,11 +228,13 @@ class Model:
 
             zoneDeInteres = self.suprimareNonMaxime(zoneDeInteres)
 
-            # Salvare Imagine cu Predictiile Evidentiate
-            imagineRezultat = imagineOriginala.copy()
-
+            print('Scoruri Predictii: ')
             for zonaDeInteres in zoneDeInteres:
-                cv.rectangle(imagineRezultat, (zonaDeInteres[0], zonaDeInteres[1]), (zonaDeInteres[2], zonaDeInteres[3]), (255, 0, 0), 2)
+                print(zonaDeInteres[4])
+
+            # Salvare Imagine cu Predictiile Evidentiate
+            for zonaDeInteres in zoneDeInteres:
+                cv.rectangle(imagineRezultat, (zonaDeInteres[0], zonaDeInteres[1]), (zonaDeInteres[2], zonaDeInteres[3]), (0, 0, 255), 2) # BGR
 
             cv.imwrite(adresaPredictiiRezultate + '/' + fisierImagine, imagineRezultat)
 
