@@ -100,6 +100,11 @@ class Model:
             descriptori = feature.hog(np.fliplr(imagine), pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
             self.descriptoriNegativi.append(descriptori.flatten())
 
+            descriptori = feature.hog(np.flipud(imagine), pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
+            self.descriptoriNegativi.append(descriptori.flatten())
+            descriptori = feature.hog(np.fliplr(np.flipud(imagine)), pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
+            self.descriptoriNegativi.append(descriptori.flatten())
+
         self.descriptoriNegativi = np.array(self.descriptoriNegativi)
 
 
