@@ -8,6 +8,7 @@ Utilitar.genereazaHiperparametriFereastraGlisanta('fisiere/antrenare', 'fisiere/
 
 model = Model.Model('unknown', 'fisiere/iesire/hiperparametrii')
 model.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
+model.testeaza('fisiere/validare/validare', 'fisiere/iesire/testare')
 
 # x-ul din adnotari e latimea imaginii, y-ul e inaltimea imaginii, iar originea este in coltul stanga sus
 

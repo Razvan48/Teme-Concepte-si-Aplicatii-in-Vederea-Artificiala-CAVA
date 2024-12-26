@@ -29,11 +29,13 @@ class Model:
         self.descriptoriNegativi = []
 
         self.PRAG_INTERSECTION_OVER_UNION = 0.3
+        self.PROCENT_SALT_FEREASTRA_GLISANTA = 0.2
+        self.PRAG_PREDICTIE_POZITIVA_SVM = 0.0
 
-        self.aspectRatiosUtilizabile = set()
+        self.aspectRatiosUtilizabili = set()
         fisierAspectRatios = open(self.adresaHiperparametrii + '/' + self.numePersonaj + '_aspectRatiosClustered.txt', 'r')
         for linie in fisierAspectRatios:
-            self.aspectRatiosUtilizabile.add(float(linie))
+            self.aspectRatiosUtilizabili.add(float(linie))
         fisierAspectRatios.close()
 
         self.inaltimiFereastraUtilizabile = set()
@@ -86,13 +88,11 @@ class Model:
 
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
                         imagineDeInteres = cv.resize(imagineDeInteres, self.dimensiuneImagine)
-
                         descriptori = feature.hog(imagineDeInteres, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
                         self.descriptoriPozitivi.append(descriptori.flatten())
 
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
                         imagineDeInteres = cv.resize(np.fliplr(imagineDeInteres), self.dimensiuneImagine)
-
                         descriptori = feature.hog(imagineDeInteres, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
                         self.descriptoriPozitivi.append(descriptori.flatten())
 
@@ -142,26 +142,85 @@ class Model:
 
 
 
-        def testeaza(self, adresaTestare: str, adresaPredictii: str):
+    def suprimareNonMaxime(self, zoneDeInteres: list):
+        zoneDeInteres.sort(key=(lambda x: x[4]), reverse=True)
 
-            # TODO: de terminat
+        zoneCeRaman = [True for _ in range(len(zoneDeInteres))]
 
-            for fisierImagine in os.listdir(adresaTestare):
-                imagine = cv.imread(adresaTestare + '/' + fisierImagine)
+        for i in range(len(zoneDeInteres) - 1):
+            if zoneCeRaman[i] == False:
+                continue
 
-                imagine = cv.resize(imagine, self.dimensiuneImagine)
+            for j in range(i + 1, len(zoneDeInteres)):
+                if zoneCeRaman[j] == False:
+                    continue
 
-                descriptori = feature.hog(imagine, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
+                xMin1 = zoneDeInteres[i][0]
+                yMin1 = zoneDeInteres[i][1]
+                xMax1 = zoneDeInteres[i][2]
+                yMax1 = zoneDeInteres[i][3]
 
-                for i in range(descriptori.shape[0]):
-                    for j in range(descriptori.shape[1]):
-                        descriptor = descriptori[i, j, :].flatten()
-                        eticheta = self.modelInvatare.predict(descriptor.reshape(1, -1))
+                xMin2 = zoneDeInteres[j][0]
+                yMin2 = zoneDeInteres[j][1]
+                xMax2 = zoneDeInteres[j][2]
+                yMax2 = zoneDeInteres[j][3]
 
-                        if eticheta == 1:
-                            cv.rectangle(imagine, (j * self.pixeliPerCelula[0], i * self.pixeliPerCelula[1]), ((j + self.celulePerBloc[1]) * self.pixeliPerCelula[0], (i + self.celulePerBloc[0]) * self.pixeliPerCelula[1]), (0, 255, 0), 2)
+                if Utilitar.intersectionOverUnion(xMin1, yMin1, xMax1, yMax1, xMin2, yMin2, xMax2, yMax2) > self.PRAG_INTERSECTION_OVER_UNION:
+                    zoneCeRaman[j] = False
 
-                cv.imwrite(adresaPredictii + '/' + fisierImagine, imagine)
+        return [zoneDeInteres[i] for i in range(len(zoneDeInteres)) if zoneCeRaman[i]]
+
+
+
+    def testeaza(self, adresaTestare: str, adresaPredictiiRezultate: str):
+
+        os.makedirs(adresaPredictiiRezultate, exist_ok=True)
+
+        for fisierImagine in os.listdir(adresaTestare):
+            print('Testare: ', adresaTestare + '/' + fisierImagine)
+
+            imagineOriginala = cv.imread(adresaTestare + '/' + fisierImagine)
+            imagineOriginala = cv.cvtColor(imagineOriginala, cv.COLOR_BGR2GRAY)
+
+            zoneDeInteres = []
+
+            for inaltimeFereastra in self.inaltimiFereastraUtilizabile:
+                for aspectRatio in self.aspectRatiosUtilizabili:
+                    if int(aspectRatio * inaltimeFereastra) > imagineOriginala.shape[1]:
+                        continue
+
+                    latimeFereastra = int(aspectRatio * inaltimeFereastra)
+
+                    saltXFereastra = int(self.PROCENT_SALT_FEREASTRA_GLISANTA * latimeFereastra)
+                    saltYFereastra = int(self.PROCENT_SALT_FEREASTRA_GLISANTA * inaltimeFereastra)
+
+                    for xMin in range(0, imagineOriginala.shape[1] - latimeFereastra + 1, saltXFereastra):
+                        for yMin in range(0, imagineOriginala.shape[0] - inaltimeFereastra + 1, saltYFereastra):
+                            xMax = xMin + latimeFereastra - 1
+                            yMax = yMin + inaltimeFereastra - 1
+
+                            imagineDeInteres = imagineOriginala[yMin:yMax + 1, xMin:xMax + 1].copy()
+                            imagineDeInteres = cv.resize(imagineDeInteres, self.dimensiuneImagine)
+
+                            descriptori = feature.hog(imagineDeInteres, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
+                            descriptori = descriptori.flatten().shape(1, -1)
+
+                            scorPredictie = self.modelInvatare.decision_function(descriptori)
+
+                            if scorPredictie > self.PRAG_PREDICTIE_POZITIVA_SVM:
+                                zoneDeInteres.append((xMin, yMin, xMax, yMax, scorPredictie))
+
+
+            zoneDeInteres = self.suprimareNonMaxime(zoneDeInteres)
+
+            # Salvare Imagine cu Predictiile Evidentiate
+            imagineRezultat = imagineOriginala.copy()
+
+            for zonaDeInteres in zoneDeInteres:
+                cv.rectangle(imagineRezultat, (zonaDeInteres[0], zonaDeInteres[1]), (zonaDeInteres[2], zonaDeInteres[3]), (255, 0, 0), 2)
+
+            cv.imwrite(adresaPredictiiRezultate + '/' + fisierImagine, imagineRezultat)
+
 
 
 
