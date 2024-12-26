@@ -77,32 +77,48 @@ class Model:
                 fisierAdnotari.close()
 
                 for fisierImagine in os.listdir(adresaAntrenareExemplePozitive + '/' + numePersonaj):
-                    imagine = cv.imread(adresaAntrenareExemplePozitive + '/' + numePersonaj + '/' + fisierImagine)
+                    print('Antrenare Exemple Pozitive: ', adresaAntrenareExemplePozitive + '/' + numePersonaj + '/' + fisierImagine)
 
-                    imagine = cv.resize(imagine, self.dimensiuneImagine)
+                    imagineOriginala = cv.imread(adresaAntrenareExemplePozitive + '/' + numePersonaj + '/' + fisierImagine)
+                    imagineOriginala = cv.cvtColor(imagineOriginala, cv.COLOR_BGR2GRAY)
 
                     for zonaDeInteres in zoneDeInteres[fisierImagine]:
-                        descriptori = feature.hog(imagine[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1], pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
+
+                        imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
+                        imagineDeInteres = cv.resize(imagineDeInteres, self.dimensiuneImagine)
+
+                        descriptori = feature.hog(imagineDeInteres, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
                         self.descriptoriPozitivi.append(descriptori.flatten())
-                        descriptori = feature.hog(np.fliplr(imagine[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1]), pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
+
+                        imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
+                        imagineDeInteres = cv.resize(np.fliplr(imagineDeInteres), self.dimensiuneImagine)
+
+                        descriptori = feature.hog(imagineDeInteres, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
                         self.descriptoriPozitivi.append(descriptori.flatten())
 
         self.descriptoriPozitivi = np.array(self.descriptoriPozitivi)
 
         # exemple negative
         for fisierImagine in os.listdir(adresaAntrenareExempleNegative):
-            imagine = cv.imread(adresaAntrenareExempleNegative + '/' + fisierImagine)
+            print('Antrenare Exemple Negative: ', adresaAntrenareExempleNegative + '/' + fisierImagine)
 
-            imagine = cv.resize(imagine, self.dimensiuneImagine)
+            imagineOriginala = cv.imread(adresaAntrenareExempleNegative + '/' + fisierImagine)
+            imagineOriginala = cv.cvtColor(imagineOriginala, cv.COLOR_BGR2GRAY)
 
+            imagine = cv.resize(imagineOriginala, self.dimensiuneImagine)
             descriptori = feature.hog(imagine, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
             self.descriptoriNegativi.append(descriptori.flatten())
-            descriptori = feature.hog(np.fliplr(imagine), pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
+
+            imagineInversataOrizontal = cv.resize(np.fliplr(imagineOriginala), self.dimensiuneImagine)
+            descriptori = feature.hog(imagineInversataOrizontal, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
             self.descriptoriNegativi.append(descriptori.flatten())
 
-            descriptori = feature.hog(np.flipud(imagine), pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
+            imagineInversataVertical = cv.resize(np.flipud(imagineOriginala), self.dimensiuneImagine)
+            descriptori = feature.hog(imagineInversataVertical, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
             self.descriptoriNegativi.append(descriptori.flatten())
-            descriptori = feature.hog(np.fliplr(np.flipud(imagine)), pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
+
+            imagineInversataVerticalOrizontal = cv.resize(np.flipud(np.fliplr(imagineOriginala)), self.dimensiuneImagine)
+            descriptori = feature.hog(imagineInversataVerticalOrizontal, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
             self.descriptoriNegativi.append(descriptori.flatten())
 
         self.descriptoriNegativi = np.array(self.descriptoriNegativi)
