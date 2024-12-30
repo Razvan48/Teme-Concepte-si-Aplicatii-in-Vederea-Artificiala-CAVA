@@ -121,6 +121,16 @@ def punctInDreptunghi(xPunct, yPunct, xMin, yMin, xMax, yMax):
 
 
 
+def segmentInSegment(st1, dr1, st2, dr2):
+    return st2 <= st1 and dr1 <= dr2
+
+
+
+def dreptunghiInDreptunghi(xMin1, yMin1, xMax1, yMax1, xMin2, yMin2, xMax2, yMax2):
+    return segmentInSegment(xMin1, xMax1, xMin2, xMax2) and segmentInSegment(yMin1, yMax1, yMin2, yMax2)
+
+
+
 def genereazaExempleNegative(adresaAntrenare: str, adresaHiperparametrii: str, adresaExempleNegative: str, numarExemple: int):
     numePersonaje = ['dad', 'deedee', 'dexter', 'mom'] # 'unknown' nu trebuie inclus aici
 
@@ -157,6 +167,8 @@ def genereazaExempleNegative(adresaAntrenare: str, adresaHiperparametrii: str, a
     NUMAR_EXEMPLE_ANTRENARE_PER_PERSONAJ = 1000
     indexExempluNegativ = 0
     while indexExempluNegativ < numarExemple:
+        print('Se construieste exemplul negativ ' + str(indexExempluNegativ) + '...')
+
         numePersonaj = np.random.choice(numePersonaje)
         indexImagine = np.random.randint(1, NUMAR_EXEMPLE_ANTRENARE_PER_PERSONAJ + 1)
 
@@ -207,9 +219,10 @@ def genereazaExempleNegative(adresaAntrenare: str, adresaHiperparametrii: str, a
             yMax = yMin + int(inaltimeFereastraAleasa) - 1
 
 
+            PRAG_INTERSECTION_OVER_UNION = 0.3
             exempluNegativGasit = True
             for zonaDeInteres in zoneDeInteres:
-                if ferestreleSeSuprapun(xMin, yMin, xMax, yMax, zonaDeInteres[0], zonaDeInteres[1], zonaDeInteres[2], zonaDeInteres[3]):
+                if intersectionOverUnion(xMin, yMin, xMax, yMax, zonaDeInteres[0], zonaDeInteres[1], zonaDeInteres[2], zonaDeInteres[3]) > PRAG_INTERSECTION_OVER_UNION or dreptunghiInDreptunghi(zonaDeInteres[0], zonaDeInteres[1], zonaDeInteres[2], zonaDeInteres[3], xMin, yMin, xMax, yMax):
                     exempluNegativGasit = False
                     break
 

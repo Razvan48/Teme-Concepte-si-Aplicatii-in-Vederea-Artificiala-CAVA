@@ -16,13 +16,14 @@ class Model:
         self.numePersonaj = numePersonaj
         self.adresaHiperparametrii = adresaHiperparametrii
 
-        self.pixeliPerCelula = (8, 8)
-        self.celulePerBloc = (2, 2)
-        self.celulePerImagine = (12, 12)
+        self.pixeliPerCelula = (16, 16)
+        self.celulePerBloc = (4, 4)
+        self.celulePerImagine = (16, 16)
+        self.numOrientari = 8
 
         self.dimensiuneImagine = (self.pixeliPerCelula[0] * self.celulePerImagine[0], self.pixeliPerCelula[1] * self.celulePerImagine[1])
 
-        self.parametriiRegularizare = [(10 ** x) for x in range(-6, 0)]
+        self.parametriiRegularizare = [(10 ** x) for x in range(-6, 6)]
         self.NUMAR_ITERATII_ANTRENARE = 100
 
         self.modelInvatare = None
@@ -31,7 +32,7 @@ class Model:
 
         self.PRAG_INTERSECTION_OVER_UNION = 0.3
         self.PROCENT_SALT_FEREASTRA_GLISANTA = 0.2
-        self.PRAG_PREDICTIE_POZITIVA_SVM = 3.0
+        self.PRAG_PREDICTIE_POZITIVA_SVM = 1.1
 
         self.aspectRatiosUtilizabili = set()
         fisierAspectRatios = open(self.adresaHiperparametrii + '/' + self.numePersonaj + '_aspectRatiosClustered.txt', 'r')
@@ -89,12 +90,12 @@ class Model:
 
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
                         imagineDeInteres = cv.resize(imagineDeInteres, self.dimensiuneImagine)
-                        descriptori = feature.hog(imagineDeInteres, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
+                        descriptori = feature.hog(imagineDeInteres, orientations=self.numOrientari, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
                         self.descriptoriPozitivi.append(descriptori.flatten())
 
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
                         imagineDeInteres = cv.resize(np.fliplr(imagineDeInteres), self.dimensiuneImagine)
-                        descriptori = feature.hog(imagineDeInteres, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
+                        descriptori = feature.hog(imagineDeInteres, orientations=self.numOrientari, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
                         self.descriptoriPozitivi.append(descriptori.flatten())
 
         self.descriptoriPozitivi = np.array(self.descriptoriPozitivi)
@@ -107,19 +108,19 @@ class Model:
             imagineOriginala = cv.cvtColor(imagineOriginala, cv.COLOR_BGR2GRAY)
 
             imagine = cv.resize(imagineOriginala, self.dimensiuneImagine)
-            descriptori = feature.hog(imagine, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
+            descriptori = feature.hog(imagine, orientations=self.numOrientari, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
             self.descriptoriNegativi.append(descriptori.flatten())
 
             imagineInversataOrizontal = cv.resize(np.fliplr(imagineOriginala), self.dimensiuneImagine)
-            descriptori = feature.hog(imagineInversataOrizontal, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
+            descriptori = feature.hog(imagineInversataOrizontal, orientations=self.numOrientari, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
             self.descriptoriNegativi.append(descriptori.flatten())
 
             imagineInversataVertical = cv.resize(np.flipud(imagineOriginala), self.dimensiuneImagine)
-            descriptori = feature.hog(imagineInversataVertical, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
+            descriptori = feature.hog(imagineInversataVertical, orientations=self.numOrientari, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
             self.descriptoriNegativi.append(descriptori.flatten())
 
             imagineInversataVerticalOrizontal = cv.resize(np.flipud(np.fliplr(imagineOriginala)), self.dimensiuneImagine)
-            descriptori = feature.hog(imagineInversataVerticalOrizontal, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
+            descriptori = feature.hog(imagineInversataVerticalOrizontal, orientations=self.numOrientari, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
             self.descriptoriNegativi.append(descriptori.flatten())
 
         self.descriptoriNegativi = np.array(self.descriptoriNegativi)
@@ -217,7 +218,7 @@ class Model:
                             imagineDeInteres = imagineOriginala[yMin:yMax + 1, xMin:xMax + 1].copy()
                             imagineDeInteres = cv.resize(imagineDeInteres, self.dimensiuneImagine)
 
-                            descriptori = feature.hog(imagineDeInteres, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
+                            descriptori = feature.hog(imagineDeInteres, orientations=self.numOrientari, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
                             descriptori = descriptori.flatten().reshape(1, -1)
 
                             scorPredictie = self.modelInvatare.decision_function(descriptori)
