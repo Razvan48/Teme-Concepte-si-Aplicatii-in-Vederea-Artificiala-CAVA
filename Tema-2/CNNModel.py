@@ -3,6 +3,9 @@ import os
 import numpy as np
 import cv2 as cv
 
+import tensorflow as tf
+
+
 import Utilitar
 
 
@@ -81,11 +84,13 @@ class CNNModel:
 
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
                         imagineDeInteres = cv.resize(imagineDeInteres, self.dimensiuneImagine)
+                        imagineDeInteres = imagineDeInteres.astype(np.float32)
                         imagineDeInteres /= self.SCALAR_NORMALIZARE
                         self.imaginiPozitive.append(imagineDeInteres)
 
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
                         imagineDeInteres = cv.resize(np.fliplr(imagineDeInteres), self.dimensiuneImagine)
+                        imagineDeInteres = imagineDeInteres.astype(np.float32)
                         imagineDeInteres /= self.SCALAR_NORMALIZARE
                         self.imaginiPozitive.append(imagineDeInteres)
 
@@ -98,18 +103,22 @@ class CNNModel:
             imagineOriginala = cv.imread(adresaAntrenareExempleNegative + '/' + fisierImagine)
 
             imagine = cv.resize(imagineOriginala, self.dimensiuneImagine)
+            imagine = imagine.astype(np.float32)
             imagine /= self.SCALAR_NORMALIZARE
             self.imaginiNegative.append(imagine)
 
             imagineInversataOrizontal = cv.resize(np.fliplr(imagineOriginala), self.dimensiuneImagine)
+            imagineInversataOrizontal = imagineInversataOrizontal.astype(np.float32)
             imagineInversataOrizontal /= self.SCALAR_NORMALIZARE
             self.imaginiNegative.append(imagineInversataOrizontal)
 
             imagineInversataVertical = cv.resize(np.flipud(imagineOriginala), self.dimensiuneImagine)
+            imagineInversataVertical = imagineInversataVertical.astype(np.float32)
             imagineInversataVertical /= self.SCALAR_NORMALIZARE
             self.imaginiNegative.append(imagineInversataVertical)
 
             imagineInversataVerticalOrizontal = cv.resize(np.flipud(np.fliplr(imagineOriginala)), self.dimensiuneImagine)
+            imagineInversataVerticalOrizontal = imagineInversataVerticalOrizontal.astype(np.float32)
             imagineInversataVerticalOrizontal /= self.SCALAR_NORMALIZARE
             self.imaginiNegative.append(imagineInversataVerticalOrizontal)
 
@@ -118,7 +127,16 @@ class CNNModel:
 
         # Construire Model
 
-        # TODO: construire model
+        self.modelInvatare = tf.keras.models.Sequential([
+            tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(self.dimensiuneImagine[0], self.dimensiuneImagine[1], 3)),
+            tf.keras.layers.MaxPooling2D((2, 2)),
+            tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
+            tf.keras.layers.MaxPooling2D((2, 2)),
+            tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
+            tf.keras.layers.Flatten(),
+            tf.keras.layers.Dense(64, activation='relu'),
+            tf.keras.layers.Dense(1, activation='sigmoid')
+        ])
 
 
         # Antrenare Model
@@ -162,10 +180,12 @@ class CNNModel:
 
                             imagineDeInteres = imagineOriginala[yMin:yMax + 1, xMin:xMax + 1].copy()
                             imagineDeInteres = cv.resize(imagineDeInteres, self.dimensiuneImagine)
+                            imagineDeInteres = imagineDeInteres.astype(np.float32)
                             imagineDeInteres /= self.SCALAR_NORMALIZARE
 
                             # TODO: predictie
-                            scorPredictie = self.modelInvatare.decision_function(imagineDeInteres)
+                            # scorPredictie = self.modelInvatare.decision_function(imagineDeInteres)
+                            scorPredictie = self.modelInvatare.predict(imagineDeInteres)
 
                             if scorPredictie > self.PRAG_PREDICTIE_POZITIVA_CNN:
                                 zoneDeInteres.append((xMin, yMin, xMax, yMax, scorPredictie))
