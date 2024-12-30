@@ -1,14 +1,15 @@
 import Utilitar
-import Model
+import SVMHogModel
+#import CNNModel
 
 
 # Utilitar.genereazaHiperparametriFereastraGlisanta('fisiere/antrenare', 'fisiere/iesire/hiperparametrii')
 # Utilitar.genereazaExempleNegative('fisiere/antrenare', 'fisiere/iesire/hiperparametrii', 'fisiere/iesire/exempleNegative', 10000)
 
-model = Model.Model('unknown', 'fisiere/iesire/hiperparametrii')
-model.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
+svmHogModel = SVMHogModel.SVMHogModel('unknown', 'fisiere/iesire/hiperparametrii')
+svmHogModel.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
 
-model.testeaza('fisiere/validare/validare', 'fisiere/iesire/testare')
+svmHogModel.testeaza('fisiere/validare/validare', 'fisiere/iesire/testare')
 
 # x-ul din adnotari e latimea imaginii, y-ul e inaltimea imaginii, iar originea este in coltul stanga sus
 

@@ -236,6 +236,45 @@ def genereazaExempleNegative(adresaAntrenare: str, adresaHiperparametrii: str, a
 
 
 
+def suprimareNonMaxime(zoneDeInteres: list):
+    if len(zoneDeInteres) < 2:
+        return zoneDeInteres
+
+    PRAG_INTERSECTION_OVER_UNION = 0.3
+
+    zoneDeInteres.sort(key=(lambda x: x[4]), reverse=True)
+
+    zoneCeRaman = [True for _ in range(len(zoneDeInteres))]
+
+    for i in range(len(zoneDeInteres) - 1):
+        if not zoneCeRaman[i]:
+            continue
+
+        for j in range(i + 1, len(zoneDeInteres)):
+            if not zoneCeRaman[j]:
+                continue
+
+            xMin1 = zoneDeInteres[i][0]
+            yMin1 = zoneDeInteres[i][1]
+            xMax1 = zoneDeInteres[i][2]
+            yMax1 = zoneDeInteres[i][3]
+
+            xMin2 = zoneDeInteres[j][0]
+            yMin2 = zoneDeInteres[j][1]
+            xMax2 = zoneDeInteres[j][2]
+            yMax2 = zoneDeInteres[j][3]
+
+            xCentru2 = (xMin2 + xMax2) / 2
+            yCentru2 = (yMin2 + yMax2) / 2
+
+            if intersectionOverUnion(xMin1, yMin1, xMax1, yMax1, xMin2, yMin2, xMax2, yMax2) > PRAG_INTERSECTION_OVER_UNION:
+                zoneCeRaman[j] = False
+            elif punctInDreptunghi(xCentru2, yCentru2, xMin1, yMin1, xMax1, yMax1):
+                zoneCeRaman[j] = False
+
+    return [zoneDeInteres[i] for i in range(len(zoneDeInteres)) if zoneCeRaman[i]]
+
+
 
 
 
