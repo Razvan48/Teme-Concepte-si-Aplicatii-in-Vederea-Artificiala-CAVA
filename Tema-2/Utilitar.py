@@ -49,8 +49,8 @@ def genereazaHiperparametriFereastraGlisanta(adresaAntrenare: str, adresaHiperpa
     os.makedirs(adresaHiperparametrii, exist_ok=True)
 
 
-    NUM_CLUSTER_ASPECT_RATIO = 4
-    NUM_CLUSTER_ASPECT_RATIO_UNKNOWN = 1 * NUM_CLUSTER_ASPECT_RATIO
+    NUM_CLUSTER_ASPECT_RATIO = 6
+    NUM_CLUSTER_ASPECT_RATIO_UNKNOWN = int(1.5 * NUM_CLUSTER_ASPECT_RATIO)
     for numePersonaj in aspectRatios:
         fisier = open(adresaHiperparametrii + '/' + numePersonaj + '_aspectRatios.txt', 'w')
         for aspectRatio in aspectRatios[numePersonaj]:
@@ -68,8 +68,8 @@ def genereazaHiperparametriFereastraGlisanta(adresaAntrenare: str, adresaHiperpa
         fisier.close()
 
 
-    NUM_CLUSTER_INALTIME_FEREASTRA = 6
-    NUM_CLUSTER_INALTIME_FEREASTRA_UNKNOWN = 1 * NUM_CLUSTER_INALTIME_FEREASTRA
+    NUM_CLUSTER_INALTIME_FEREASTRA = 7
+    NUM_CLUSTER_INALTIME_FEREASTRA_UNKNOWN = int(1.25 * NUM_CLUSTER_INALTIME_FEREASTRA)
     for numePersonaj in inaltimiFereastra:
         fisier = open(adresaHiperparametrii + '/' + numePersonaj + '_inaltimiFereastra.txt', 'w')
         for inaltimeFereastra in inaltimiFereastra[numePersonaj]:
@@ -219,7 +219,7 @@ def genereazaExempleNegative(adresaAntrenare: str, adresaHiperparametrii: str, a
             yMax = yMin + int(inaltimeFereastraAleasa) - 1
 
 
-            PRAG_INTERSECTION_OVER_UNION = 0.3
+            PRAG_INTERSECTION_OVER_UNION = 0.1
             exempluNegativGasit = True
             for zonaDeInteres in zoneDeInteres:
                 if intersectionOverUnion(xMin, yMin, xMax, yMax, zonaDeInteres[0], zonaDeInteres[1], zonaDeInteres[2], zonaDeInteres[3]) > PRAG_INTERSECTION_OVER_UNION or dreptunghiInDreptunghi(zonaDeInteres[0], zonaDeInteres[1], zonaDeInteres[2], zonaDeInteres[3], xMin, yMin, xMax, yMax):
@@ -240,7 +240,7 @@ def suprimareNonMaxime(zoneDeInteres: list):
     if len(zoneDeInteres) < 2:
         return zoneDeInteres
 
-    PRAG_INTERSECTION_OVER_UNION = 0.3
+    PRAG_INTERSECTION_OVER_UNION = 0.1
 
     zoneDeInteres.sort(key=(lambda x: x[4]), reverse=True)
 

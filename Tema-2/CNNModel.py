@@ -24,8 +24,8 @@ class CNNModel:
         self.imaginiPozitive = []
         self.imaginiNegative = []
 
-        self.PROCENT_SALT_FEREASTRA_GLISANTA = 0.2
-        self.PRAG_PREDICTIE_POZITIVA_CNN = 0.5
+        self.PROCENT_SALT_FEREASTRA_GLISANTA = 0.15
+        self.PRAG_PREDICTIE_POZITIVA_CNN = 0.85
 
         self.SCALAR_NORMALIZARE = 255.0
 
@@ -137,6 +137,31 @@ class CNNModel:
             tf.keras.layers.Dense(64, activation='relu'),
             tf.keras.layers.Dense(1, activation='sigmoid')
         ])
+        self.modelInvatare.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+        '''
+        self.modelInvatare = tf.keras.models.Sequential([
+            tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(self.dimensiuneImagine[0], self.dimensiuneImagine[1], 3)),
+            tf.keras.layers.MaxPooling2D((2, 2)),
+            tf.keras.layers.BatchNormalization(),
+
+            tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
+            tf.keras.layers.MaxPooling2D((2, 2)),
+            tf.keras.layers.BatchNormalization(),
+
+            tf.keras.layers.Conv2D(128, (3, 3), activation='relu'),
+            tf.keras.layers.MaxPooling2D((2, 2)),
+            tf.keras.layers.BatchNormalization(),
+
+            tf.keras.layers.GlobalAveragePooling2D(),
+
+            tf.keras.layers.Dense(128, activation='relu'),
+            tf.keras.layers.Dropout(0.5),
+
+            tf.keras.layers.Dense(1, activation='sigmoid')
+        ])
+        self.modelInvatare.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+        '''
 
 
         # Antrenare Model
@@ -145,7 +170,7 @@ class CNNModel:
         toateEtichetele = np.concatenate((np.ones(self.imaginiPozitive.shape[0]), np.zeros(self.imaginiNegative.shape[0])))
         self.modelInvatare.fit(toateImaginile, toateEtichetele)
 
-        print('Acuratete Model: ', self.modelInvatare.score(toateImaginile, toateEtichetele))
+        print('Acuratete Model: ', self.modelInvatare.evaluate(toateImaginile, toateEtichetele)[1]) # 0 = loss, 1 = accuracy
 
 
 
@@ -160,6 +185,7 @@ class CNNModel:
             imagineRezultat = imagineOriginala.copy()
 
             zoneDeInteres = []
+            imaginiDeInteres = []
 
             for inaltimeFereastra in self.inaltimiFereastraUtilizabile:
                 for aspectRatio in self.aspectRatiosUtilizabili:
@@ -183,13 +209,13 @@ class CNNModel:
                             imagineDeInteres = imagineDeInteres.astype(np.float32)
                             imagineDeInteres /= self.SCALAR_NORMALIZARE
 
-                            # TODO: predictie
-                            # scorPredictie = self.modelInvatare.decision_function(imagineDeInteres)
-                            scorPredictie = self.modelInvatare.predict(imagineDeInteres)
+                            zoneDeInteres.append((xMin, yMin, xMax, yMax))
+                            imaginiDeInteres.append(imagineDeInteres)
 
-                            if scorPredictie > self.PRAG_PREDICTIE_POZITIVA_CNN:
-                                zoneDeInteres.append((xMin, yMin, xMax, yMax, scorPredictie))
 
+            scoruriImaginiDeInteres = self.modelInvatare.predict(np.array(imaginiDeInteres))
+            zoneDeInteres = [(zoneDeInteres[i][0], zoneDeInteres[i][1], zoneDeInteres[i][2], zoneDeInteres[i][3], scoruriImaginiDeInteres[i][0]) for i in range(len(zoneDeInteres))]
+            zoneDeInteres = [zonaDeInteres for zonaDeInteres in zoneDeInteres if zonaDeInteres[4] > self.PRAG_PREDICTIE_POZITIVA_CNN]
 
             zoneDeInteres = Utilitar.suprimareNonMaxime(zoneDeInteres)
 
