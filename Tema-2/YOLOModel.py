@@ -4,10 +4,12 @@ import cv2 as cv
 
 import torch
 
+
+
 import Utilitar
 
 
-class CNNModel:
+class YOLOModel:
 
     def __init__(self, numePersonaj: str):  # numePersonaj trebuie sa fie 'unknown' in cazul task-ului 1
         self.numePersonaj = numePersonaj

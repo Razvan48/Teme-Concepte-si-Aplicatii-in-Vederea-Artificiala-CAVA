@@ -17,14 +17,17 @@ import YOLOModel
 
 # CNN Model
 
-cnnModel = CNNModel.CNNModel('unknown', 'fisiere/iesire/hiperparametrii')
-cnnModel.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
+#cnnModel = CNNModel.CNNModel('unknown', 'fisiere/iesire/hiperparametrii')
+#cnnModel.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
 
-cnnModel.testeaza('fisiere/validare/validare', 'fisiere/iesire/testare')
+#cnnModel.testeaza('fisiere/validare/validare', 'fisiere/iesire/testare')
 
 # YOLO Model
 
+yoloModel = YOLOModel.YOLOModel('unknown')
+yoloModel.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
 
+yoloModel.testeaza('fisiere/validare/validare', 'fisiere/iesire/testare')
 
 
 
