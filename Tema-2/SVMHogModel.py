@@ -55,39 +55,39 @@ class SVMHogModel:
 
         # exemple pozitive
         for numePersonaj in numePersonaje:
-            if self.numePersonaj == numePersonaj or self.numePersonaj == 'unknown': # self.numePersonaj si numePersonaj nu sunt aceleasi mereu
 
-                fisierAdnotari = open(adresaAntrenareExemplePozitive + '/' + numePersonaj + '_annotations.txt', 'r')
-                zoneDeInteres = dict()
+            fisierAdnotari = open(adresaAntrenareExemplePozitive + '/' + numePersonaj + '_annotations.txt', 'r')
+            zoneDeInteres = dict()
 
-                for linie in fisierAdnotari:
-                    cuvinte = linie.split(' ')
+            for linie in fisierAdnotari:
+                cuvinte = linie.split(' ')
 
-                    # elimina \n
-                    if cuvinte[-1][-1] == '\n':
-                        cuvinte[-1] = cuvinte[-1][:-1]
+                # elimina \n
+                if cuvinte[-1][-1] == '\n':
+                    cuvinte[-1] = cuvinte[-1][:-1]
 
-                    if cuvinte[5] == numePersonaj:
-                        if cuvinte[0] not in zoneDeInteres:
-                            zoneDeInteres[cuvinte[0]] = []
+                if cuvinte[5] == numePersonaj:
+                    if cuvinte[0] not in zoneDeInteres:
+                        zoneDeInteres[cuvinte[0]] = []
 
-                        xMin = int(cuvinte[1])
-                        yMin = int(cuvinte[2])
-                        xMax = int(cuvinte[3])
-                        yMax = int(cuvinte[4])
+                    xMin = int(cuvinte[1])
+                    yMin = int(cuvinte[2])
+                    xMax = int(cuvinte[3])
+                    yMax = int(cuvinte[4])
 
-                        zoneDeInteres[cuvinte[0]].append((xMin, yMin, xMax, yMax))
+                    zoneDeInteres[cuvinte[0]].append((xMin, yMin, xMax, yMax))
 
-                fisierAdnotari.close()
+            fisierAdnotari.close()
 
-                for fisierImagine in os.listdir(adresaAntrenareExemplePozitive + '/' + numePersonaj):
+            for fisierImagine in os.listdir(adresaAntrenareExemplePozitive + '/' + numePersonaj):
+
+                imagineOriginala = cv.imread(adresaAntrenareExemplePozitive + '/' + numePersonaj + '/' + fisierImagine)
+                imagineOriginala = cv.cvtColor(imagineOriginala, cv.COLOR_BGR2GRAY)
+
+                if self.numePersonaj == numePersonaj or self.numePersonaj == 'unknown':  # self.numePersonaj si numePersonaj nu sunt aceleasi mereu
                     print('Antrenare Exemple Pozitive: ', adresaAntrenareExemplePozitive + '/' + numePersonaj + '/' + fisierImagine)
 
-                    imagineOriginala = cv.imread(adresaAntrenareExemplePozitive + '/' + numePersonaj + '/' + fisierImagine)
-                    imagineOriginala = cv.cvtColor(imagineOriginala, cv.COLOR_BGR2GRAY)
-
                     for zonaDeInteres in zoneDeInteres[fisierImagine]:
-
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
                         imagineDeInteres = cv.resize(imagineDeInteres, self.dimensiuneImagine)
                         descriptori = feature.hog(imagineDeInteres, orientations=self.numOrientari, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
@@ -97,8 +97,30 @@ class SVMHogModel:
                         imagineDeInteres = cv.resize(np.fliplr(imagineDeInteres), self.dimensiuneImagine)
                         descriptori = feature.hog(imagineDeInteres, orientations=self.numOrientari, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
                         self.descriptoriPozitivi.append(descriptori.flatten())
+                else:
+                    print('Antrenare Exemple Negative: ', adresaAntrenareExemplePozitive + '/' + numePersonaj + '/' + fisierImagine)
 
-        self.descriptoriPozitivi = np.array(self.descriptoriPozitivi)
+                    for zonaDeInteres in zoneDeInteres[fisierImagine]:
+                        imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
+                        imagineDeInteres = cv.resize(imagineDeInteres, self.dimensiuneImagine)
+                        descriptori = feature.hog(imagineDeInteres, orientations=self.numOrientari, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
+                        self.descriptoriNegativi.append(descriptori.flatten())
+
+                        imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
+                        imagineDeInteres = cv.resize(np.fliplr(imagineDeInteres), self.dimensiuneImagine)
+                        descriptori = feature.hog(imagineDeInteres, orientations=self.numOrientari, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
+                        self.descriptoriNegativi.append(descriptori.flatten())
+
+                        imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
+                        imagineDeInteres = cv.resize(np.flipud(imagineDeInteres), self.dimensiuneImagine)
+                        descriptori = feature.hog(imagineDeInteres, orientations=self.numOrientari, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
+                        self.descriptoriNegativi.append(descriptori.flatten())
+
+                        imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
+                        imagineDeInteres = cv.resize(np.flipud(np.fliplr(imagineDeInteres)), self.dimensiuneImagine)
+                        descriptori = feature.hog(imagineDeInteres, orientations=self.numOrientari, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
+                        self.descriptoriNegativi.append(descriptori.flatten())
+
 
         # exemple negative
         for fisierImagine in os.listdir(adresaAntrenareExempleNegative):
@@ -123,6 +145,8 @@ class SVMHogModel:
             descriptori = feature.hog(imagineInversataVerticalOrizontal, orientations=self.numOrientari, pixels_per_cell=self.pixeliPerCelula, cells_per_block=self.celulePerBloc, feature_vector=False)
             self.descriptoriNegativi.append(descriptori.flatten())
 
+
+        self.descriptoriPozitivi = np.array(self.descriptoriPozitivi)
         self.descriptoriNegativi = np.array(self.descriptoriNegativi)
 
 

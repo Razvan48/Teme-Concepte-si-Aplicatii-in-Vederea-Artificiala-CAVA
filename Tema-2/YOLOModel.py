@@ -1,52 +1,27 @@
-import copy
 import os
 import numpy as np
 import cv2 as cv
 
-import tensorflow as tf
-
+import torch
 
 import Utilitar
 
 
-
 class CNNModel:
 
-
-
-    def __init__(self, numePersonaj: str, adresaHiperparametrii: str): # numePersonaj trebuie sa fie 'unknown' in cazul task-ului 1
+    def __init__(self, numePersonaj: str):  # numePersonaj trebuie sa fie 'unknown' in cazul task-ului 1
         self.numePersonaj = numePersonaj
-        self.adresaHiperparametrii = adresaHiperparametrii
-
-        self.dimensiuneImagine = (64, 64)
 
         self.modelInvatare = None
         self.imaginiPozitive = []
         self.imaginiNegative = []
 
-        self.PROCENT_SALT_FEREASTRA_GLISANTA = 0.15
-        self.PRAG_PREDICTIE_POZITIVA_CNN = 0.85
-
-        self.SCALAR_NORMALIZARE = 255.0
-
-        self.aspectRatiosUtilizabili = set()
-        fisierAspectRatios = open(self.adresaHiperparametrii + '/' + self.numePersonaj + '_aspectRatiosClustered.txt', 'r')
-        for linie in fisierAspectRatios:
-            self.aspectRatiosUtilizabili.add(float(linie))
-        fisierAspectRatios.close()
-
-        self.inaltimiFereastraUtilizabile = set()
-        fisierInaltimiFereastra = open(self.adresaHiperparametrii + '/' + self.numePersonaj + '_inaltimiFereastraClustered.txt', 'r')
-        for linie in fisierInaltimiFereastra:
-            self.inaltimiFereastraUtilizabile.add(float(linie))
-        fisierInaltimiFereastra.close()
-
-        # aici mai pot adauga valori hardcodate pentru aspectRatios si inaltimiFereastra
+        self.PRAG_PREDICTIE_POZITIVA_YOLO = 0.0
 
 
 
     def antreneaza(self, adresaAntrenareExemplePozitive: str, adresaAntrenareExempleNegative: str):
-        numePersonaje = ['dad', 'deedee', 'dexter', 'mom'] # 'unknown' nu trebuie inclus aici
+        numePersonaje = ['dad', 'deedee', 'dexter', 'mom']  # 'unknown' nu trebuie inclus aici
 
         # exemple pozitive
         for numePersonaj in numePersonaje:
@@ -76,135 +51,73 @@ class CNNModel:
 
             for fisierImagine in os.listdir(adresaAntrenareExemplePozitive + '/' + numePersonaj):
                 imagineOriginala = cv.imread(adresaAntrenareExemplePozitive + '/' + numePersonaj + '/' + fisierImagine)
+                imagineOriginala = cv.cvtColor(imagineOriginala, cv.COLOR_BGR2RGB)
 
                 if self.numePersonaj == numePersonaj or self.numePersonaj == 'unknown':  # self.numePersonaj si numePersonaj nu sunt aceleasi mereu
                     print('Antrenare Exemple Pozitive: ', adresaAntrenareExemplePozitive + '/' + numePersonaj + '/' + fisierImagine)
 
                     for zonaDeInteres in zoneDeInteres[fisierImagine]:
-
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
-                        imagineDeInteres = cv.resize(imagineDeInteres, self.dimensiuneImagine)
-                        imagineDeInteres = imagineDeInteres.astype(np.float32)
-                        imagineDeInteres /= self.SCALAR_NORMALIZARE
                         self.imaginiPozitive.append(imagineDeInteres)
 
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
-                        imagineDeInteres = cv.resize(np.fliplr(imagineDeInteres), self.dimensiuneImagine)
-                        imagineDeInteres = imagineDeInteres.astype(np.float32)
-                        imagineDeInteres /= self.SCALAR_NORMALIZARE
+                        imagineDeInteres = np.fliplr(imagineDeInteres)
                         self.imaginiPozitive.append(imagineDeInteres)
                 else:
                     print('Antrenare Exemple Negative: ', adresaAntrenareExemplePozitive + '/' + numePersonaj + '/' + fisierImagine)
 
                     for zonaDeInteres in zoneDeInteres[fisierImagine]:
-
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
-                        imagineDeInteres = cv.resize(imagineDeInteres, self.dimensiuneImagine)
-                        imagineDeInteres = imagineDeInteres.astype(np.float32)
-                        imagineDeInteres /= self.SCALAR_NORMALIZARE
                         self.imaginiNegative.append(imagineDeInteres)
 
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
-                        imagineDeInteres = cv.resize(np.fliplr(imagineDeInteres), self.dimensiuneImagine)
-                        imagineDeInteres = imagineDeInteres.astype(np.float32)
-                        imagineDeInteres /= self.SCALAR_NORMALIZARE
+                        imagineDeInteres = np.fliplr(imagineDeInteres)
                         self.imaginiNegative.append(imagineDeInteres)
 
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
-                        imagineDeInteres = cv.resize(np.flipud(imagineDeInteres), self.dimensiuneImagine)
-                        imagineDeInteres = imagineDeInteres.astype(np.float32)
-                        imagineDeInteres /= self.SCALAR_NORMALIZARE
+                        imagineDeInteres = np.flipud(imagineDeInteres)
                         self.imaginiNegative.append(imagineDeInteres)
 
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
-                        imagineDeInteres = cv.resize(np.flipud(np.fliplr(imagineDeInteres)), self.dimensiuneImagine)
-                        imagineDeInteres = imagineDeInteres.astype(np.float32)
-                        imagineDeInteres /= self.SCALAR_NORMALIZARE
+                        imagineDeInteres = np.flipud(np.fliplr(imagineDeInteres))
                         self.imaginiNegative.append(imagineDeInteres)
-
-
 
         # exemple negative
         for fisierImagine in os.listdir(adresaAntrenareExempleNegative):
             print('Antrenare Exemple Negative: ', adresaAntrenareExempleNegative + '/' + fisierImagine)
 
             imagineOriginala = cv.imread(adresaAntrenareExempleNegative + '/' + fisierImagine)
+            imagineOriginala = cv.cvtColor(imagineOriginala, cv.COLOR_BGR2RGB)
 
-            imagine = cv.resize(imagineOriginala, self.dimensiuneImagine)
-            imagine = imagine.astype(np.float32)
-            imagine /= self.SCALAR_NORMALIZARE
-            self.imaginiNegative.append(imagine)
+            self.imaginiNegative.append(imagineOriginala.copy())
 
-            imagineInversataOrizontal = cv.resize(np.fliplr(imagineOriginala), self.dimensiuneImagine)
-            imagineInversataOrizontal = imagineInversataOrizontal.astype(np.float32)
-            imagineInversataOrizontal /= self.SCALAR_NORMALIZARE
+            imagineInversataOrizontal = np.fliplr(imagineOriginala)
             self.imaginiNegative.append(imagineInversataOrizontal)
 
-            imagineInversataVertical = cv.resize(np.flipud(imagineOriginala), self.dimensiuneImagine)
-            imagineInversataVertical = imagineInversataVertical.astype(np.float32)
-            imagineInversataVertical /= self.SCALAR_NORMALIZARE
+            imagineInversataVertical = np.flipud(imagineOriginala)
             self.imaginiNegative.append(imagineInversataVertical)
 
-            imagineInversataVerticalOrizontal = cv.resize(np.flipud(np.fliplr(imagineOriginala)), self.dimensiuneImagine)
-            imagineInversataVerticalOrizontal = imagineInversataVerticalOrizontal.astype(np.float32)
-            imagineInversataVerticalOrizontal /= self.SCALAR_NORMALIZARE
+            imagineInversataVerticalOrizontal = np.flipud(np.fliplr(imagineOriginala))
             self.imaginiNegative.append(imagineInversataVerticalOrizontal)
-
 
         self.imaginiPozitive = np.array(self.imaginiPozitive)
         self.imaginiNegative = np.array(self.imaginiNegative)
 
 
         # Construire Model
-
-        self.modelInvatare = tf.keras.models.Sequential([
-            tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(self.dimensiuneImagine[0], self.dimensiuneImagine[1], 3)),
-            tf.keras.layers.MaxPooling2D((2, 2)),
-            tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
-            tf.keras.layers.MaxPooling2D((2, 2)),
-            tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
-            tf.keras.layers.Flatten(),
-            tf.keras.layers.Dense(64, activation='relu'),
-            tf.keras.layers.Dense(1, activation='sigmoid')
-        ])
-        self.modelInvatare.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-
-        '''
-        self.modelInvatare = tf.keras.models.Sequential([
-            tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(self.dimensiuneImagine[0], self.dimensiuneImagine[1], 3)),
-            tf.keras.layers.MaxPooling2D((2, 2)),
-            tf.keras.layers.BatchNormalization(),
-
-            tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
-            tf.keras.layers.MaxPooling2D((2, 2)),
-            tf.keras.layers.BatchNormalization(),
-
-            tf.keras.layers.Conv2D(128, (3, 3), activation='relu'),
-            tf.keras.layers.MaxPooling2D((2, 2)),
-            tf.keras.layers.BatchNormalization(),
-
-            tf.keras.layers.GlobalAveragePooling2D(),
-
-            tf.keras.layers.Dense(128, activation='relu'),
-            tf.keras.layers.Dropout(0.5),
-
-            tf.keras.layers.Dense(1, activation='sigmoid')
-        ])
-        self.modelInvatare.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-        '''
-
+        self.modelInvatare = torch.hub.load('ultralytics/yolov5:v6.2', 'yolov5s', pretrained=False)
 
         # Antrenare Model
 
         toateImaginile = np.concatenate((self.imaginiPozitive, self.imaginiNegative), axis=0)
         toateEtichetele = np.concatenate((np.ones(self.imaginiPozitive.shape[0]), np.zeros(self.imaginiNegative.shape[0])))
-        self.modelInvatare.fit(toateImaginile, toateEtichetele)
 
-        print('Acuratete Model: ', self.modelInvatare.evaluate(toateImaginile, toateEtichetele)[1]) # 0 = loss, 1 = accuracy
-
+        # TODO: train model + modificari pentru metoda de test de mai jos
 
 
     def testeaza(self, adresaTestare: str, adresaPredictiiRezultate: str):
+
+        # TODO: aici de vazut tot codul + refactoring
 
         os.makedirs(adresaPredictiiRezultate, exist_ok=True)
 
@@ -242,10 +155,11 @@ class CNNModel:
                             zoneDeInteres.append((xMin, yMin, xMax, yMax))
                             imaginiDeInteres.append(imagineDeInteres)
 
-
             scoruriImaginiDeInteres = self.modelInvatare.predict(np.array(imaginiDeInteres))
-            zoneDeInteres = [(zoneDeInteres[i][0], zoneDeInteres[i][1], zoneDeInteres[i][2], zoneDeInteres[i][3], scoruriImaginiDeInteres[i][0]) for i in range(len(zoneDeInteres))]
-            zoneDeInteres = [zonaDeInteres for zonaDeInteres in zoneDeInteres if zonaDeInteres[4] > self.PRAG_PREDICTIE_POZITIVA_CNN]
+            zoneDeInteres = [(zoneDeInteres[i][0], zoneDeInteres[i][1], zoneDeInteres[i][2], zoneDeInteres[i][3],
+                              scoruriImaginiDeInteres[i][0]) for i in range(len(zoneDeInteres))]
+            zoneDeInteres = [zonaDeInteres for zonaDeInteres in zoneDeInteres if
+                             zonaDeInteres[4] > self.PRAG_PREDICTIE_POZITIVA_CNN]
 
             zoneDeInteres = Utilitar.suprimareNonMaxime(zoneDeInteres)
 
@@ -255,7 +169,8 @@ class CNNModel:
 
             # Salvare Imagine cu Predictiile Evidentiate
             for zonaDeInteres in zoneDeInteres:
-                cv.rectangle(imagineRezultat, (zonaDeInteres[0], zonaDeInteres[1]), (zonaDeInteres[2], zonaDeInteres[3]), (0, 0, 255), 2) # BGR
+                cv.rectangle(imagineRezultat, (zonaDeInteres[0], zonaDeInteres[1]),
+                             (zonaDeInteres[2], zonaDeInteres[3]), (0, 0, 255), 2)  # BGR
 
             cv.imwrite(adresaPredictiiRezultate + '/' + fisierImagine, imagineRezultat)
 
