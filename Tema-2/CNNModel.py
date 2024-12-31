@@ -24,8 +24,8 @@ class CNNModel:
         self.imaginiPozitive = []
         self.imaginiNegative = []
 
-        self.PROCENT_SALT_FEREASTRA_GLISANTA = 0.15
-        self.PRAG_PREDICTIE_POZITIVA_CNN = 0.85
+        self.PROCENT_SALT_FEREASTRA_GLISANTA = 0.2
+        self.PRAG_PREDICTIE_POZITIVA_CNN = 0.9
 
         self.SCALAR_NORMALIZARE = 255.0
 
