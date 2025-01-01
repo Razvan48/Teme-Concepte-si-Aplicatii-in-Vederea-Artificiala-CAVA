@@ -14,6 +14,8 @@ Mod de Utilizare:
 Fisierele EvaluatorSabloane.py, main.py, Tema_1.py si Utilitar.py trebuie sa ramana intr-un director comun.
 Toate filepath-urile folosite in implementare sunt relative la acest director comun.
 
+Proiectul se va rula pornind din main.py.
+
 Pentru a rula proiectul trebuie ca in main.py sa se instantieze un obiect de tipul Tema_1 si apoi acestei instante sa i se apeleze metoda .ruleaza().
 Instantele de tipul Tema_1 au o unica folosinta, odata rulate nu mai pot fi refolosite, trebuie reinstantiate.
 
