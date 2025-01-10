@@ -208,7 +208,16 @@ class CNNModel:
 
         os.makedirs(adresaPredictiiRezultate, exist_ok=True)
 
-        for fisierImagine in os.listdir(adresaTestare):
+        if self.numePersonaj == 'unknown':
+            os.makedirs(adresaPredictiiRezultate + '/352_Capatina_Razvan/task1', exist_ok=True)
+        else:
+            os.makedirs(adresaPredictiiRezultate + '/352_Capatina_Razvan/task2', exist_ok=True)
+
+        detectii = []
+        numeFisiere = []
+        scoruri = []
+
+        for fisierImagine in sorted(os.listdir(adresaTestare)):
             print('Testare: ', adresaTestare + '/' + fisierImagine)
 
             imagineOriginala = cv.imread(adresaTestare + '/' + fisierImagine)
@@ -222,7 +231,7 @@ class CNNModel:
                     if int(aspectRatio * inaltimeFereastra) > imagineOriginala.shape[1]:
                         continue
 
-                    print('Inaltime Fereastra: ', inaltimeFereastra, ' Aspect Ratio: ', aspectRatio)
+                    # print('Inaltime Fereastra: ', inaltimeFereastra, ' Aspect Ratio: ', aspectRatio)
 
                     latimeFereastra = int(aspectRatio * inaltimeFereastra)
 
@@ -249,15 +258,32 @@ class CNNModel:
 
             zoneDeInteres = Utilitar.suprimareNonMaxime(zoneDeInteres)
 
-            print('Scoruri Predictii: ')
             for zonaDeInteres in zoneDeInteres:
-                print(zonaDeInteres[4])
+                detectii.append([zonaDeInteres[0], zonaDeInteres[1], zonaDeInteres[2], zonaDeInteres[3]])
+                numeFisiere.append(fisierImagine)
+                scoruri.append(zonaDeInteres[4])
+
+            # print('Scoruri Predictii: ')
+            # for zonaDeInteres in zoneDeInteres:
+            #     print(zonaDeInteres[4])
 
             # Salvare Imagine cu Predictiile Evidentiate
-            for zonaDeInteres in zoneDeInteres:
-                cv.rectangle(imagineRezultat, (zonaDeInteres[0], zonaDeInteres[1]), (zonaDeInteres[2], zonaDeInteres[3]), (0, 0, 255), 2) # BGR
+            # for zonaDeInteres in zoneDeInteres:
+            #     cv.rectangle(imagineRezultat, (zonaDeInteres[0], zonaDeInteres[1]), (zonaDeInteres[2], zonaDeInteres[3]), (0, 0, 255), 2) # BGR
 
-            cv.imwrite(adresaPredictiiRezultate + '/' + fisierImagine, imagineRezultat)
+            # cv.imwrite(adresaPredictiiRezultate + '/' + fisierImagine, imagineRezultat)
+
+
+        # Salvare
+
+        if self.numePersonaj == 'unknown':
+            np.save(adresaPredictiiRezultate + '/352_Capatina_Razvan/task1/detections_all_faces.npy', np.array(detectii))
+            np.save(adresaPredictiiRezultate + '/352_Capatina_Razvan/task1/file_names_all_faces.npy', np.array(numeFisiere))
+            np.save(adresaPredictiiRezultate + '/352_Capatina_Razvan/task1/scores_all_faces.npy', np.array(scoruri))
+        else:
+            np.save(adresaPredictiiRezultate + '/352_Capatina_Razvan/task2/detections_' + self.numePersonaj + '.npy', np.array(detectii))
+            np.save(adresaPredictiiRezultate + '/352_Capatina_Razvan/task2/file_names_' + self.numePersonaj + '.npy', np.array(numeFisiere))
+            np.save(adresaPredictiiRezultate + '/352_Capatina_Razvan/task2/scores_' + self.numePersonaj + '.npy', np.array(scoruri))
 
 
 
