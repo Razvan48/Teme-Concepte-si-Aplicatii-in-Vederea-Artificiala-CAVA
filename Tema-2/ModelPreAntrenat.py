@@ -38,6 +38,8 @@ class ModelPreAntrenat:
         self.criteriuInvatare = torch.nn.BCEWithLogitsLoss()
         self.optimizatorInvatare = torch.optim.Adam(self.modelInvatare.parameters(), lr=0.0001)
 
+        self.NUMAR_EPOCI_ANTRENARE = 10
+
 
 
         self.imaginiPozitive = []
@@ -98,46 +100,32 @@ class ModelPreAntrenat:
                     print('Antrenare Exemple Pozitive: ', adresaAntrenareExemplePozitive + '/' + numePersonaj + '/' + fisierImagine)
 
                     for zonaDeInteres in zoneDeInteres[fisierImagine]:
+                        imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
+                        self.imaginiPozitive.append(self.preProcesareImagine(imagineDeInteres))
 
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
-                        imagineDeInteres = cv.resize(imagineDeInteres, self.dimensiuneImagine)
-                        imagineDeInteres = imagineDeInteres.astype(np.float32)
-                        imagineDeInteres /= self.SCALAR_NORMALIZARE
-                        self.imaginiPozitive.append(imagineDeInteres)
+                        imagineDeInteres = np.fliplr(imagineDeInteres)
+                        self.imaginiPozitive.append(self.preProcesareImagine(imagineDeInteres))
 
-                        imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
-                        imagineDeInteres = cv.resize(np.fliplr(imagineDeInteres), self.dimensiuneImagine)
-                        imagineDeInteres = imagineDeInteres.astype(np.float32)
-                        imagineDeInteres /= self.SCALAR_NORMALIZARE
-                        self.imaginiPozitive.append(imagineDeInteres)
                 else:
                     print('Antrenare Exemple Negative: ', adresaAntrenareExemplePozitive + '/' + numePersonaj + '/' + fisierImagine)
 
                     for zonaDeInteres in zoneDeInteres[fisierImagine]:
 
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
-                        imagineDeInteres = cv.resize(imagineDeInteres, self.dimensiuneImagine)
-                        imagineDeInteres = imagineDeInteres.astype(np.float32)
-                        imagineDeInteres /= self.SCALAR_NORMALIZARE
-                        self.imaginiNegative.append(imagineDeInteres)
+                        self.imaginiNegative.append(self.preProcesareImagine(imagineDeInteres))
 
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
-                        imagineDeInteres = cv.resize(np.fliplr(imagineDeInteres), self.dimensiuneImagine)
-                        imagineDeInteres = imagineDeInteres.astype(np.float32)
-                        imagineDeInteres /= self.SCALAR_NORMALIZARE
-                        self.imaginiNegative.append(imagineDeInteres)
+                        imagineDeInteres = np.fliplr(imagineDeInteres)
+                        self.imaginiNegative.append(self.preProcesareImagine(imagineDeInteres))
 
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
-                        imagineDeInteres = cv.resize(np.flipud(imagineDeInteres), self.dimensiuneImagine)
-                        imagineDeInteres = imagineDeInteres.astype(np.float32)
-                        imagineDeInteres /= self.SCALAR_NORMALIZARE
-                        self.imaginiNegative.append(imagineDeInteres)
+                        imagineDeInteres = np.flipud(imagineDeInteres)
+                        self.imaginiNegative.append(self.preProcesareImagine(imagineDeInteres))
 
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
-                        imagineDeInteres = cv.resize(np.flipud(np.fliplr(imagineDeInteres)), self.dimensiuneImagine)
-                        imagineDeInteres = imagineDeInteres.astype(np.float32)
-                        imagineDeInteres /= self.SCALAR_NORMALIZARE
-                        self.imaginiNegative.append(imagineDeInteres)
+                        imagineDeInteres = np.flipud(np.fliplr(imagineDeInteres))
+                        self.imaginiNegative.append(self.preProcesareImagine(imagineDeInteres))
 
 
 
@@ -147,25 +135,16 @@ class ModelPreAntrenat:
 
             imagineOriginala = cv.imread(adresaAntrenareExempleNegative + '/' + fisierImagine)
 
-            imagine = cv.resize(imagineOriginala, self.dimensiuneImagine)
-            imagine = imagine.astype(np.float32)
-            imagine /= self.SCALAR_NORMALIZARE
-            self.imaginiNegative.append(imagine)
+            self.imaginiNegative.append(self.preProcesareImagine(imagineOriginala))
 
-            imagineInversataOrizontal = cv.resize(np.fliplr(imagineOriginala), self.dimensiuneImagine)
-            imagineInversataOrizontal = imagineInversataOrizontal.astype(np.float32)
-            imagineInversataOrizontal /= self.SCALAR_NORMALIZARE
-            self.imaginiNegative.append(imagineInversataOrizontal)
+            imagineInversataOrizontal = np.fliplr(imagineOriginala)
+            self.imaginiNegative.append(self.preProcesareImagine(imagineInversataOrizontal))
 
-            imagineInversataVertical = cv.resize(np.flipud(imagineOriginala), self.dimensiuneImagine)
-            imagineInversataVertical = imagineInversataVertical.astype(np.float32)
-            imagineInversataVertical /= self.SCALAR_NORMALIZARE
-            self.imaginiNegative.append(imagineInversataVertical)
+            imagineInversataVertical = np.flipud(imagineOriginala)
+            self.imaginiNegative.append(self.preProcesareImagine(imagineInversataVertical))
 
-            imagineInversataVerticalOrizontal = cv.resize(np.flipud(np.fliplr(imagineOriginala)), self.dimensiuneImagine)
-            imagineInversataVerticalOrizontal = imagineInversataVerticalOrizontal.astype(np.float32)
-            imagineInversataVerticalOrizontal /= self.SCALAR_NORMALIZARE
-            self.imaginiNegative.append(imagineInversataVerticalOrizontal)
+            imagineInversataVerticalOrizontal = np.flipud(np.fliplr(imagineOriginala))
+            self.imaginiNegative.append(self.preProcesareImagine(imagineInversataVerticalOrizontal))
 
 
         self.imaginiPozitive = np.array(self.imaginiPozitive)
@@ -182,7 +161,7 @@ class ModelPreAntrenat:
 
         self.modelInvatare.train()
 
-        for epoca in range(10):
+        for epoca in range(self.NUMAR_EPOCI_ANTRENARE):
             self.optimizatorInvatare.zero_grad()
             dateIesireModel = self.modelInvatare(toateImaginile)
             eroare = self.criteriuInvatare(dateIesireModel.squeeze(), toateEtichetele.float())
@@ -238,9 +217,7 @@ class ModelPreAntrenat:
                             yMax = yMin + int(inaltimeFereastra) - 1
 
                             imagineDeInteres = imagineOriginala[yMin:yMax + 1, xMin:xMax + 1].copy()
-                            imagineDeInteres = cv.resize(imagineDeInteres, self.dimensiuneImagine)
-                            imagineDeInteres = imagineDeInteres.astype(np.float32)
-                            imagineDeInteres /= self.SCALAR_NORMALIZARE
+                            imagineDeInteres = self.preProcesareImagine(imagineDeInteres)
 
                             zoneDeInteres.append((xMin, yMin, xMax, yMax))
                             imaginiDeInteres.append(imagineDeInteres)
@@ -250,7 +227,7 @@ class ModelPreAntrenat:
             scoruriImaginiDeInteres = self.modelInvatare(torch.tensor(imaginiDeInteres)).detach().numpy()
 
             zoneDeInteres = [(zoneDeInteres[i][0], zoneDeInteres[i][1], zoneDeInteres[i][2], zoneDeInteres[i][3], scoruriImaginiDeInteres[i][0]) for i in range(len(zoneDeInteres))]
-            zoneDeInteres = [zonaDeInteres for zonaDeInteres in zoneDeInteres if zonaDeInteres[4] > self.PRAG_PREDICTIE_POZITIVA_CNN]
+            zoneDeInteres = [zonaDeInteres for zonaDeInteres in zoneDeInteres if zonaDeInteres[4] > self.PRAG_PREDICTIE_POZITIVA_MODEL_PRE_ANTRENAT]
 
             zoneDeInteres = Utilitar.suprimareNonMaxime(zoneDeInteres)
 
@@ -264,10 +241,10 @@ class ModelPreAntrenat:
             #     print(zonaDeInteres[4])
 
             # Salvare Imagine cu Predictiile Evidentiate
-            # for zonaDeInteres in zoneDeInteres:
-            #     cv.rectangle(imagineRezultat, (zonaDeInteres[0], zonaDeInteres[1]), (zonaDeInteres[2], zonaDeInteres[3]), (0, 0, 255), 2) # BGR
+            for zonaDeInteres in zoneDeInteres:
+                cv.rectangle(imagineRezultat, (zonaDeInteres[0], zonaDeInteres[1]), (zonaDeInteres[2], zonaDeInteres[3]), (0, 0, 255), 2) # BGR
 
-            # cv.imwrite(adresaPredictiiRezultate + '/' + fisierImagine, imagineRezultat)
+            cv.imwrite(adresaPredictiiRezultate + '/352_Capatina_Razvan/imagini/' + fisierImagine, imagineRezultat)
 
 
         # Salvare

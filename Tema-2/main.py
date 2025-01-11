@@ -52,7 +52,7 @@ import ModelPreAntrenat
 
 # Model Pre Antrenat
 
-modelPreAntrenat = ModelPreAntrenat.ModelPreAntrenat('unknown')
+modelPreAntrenat = ModelPreAntrenat.ModelPreAntrenat('unknown', 'fisiere/iesire/hiperparametrii')
 modelPreAntrenat.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
 
 modelPreAntrenat.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
