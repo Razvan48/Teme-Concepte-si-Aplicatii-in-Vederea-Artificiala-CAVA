@@ -2,7 +2,7 @@ import Utilitar
 
 import SVMHogModel
 import CNNModel
-import YOLOModel
+import ModelPreAntrenat
 
 
 #Utilitar.genereazaHiperparametriFereastraGlisanta('fisiere/antrenare', 'fisiere/iesire/hiperparametrii')
@@ -17,45 +17,45 @@ import YOLOModel
 
 # CNN Model
 
-cnnModelUnknown = CNNModel.CNNModel('unknown', 'fisiere/iesire/hiperparametrii')
-cnnModelUnknown.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
+#cnnModelUnknown = CNNModel.CNNModel('unknown', 'fisiere/iesire/hiperparametrii')
+#cnnModelUnknown.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
 
-cnnModelUnknown.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
+#cnnModelUnknown.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
 
 # CNN doar Dad
 
-cnnModelDad = CNNModel.CNNModel('dad', 'fisiere/iesire/hiperparametrii')
-cnnModelDad.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
+#cnnModelDad = CNNModel.CNNModel('dad', 'fisiere/iesire/hiperparametrii')
+#cnnModelDad.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
 
-cnnModelDad.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
+#cnnModelDad.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
 
 # CNN doar DeeDee
 
-cnnModelDeeDee = CNNModel.CNNModel('deedee', 'fisiere/iesire/hiperparametrii')
-cnnModelDeeDee.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
+#cnnModelDeeDee = CNNModel.CNNModel('deedee', 'fisiere/iesire/hiperparametrii')
+#cnnModelDeeDee.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
 
-cnnModelDeeDee.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
+#cnnModelDeeDee.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
 
 # CNN doar Dexter
 
-cnnModelDexter = CNNModel.CNNModel('dexter', 'fisiere/iesire/hiperparametrii')
-cnnModelDexter.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
+#cnnModelDexter = CNNModel.CNNModel('dexter', 'fisiere/iesire/hiperparametrii')
+#cnnModelDexter.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
 
-cnnModelDexter.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
+#cnnModelDexter.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
 
 # CNN doar Mom
 
-cnnModelMom = CNNModel.CNNModel('mom', 'fisiere/iesire/hiperparametrii')
-cnnModelMom.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
+#cnnModelMom = CNNModel.CNNModel('mom', 'fisiere/iesire/hiperparametrii')
+#cnnModelMom.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
 
-cnnModelMom.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
+#cnnModelMom.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
 
-# YOLO Model
+# Model Pre Antrenat
 
-#yoloModel = YOLOModel.YOLOModel('unknown')
-#yoloModel.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
+modelPreAntrenat = ModelPreAntrenat.ModelPreAntrenat('unknown')
+modelPreAntrenat.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
 
-#yoloModel.testeaza('fisiere/validare/validare', 'fisiere/iesire/testare')
+modelPreAntrenat.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
 
 
 
