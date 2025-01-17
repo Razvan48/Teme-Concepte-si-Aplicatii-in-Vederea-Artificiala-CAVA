@@ -17,10 +17,12 @@ import ModelPreAntrenat
 
 # CNN Model
 
-#cnnModelUnknown = CNNModel.CNNModel('unknown', 'fisiere/iesire/hiperparametrii')
-#cnnModelUnknown.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
+cnnModelUnknown = CNNModel.CNNModel('unknown', 'fisiere/iesire/hiperparametrii')
+cnnModelUnknown.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
 
-#cnnModelUnknown.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
+cnnModelUnknown.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
+
+cnnModelUnknown.salveazaModel('fisiere/iesire/modele/CNNModel')
 
 # CNN doar Dad
 

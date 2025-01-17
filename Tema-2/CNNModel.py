@@ -270,10 +270,11 @@ class CNNModel:
             #     print(zonaDeInteres[4])
 
             # Salvare Imagine cu Predictiile Evidentiate
-            #for zonaDeInteres in zoneDeInteres:
-            #    cv.rectangle(imagineRezultat, (zonaDeInteres[0], zonaDeInteres[1]), (zonaDeInteres[2], zonaDeInteres[3]), (0, 0, 255), 2) # BGR
+            os.makedirs(adresaPredictiiRezultate + '/352_Capatina_Razvan/imagini_' + self.numePersonaj, exist_ok=True)
+            for zonaDeInteres in zoneDeInteres:
+                cv.rectangle(imagineRezultat, (zonaDeInteres[0], zonaDeInteres[1]), (zonaDeInteres[2], zonaDeInteres[3]), (0, 0, 255), 2) # BGR
 
-            #cv.imwrite(adresaPredictiiRezultate + '/352_Capatina_Razvan/imagini/' + fisierImagine, imagineRezultat)
+            cv.imwrite(adresaPredictiiRezultate + '/352_Capatina_Razvan/imagini_' + self.numePersonaj + '/' + fisierImagine, imagineRezultat)
 
 
         # Salvare
@@ -292,7 +293,7 @@ class CNNModel:
     def salveazaModel(self, adresaSalvareModel: str):
         os.makedirs(adresaSalvareModel, exist_ok=True)
         data = datetime.datetime.now()
-        self.modelInvatare.save(adresaSalvareModel + '/' + self.numePersonaj + '_CNNModel_' + str(data.year) + '_' + str(data.month) + '_' + str(data.day) + '_' + str(data.hour) + '_' + str(data.minute) + '_' + str(data.second))
+        self.modelInvatare.save(adresaSalvareModel + '/' + self.numePersonaj + '_CNNModel_' + str(data.year) + '_' + str(data.month) + '_' + str(data.day) + '_' + str(data.hour) + '_' + str(data.minute) + '_' + str(data.second) + '.h5')
 
 
     def incarcaModel(self, adresaIncarcareModel: str):

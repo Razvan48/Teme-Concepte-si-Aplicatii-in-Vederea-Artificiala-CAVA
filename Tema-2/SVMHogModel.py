@@ -261,7 +261,7 @@ class SVMHogModel:
     def salveazaModel(self, adresaSalvareModel: str):
         os.makedirs(adresaSalvareModel, exist_ok=True)
         data = datetime.datetime.now()
-        pickle.dump(self.modelInvatare, open(adresaSalvareModel + '/' + self.numePersonaj + '_SVMHogModel_' + str(data.year) + '_' + str(data.month) + '_' + str(data.day) + '_' + str(data.hour) + '_' + str(data.minute) + '_' + str(data.second), 'wb'))
+        pickle.dump(self.modelInvatare, open(adresaSalvareModel + '/' + self.numePersonaj + '_SVMHogModel_' + str(data.year) + '_' + str(data.month) + '_' + str(data.day) + '_' + str(data.hour) + '_' + str(data.minute) + '_' + str(data.second) + '.pkl', 'wb'))
 
 
 
