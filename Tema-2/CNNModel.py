@@ -27,7 +27,12 @@ class CNNModel:
         self.imaginiNegative = []
 
         self.PROCENT_SALT_FEREASTRA_GLISANTA = 0.2
-        self.PRAG_PREDICTIE_POZITIVA_CNN = 0.9
+        if self.numePersonaj == 'unknown':
+            self.PRAG_PREDICTIE_POZITIVA_CNN = 0.94
+        elif self.numePersonaj == 'dad':
+            self.PRAG_PREDICTIE_POZITIVA_CNN = 0.9561
+        else:
+            self.PRAG_PREDICTIE_POZITIVA_CNN = 0.90
 
         self.SCALAR_NORMALIZARE = 255.0
 
@@ -95,6 +100,47 @@ class CNNModel:
                         imagineDeInteres = imagineDeInteres.astype(np.float32)
                         imagineDeInteres /= self.SCALAR_NORMALIZARE
                         self.imaginiPozitive.append(imagineDeInteres)
+
+                        '''
+                        imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
+                        imagineDeInteres = cv.resize(np.flipud(imagineDeInteres), self.dimensiuneImagine)
+                        imagineDeInteres = imagineDeInteres.astype(np.float32)
+                        imagineDeInteres /= self.SCALAR_NORMALIZARE
+                        self.imaginiPozitive.append(imagineDeInteres)
+
+                        imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
+                        imagineDeInteres = cv.resize(np.flipud(np.fliplr(imagineDeInteres)), self.dimensiuneImagine)
+                        imagineDeInteres = imagineDeInteres.astype(np.float32)
+                        imagineDeInteres /= self.SCALAR_NORMALIZARE
+                        self.imaginiPozitive.append(imagineDeInteres)
+
+                        #rotatie 90 de grade
+
+                        imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
+                        imagineDeInteres = cv.resize(np.rot90(imagineDeInteres), self.dimensiuneImagine)
+                        imagineDeInteres = imagineDeInteres.astype(np.float32)
+                        imagineDeInteres /= self.SCALAR_NORMALIZARE
+                        self.imaginiPozitive.append(imagineDeInteres)
+
+                        imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
+                        imagineDeInteres = cv.resize(np.rot90(np.fliplr(imagineDeInteres)), self.dimensiuneImagine)
+                        imagineDeInteres = imagineDeInteres.astype(np.float32)
+                        imagineDeInteres /= self.SCALAR_NORMALIZARE
+                        self.imaginiPozitive.append(imagineDeInteres)
+
+                        imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
+                        imagineDeInteres = cv.resize(np.rot90(np.flipud(imagineDeInteres)), self.dimensiuneImagine)
+                        imagineDeInteres = imagineDeInteres.astype(np.float32)
+                        imagineDeInteres /= self.SCALAR_NORMALIZARE
+                        self.imaginiPozitive.append(imagineDeInteres)
+
+                        imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
+                        imagineDeInteres = cv.resize(np.rot90(np.flipud(np.fliplr(imagineDeInteres))), self.dimensiuneImagine)
+                        imagineDeInteres = imagineDeInteres.astype(np.float32)
+                        imagineDeInteres /= self.SCALAR_NORMALIZARE
+                        self.imaginiPozitive.append(imagineDeInteres)
+                        '''
+
                 else:
                     print('Antrenare Exemple Negative: ', adresaAntrenareExemplePozitive + '/' + numePersonaj + '/' + fisierImagine)
 
@@ -112,6 +158,7 @@ class CNNModel:
                         imagineDeInteres /= self.SCALAR_NORMALIZARE
                         self.imaginiNegative.append(imagineDeInteres)
 
+                        '''
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
                         imagineDeInteres = cv.resize(np.flipud(imagineDeInteres), self.dimensiuneImagine)
                         imagineDeInteres = imagineDeInteres.astype(np.float32)
@@ -123,6 +170,33 @@ class CNNModel:
                         imagineDeInteres = imagineDeInteres.astype(np.float32)
                         imagineDeInteres /= self.SCALAR_NORMALIZARE
                         self.imaginiNegative.append(imagineDeInteres)
+
+                        #rotatie 90 de grade
+
+                        imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
+                        imagineDeInteres = cv.resize(np.rot90(imagineDeInteres), self.dimensiuneImagine)
+                        imagineDeInteres = imagineDeInteres.astype(np.float32)
+                        imagineDeInteres /= self.SCALAR_NORMALIZARE
+                        self.imaginiNegative.append(imagineDeInteres)
+
+                        imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
+                        imagineDeInteres = cv.resize(np.rot90(np.fliplr(imagineDeInteres)), self.dimensiuneImagine)
+                        imagineDeInteres = imagineDeInteres.astype(np.float32)
+                        imagineDeInteres /= self.SCALAR_NORMALIZARE
+                        self.imaginiNegative.append(imagineDeInteres)
+
+                        imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
+                        imagineDeInteres = cv.resize(np.rot90(np.flipud(imagineDeInteres)), self.dimensiuneImagine)
+                        imagineDeInteres = imagineDeInteres.astype(np.float32)
+                        imagineDeInteres /= self.SCALAR_NORMALIZARE
+                        self.imaginiNegative.append(imagineDeInteres)
+
+                        imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
+                        imagineDeInteres = cv.resize(np.rot90(np.flipud(np.fliplr(imagineDeInteres))), self.dimensiuneImagine)
+                        imagineDeInteres = imagineDeInteres.astype(np.float32)
+                        imagineDeInteres /= self.SCALAR_NORMALIZARE
+                        self.imaginiNegative.append(imagineDeInteres)
+                        '''
 
 
 
@@ -152,12 +226,38 @@ class CNNModel:
             imagineInversataVerticalOrizontal /= self.SCALAR_NORMALIZARE
             self.imaginiNegative.append(imagineInversataVerticalOrizontal)
 
+            #rotatie 90 de grade
+
+            '''
+            imagineRotatie90 = cv.resize(np.rot90(imagineOriginala), self.dimensiuneImagine)
+            imagineRotatie90 = imagineRotatie90.astype(np.float32)
+            imagineRotatie90 /= self.SCALAR_NORMALIZARE
+            self.imaginiNegative.append(imagineRotatie90)
+
+            imagineRotatie90InversataOrizontal = cv.resize(np.rot90(np.fliplr(imagineOriginala)), self.dimensiuneImagine)
+            imagineRotatie90InversataOrizontal = imagineRotatie90InversataOrizontal.astype(np.float32)
+            imagineRotatie90InversataOrizontal /= self.SCALAR_NORMALIZARE
+            self.imaginiNegative.append(imagineRotatie90InversataOrizontal)
+
+            imagineRotatie90InversataVertical = cv.resize(np.rot90(np.flipud(imagineOriginala)), self.dimensiuneImagine)
+            imagineRotatie90InversataVertical = imagineRotatie90InversataVertical.astype(np.float32)
+            imagineRotatie90InversataVertical /= self.SCALAR_NORMALIZARE
+            self.imaginiNegative.append(imagineRotatie90InversataVertical)
+
+            imagineRotatie90InversataVerticalOrizontal = cv.resize(np.rot90(np.flipud(np.fliplr(imagineOriginala))), self.dimensiuneImagine)
+            imagineRotatie90InversataVerticalOrizontal = imagineRotatie90InversataVerticalOrizontal.astype(np.float32)
+            imagineRotatie90InversataVerticalOrizontal /= self.SCALAR_NORMALIZARE
+            self.imaginiNegative.append(imagineRotatie90InversataVerticalOrizontal)
+            '''
+
 
         self.imaginiPozitive = np.array(self.imaginiPozitive)
         self.imaginiNegative = np.array(self.imaginiNegative)
 
 
         # Construire Model
+
+        tf.random.set_seed(7)
 
         self.modelInvatare = tf.keras.models.Sequential([
             tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(self.dimensiuneImagine[0], self.dimensiuneImagine[1], 3)),
@@ -200,7 +300,7 @@ class CNNModel:
 
         toateImaginile = np.concatenate((self.imaginiPozitive, self.imaginiNegative), axis=0)
         toateEtichetele = np.concatenate((np.ones(self.imaginiPozitive.shape[0]), np.zeros(self.imaginiNegative.shape[0])))
-        self.modelInvatare.fit(toateImaginile, toateEtichetele)
+        self.modelInvatare.fit(toateImaginile, toateEtichetele, epochs=2, batch_size=64)
 
         print('Acuratete Model: ', self.modelInvatare.evaluate(toateImaginile, toateEtichetele)[1]) # 0 = loss, 1 = accuracy
 
@@ -265,9 +365,9 @@ class CNNModel:
                 numeFisiere.append(fisierImagine)
                 scoruri.append(zonaDeInteres[4])
 
-            # print('Scoruri Predictii: ')
-            # for zonaDeInteres in zoneDeInteres:
-            #     print(zonaDeInteres[4])
+            print('Scoruri Predictii: ')
+            for zonaDeInteres in zoneDeInteres:
+                print(zonaDeInteres[4])
 
             # Salvare Imagine cu Predictiile Evidentiate
             os.makedirs(adresaPredictiiRezultate + '/352_Capatina_Razvan/imagini_' + self.numePersonaj, exist_ok=True)

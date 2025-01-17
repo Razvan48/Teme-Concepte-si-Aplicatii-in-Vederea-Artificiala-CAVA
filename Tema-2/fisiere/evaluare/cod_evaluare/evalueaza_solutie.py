@@ -185,9 +185,8 @@ solution_path = solution_path_root + "task2/"
 
 
 #ground_truth_path = ground_truth_path_root + "task2_dad_gt_validare20.txt"
-
-#ground_truth_path = ground_truth_path_root + "task2_dad_gt_validare.txt"
-#evaluate_results_task2(solution_path, ground_truth_path, "dad", verbose)
+ground_truth_path = ground_truth_path_root + "task2_dad_gt_validare.txt"
+evaluate_results_task2(solution_path, ground_truth_path, "dad", verbose)
 
 '''
 ground_truth_path = ground_truth_path_root + "task2_mom_gt_validare20.txt"
