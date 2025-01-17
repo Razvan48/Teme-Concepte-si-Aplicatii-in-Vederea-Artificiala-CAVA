@@ -1,9 +1,15 @@
-import copy
 import os
+import copy
+import datetime
+
 import sklearn.svm as svm
 import skimage.feature as feature
 import numpy as np
 import cv2 as cv
+
+import pickle
+
+
 
 import Utilitar
 
@@ -249,6 +255,19 @@ class SVMHogModel:
             np.save(adresaPredictiiRezultate + '/352_Capatina_Razvan/task2/detections_' + self.numePersonaj + '.npy', np.array(detectii))
             np.save(adresaPredictiiRezultate + '/352_Capatina_Razvan/task2/file_names_' + self.numePersonaj + '.npy', np.array(numeFisiere))
             np.save(adresaPredictiiRezultate + '/352_Capatina_Razvan/task2/scores_' + self.numePersonaj + '.npy', np.array(scoruri))
+
+
+
+    def salveazaModel(self, adresaSalvareModel: str):
+        os.makedirs(adresaSalvareModel, exist_ok=True)
+        data = datetime.datetime.now()
+        pickle.dump(self.modelInvatare, open(adresaSalvareModel + '/' + self.numePersonaj + '_SVMHogModel_' + str(data.year) + '_' + str(data.month) + '_' + str(data.day) + '_' + str(data.hour) + '_' + str(data.minute) + '_' + str(data.second), 'wb'))
+
+
+
+    def incarcaModel(self, adresaIncarcareModel: str):
+        self.modelInvatare = pickle.load(open(adresaIncarcareModel, 'rb'))
+
 
 
 

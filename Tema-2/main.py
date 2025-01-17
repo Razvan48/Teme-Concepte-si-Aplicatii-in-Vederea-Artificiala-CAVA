@@ -52,28 +52,18 @@ import ModelPreAntrenat
 
 # Model Pre Antrenat
 
-modelPreAntrenat = ModelPreAntrenat.ModelPreAntrenat('unknown', 'fisiere/iesire/hiperparametrii')
-modelPreAntrenat.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
+#modelPreAntrenat = ModelPreAntrenat.ModelPreAntrenat('unknown', 'fisiere/iesire/hiperparametrii')
+#modelPreAntrenat.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
 
-modelPreAntrenat.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
+#modelPreAntrenat.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
 
 
 
 # x-ul din adnotari e latimea imaginii, y-ul e inaltimea imaginii, iar originea este in coltul stanga sus
 
-# De incercat:
-
-# micsorare numar hiperparametrii
-# de revenit la pragurile de dinainte la iou
-
 # TODO:
 
 # de revazut tot codul daca e ok peste tot
-
-# in clasa model: metode de salvat descriptorii si ponderile modelului antrenat + posibilitatea de a incarca descriptorii si ponderile
-# de stabilit unde salvez predictiile + descriptorii + ponderile
-
-# graficul precision-recall
 
 
 # de facut documentatia (txt-ul) (momentan in documentatie trebuie scris doar ce module sunt necesare (nici asta nu e scris momentan))

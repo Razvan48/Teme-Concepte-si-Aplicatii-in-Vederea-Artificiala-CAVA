@@ -5,6 +5,7 @@ import cv2 as cv
 
 import torch
 import torchvision
+from PIL import Image
 
 
 import Utilitar
@@ -101,11 +102,11 @@ class ModelPreAntrenat:
 
                     for zonaDeInteres in zoneDeInteres[fisierImagine]:
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
-                        self.imaginiPozitive.append(self.preProcesareImagine(imagineDeInteres))
+                        self.imaginiPozitive.append(self.preProcesareImagine(Image.fromarray(cv.cvtColor(imagineDeInteres, cv.COLOR_BGR2RGB))))
 
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
                         imagineDeInteres = np.fliplr(imagineDeInteres)
-                        self.imaginiPozitive.append(self.preProcesareImagine(imagineDeInteres))
+                        self.imaginiPozitive.append(self.preProcesareImagine(Image.fromarray(cv.cvtColor(imagineDeInteres, cv.COLOR_BGR2RGB))))
 
                 else:
                     print('Antrenare Exemple Negative: ', adresaAntrenareExemplePozitive + '/' + numePersonaj + '/' + fisierImagine)
@@ -113,19 +114,19 @@ class ModelPreAntrenat:
                     for zonaDeInteres in zoneDeInteres[fisierImagine]:
 
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
-                        self.imaginiNegative.append(self.preProcesareImagine(imagineDeInteres))
+                        self.imaginiNegative.append(self.preProcesareImagine(Image.fromarray(cv.cvtColor(imagineDeInteres, cv.COLOR_BGR2RGB))))
 
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
                         imagineDeInteres = np.fliplr(imagineDeInteres)
-                        self.imaginiNegative.append(self.preProcesareImagine(imagineDeInteres))
+                        self.imaginiNegative.append(self.preProcesareImagine(Image.fromarray(cv.cvtColor(imagineDeInteres, cv.COLOR_BGR2RGB))))
 
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
                         imagineDeInteres = np.flipud(imagineDeInteres)
-                        self.imaginiNegative.append(self.preProcesareImagine(imagineDeInteres))
+                        self.imaginiNegative.append(self.preProcesareImagine(Image.fromarray(cv.cvtColor(imagineDeInteres, cv.COLOR_BGR2RGB))))
 
                         imagineDeInteres = imagineOriginala[zonaDeInteres[1]:zonaDeInteres[3] + 1, zonaDeInteres[0]:zonaDeInteres[2] + 1].copy()
                         imagineDeInteres = np.flipud(np.fliplr(imagineDeInteres))
-                        self.imaginiNegative.append(self.preProcesareImagine(imagineDeInteres))
+                        self.imaginiNegative.append(self.preProcesareImagine(Image.fromarray(cv.cvtColor(imagineDeInteres, cv.COLOR_BGR2RGB))))
 
 
 
@@ -135,16 +136,16 @@ class ModelPreAntrenat:
 
             imagineOriginala = cv.imread(adresaAntrenareExempleNegative + '/' + fisierImagine)
 
-            self.imaginiNegative.append(self.preProcesareImagine(imagineOriginala))
+            self.imaginiNegative.append(self.preProcesareImagine(Image.fromarray(cv.cvtColor(imagineOriginala, cv.COLOR_BGR2RGB))))
 
             imagineInversataOrizontal = np.fliplr(imagineOriginala)
-            self.imaginiNegative.append(self.preProcesareImagine(imagineInversataOrizontal))
+            self.imaginiNegative.append(self.preProcesareImagine(Image.fromarray(cv.cvtColor(imagineInversataOrizontal, cv.COLOR_BGR2RGB))))
 
             imagineInversataVertical = np.flipud(imagineOriginala)
-            self.imaginiNegative.append(self.preProcesareImagine(imagineInversataVertical))
+            self.imaginiNegative.append(self.preProcesareImagine(Image.fromarray(cv.cvtColor(imagineInversataVertical, cv.COLOR_BGR2RGB))))
 
             imagineInversataVerticalOrizontal = np.flipud(np.fliplr(imagineOriginala))
-            self.imaginiNegative.append(self.preProcesareImagine(imagineInversataVerticalOrizontal))
+            self.imaginiNegative.append(self.preProcesareImagine(Image.fromarray(cv.cvtColor(imagineInversataVerticalOrizontal, cv.COLOR_BGR2RGB))))
 
 
         self.imaginiPozitive = np.array(self.imaginiPozitive)
@@ -217,7 +218,7 @@ class ModelPreAntrenat:
                             yMax = yMin + int(inaltimeFereastra) - 1
 
                             imagineDeInteres = imagineOriginala[yMin:yMax + 1, xMin:xMax + 1].copy()
-                            imagineDeInteres = self.preProcesareImagine(imagineDeInteres)
+                            imagineDeInteres = self.preProcesareImagine(Image.fromarray(cv.cvtColor(imagineDeInteres, cv.COLOR_BGR2RGB)))
 
                             zoneDeInteres.append((xMin, yMin, xMax, yMax))
                             imaginiDeInteres.append(imagineDeInteres)

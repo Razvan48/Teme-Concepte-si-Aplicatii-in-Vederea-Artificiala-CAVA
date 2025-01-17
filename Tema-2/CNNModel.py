@@ -1,9 +1,11 @@
-import copy
 import os
+import datetime
+
 import numpy as np
 import cv2 as cv
 
 import tensorflow as tf
+
 
 
 import Utilitar
@@ -284,6 +286,19 @@ class CNNModel:
             np.save(adresaPredictiiRezultate + '/352_Capatina_Razvan/task2/detections_' + self.numePersonaj + '.npy', np.array(detectii))
             np.save(adresaPredictiiRezultate + '/352_Capatina_Razvan/task2/file_names_' + self.numePersonaj + '.npy', np.array(numeFisiere))
             np.save(adresaPredictiiRezultate + '/352_Capatina_Razvan/task2/scores_' + self.numePersonaj + '.npy', np.array(scoruri))
+
+
+
+    def salveazaModel(self, adresaSalvareModel: str):
+        os.makedirs(adresaSalvareModel, exist_ok=True)
+        data = datetime.datetime.now()
+        self.modelInvatare.save(adresaSalvareModel + '/' + self.numePersonaj + '_CNNModel_' + str(data.year) + '_' + str(data.month) + '_' + str(data.day) + '_' + str(data.hour) + '_' + str(data.minute) + '_' + str(data.second))
+
+
+    def incarcaModel(self, adresaIncarcareModel: str):
+        self.modelInvatare = tf.keras.models.load_model(adresaIncarcareModel)
+        #self.dimensiuneImagine = (self.modelInvatare.input_shape[1], self.modelInvatare.input_shape[2])
+
 
 
 
