@@ -188,13 +188,15 @@ solution_path = solution_path_root + "task2/"
 ground_truth_path = ground_truth_path_root + "task2_dad_gt_validare.txt"
 evaluate_results_task2(solution_path, ground_truth_path, "dad", verbose)
 
-'''
-ground_truth_path = ground_truth_path_root + "task2_mom_gt_validare20.txt"
-evaluate_results_task2(solution_path, ground_truth_path, "mom", verbose)
 
-ground_truth_path = ground_truth_path_root + "task2_dexter_gt_validare20.txt"
+#ground_truth_path = ground_truth_path_root + "task2_deedee_gt_validare20.txt"
+ground_truth_path = ground_truth_path_root + "task2_deedee_gt_validare.txt"
+evaluate_results_task2(solution_path, ground_truth_path, "deedee", verbose)
+
+#ground_truth_path = ground_truth_path_root + "task2_dexter_gt_validare20.txt"
+ground_truth_path = ground_truth_path_root + "task2_dexter_gt_validare.txt"
 evaluate_results_task2(solution_path, ground_truth_path, "dexter", verbose)
 
-ground_truth_path = ground_truth_path_root + "task2_deedee_gt_validare20.txt"
-evaluate_results_task2(solution_path, ground_truth_path, "deedee", verbose)
-'''
+#ground_truth_path = ground_truth_path_root + "task2_mom_gt_validare20.txt"
+ground_truth_path = ground_truth_path_root + "task2_mom_gt_validare.txt"
+evaluate_results_task2(solution_path, ground_truth_path, "mom", verbose)

@@ -5,15 +5,9 @@ import CNNModel
 import ModelPreAntrenat
 
 
+
 #Utilitar.genereazaHiperparametriFereastraGlisanta('fisiere/antrenare', 'fisiere/iesire/hiperparametrii')
 #Utilitar.genereazaExempleNegative('fisiere/antrenare', 'fisiere/iesire/hiperparametrii', 'fisiere/iesire/exempleNegative', 20000)
-
-# SVM HOG Model
-
-#svmHogModel = SVMHogModel.SVMHogModel('unknown', 'fisiere/iesire/hiperparametrii')
-#svmHogModel.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
-
-#svmHogModel.testeaza('fisiere/validare/validare', 'fisiere/iesire/testare')
 
 # CNN Model
 
@@ -39,41 +33,59 @@ import ModelPreAntrenat
 
 # CNN doar DeeDee
 
-cnnModelDeeDee = CNNModel.CNNModel('deedee', 'fisiere/iesire/hiperparametrii')
+#cnnModelDeeDee = CNNModel.CNNModel('deedee', 'fisiere/iesire/hiperparametrii')
 
-cnnModelDeeDee.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
-cnnModelDeeDee.salveazaModel('fisiere/iesire/modele/CNNModel')
+#cnnModelDeeDee.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
+#cnnModelDeeDee.salveazaModel('fisiere/iesire/modele/CNNModel')
 
-#cnnModelDeeDee.incarcaModel('fisiere/iesire/modele/CNNModel/deedee_CNNModel_2025_1_18_0_20_2.h5')
+#cnnModelDeeDee.incarcaModel('fisiere/iesire/modele/CNNModel/deedee_CNNModel_2025_1_18_18_56_49.h5')
 
-cnnModelDeeDee.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
+#cnnModelDeeDee.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
 
 # CNN doar Dexter
 
 #cnnModelDexter = CNNModel.CNNModel('dexter', 'fisiere/iesire/hiperparametrii')
+
 #cnnModelDexter.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
+#cnnModelDexter.salveazaModel('fisiere/iesire/modele/CNNModel')
+
+#cnnModelDexter.incarcaModel('fisiere/iesire/modele/CNNModel/dexter_CNNModel_2025_1_18_19_20_29.h5')
 
 #cnnModelDexter.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
 
 # CNN doar Mom
 
 #cnnModelMom = CNNModel.CNNModel('mom', 'fisiere/iesire/hiperparametrii')
+
 #cnnModelMom.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
+#cnnModelMom.salveazaModel('fisiere/iesire/modele/CNNModel')
+
+#cnnModelMom.incarcaModel('fisiere/iesire/modele/CNNModel/mom_CNNModel_2025_1_18_20_7_2.h5')
 
 #cnnModelMom.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
 
-# Model Pre Antrenat
 
-#modelPreAntrenat = ModelPreAntrenat.ModelPreAntrenat('unknown', 'fisiere/iesire/hiperparametrii')
-#modelPreAntrenat.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
 
-#modelPreAntrenat.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
+
+
+
+
+# SVM HOG Model
+
+#svmHogModel = SVMHogModel.SVMHogModel('unknown', 'fisiere/iesire/hiperparametrii')
+#svmHogModel.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
+
+#svmHogModel.testeaza('fisiere/validare/validare', 'fisiere/iesire/testare')
+
+
 
 
 
 # x-ul din adnotari e latimea imaginii, y-ul e inaltimea imaginii, iar originea este in coltul stanga sus
 
 # TODO:
+
+# de eliminat crearea de imagini pentru modele cand dau raspunsuri (era doar orientativ)
 
 # de revazut tot codul daca e ok peste tot
 

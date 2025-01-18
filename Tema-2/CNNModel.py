@@ -31,8 +31,12 @@ class CNNModel:
             self.PRAG_PREDICTIE_POZITIVA_CNN = 0.94
         elif self.numePersonaj == 'dad':
             self.PRAG_PREDICTIE_POZITIVA_CNN = 0.9561
-        else:
-            self.PRAG_PREDICTIE_POZITIVA_CNN = 0.90
+        elif self.numePersonaj == 'deedee':
+            self.PRAG_PREDICTIE_POZITIVA_CNN = 0.986
+        elif self.numePersonaj == 'dexter':
+            self.PRAG_PREDICTIE_POZITIVA_CNN = 0.952
+        else:# mom
+            self.PRAG_PREDICTIE_POZITIVA_CNN = 0.97
 
         self.SCALAR_NORMALIZARE = 255.0
 
@@ -300,7 +304,10 @@ class CNNModel:
 
         toateImaginile = np.concatenate((self.imaginiPozitive, self.imaginiNegative), axis=0)
         toateEtichetele = np.concatenate((np.ones(self.imaginiPozitive.shape[0]), np.zeros(self.imaginiNegative.shape[0])))
-        self.modelInvatare.fit(toateImaginile, toateEtichetele, epochs=2, batch_size=64)
+        if self.numePersonaj == 'deedee':
+            self.modelInvatare.fit(toateImaginile, toateEtichetele, epochs=3, batch_size=64)
+        else:
+            self.modelInvatare.fit(toateImaginile, toateEtichetele, epochs=2, batch_size=64)
 
         print('Acuratete Model: ', self.modelInvatare.evaluate(toateImaginile, toateEtichetele)[1]) # 0 = loss, 1 = accuracy
 
