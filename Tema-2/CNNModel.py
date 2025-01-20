@@ -275,31 +275,6 @@ class CNNModel:
         ])
         self.modelInvatare.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
-        '''
-        self.modelInvatare = tf.keras.models.Sequential([
-            tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(self.dimensiuneImagine[0], self.dimensiuneImagine[1], 3)),
-            tf.keras.layers.MaxPooling2D((2, 2)),
-            tf.keras.layers.BatchNormalization(),
-
-            tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
-            tf.keras.layers.MaxPooling2D((2, 2)),
-            tf.keras.layers.BatchNormalization(),
-
-            tf.keras.layers.Conv2D(128, (3, 3), activation='relu'),
-            tf.keras.layers.MaxPooling2D((2, 2)),
-            tf.keras.layers.BatchNormalization(),
-
-            tf.keras.layers.GlobalAveragePooling2D(),
-
-            tf.keras.layers.Dense(128, activation='relu'),
-            tf.keras.layers.Dropout(0.5),
-
-            tf.keras.layers.Dense(1, activation='sigmoid')
-        ])
-        self.modelInvatare.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-        '''
-
-
         # Antrenare Model
 
         toateImaginile = np.concatenate((self.imaginiPozitive, self.imaginiNegative), axis=0)
@@ -405,7 +380,6 @@ class CNNModel:
 
     def incarcaModel(self, adresaIncarcareModel: str):
         self.modelInvatare = tf.keras.models.load_model(adresaIncarcareModel)
-        #self.dimensiuneImagine = (self.modelInvatare.input_shape[1], self.modelInvatare.input_shape[2])
 
 
 

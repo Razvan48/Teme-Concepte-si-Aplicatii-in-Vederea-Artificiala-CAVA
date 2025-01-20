@@ -1,8 +1,6 @@
 import Utilitar
 
-import SVMHogModel
 import CNNModel
-import ModelPreAntrenat
 
 
 
@@ -70,25 +68,10 @@ import ModelPreAntrenat
 
 
 
-# SVM HOG Model
-
-#svmHogModel = SVMHogModel.SVMHogModel('unknown', 'fisiere/iesire/hiperparametrii')
-#svmHogModel.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegative')
-
-#svmHogModel.testeaza('fisiere/validare/validare', 'fisiere/iesire/testare')
-
-
-
-
-
-# x-ul din adnotari e latimea imaginii, y-ul e inaltimea imaginii, iar originea este in coltul stanga sus
-
 # TODO:
 
 # de eliminat crearea de imagini pentru modele cand dau raspunsuri (era doar orientativ)
 
-# de revazut tot codul daca e ok peste tot
 
-
-# de facut documentatia (txt-ul) (momentan in documentatie trebuie scris doar ce module sunt necesare (nici asta nu e scris momentan))
+# de facut documentatia (txt-ul)
 # de facut latex-ul

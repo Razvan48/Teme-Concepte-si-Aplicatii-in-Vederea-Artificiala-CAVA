@@ -6,6 +6,21 @@ in deedee_annotations: 0471.jpg 326 6 414 65 deedee (era dexter inainte)
 in deedee_annotations: 0656.jpg 152 146 343 264 deedee (era unknown inainte)
 in dexter_annotations: 0921.jpg 109 111 267 278 dexter (era deedee inainte)
 
+Module folosite:
+
+shutil
+os
+sklearn
+numpy
+cv2
+
+copy
+datetime
+skimage
+pickle
+
+tensorflow
+
 
 
 

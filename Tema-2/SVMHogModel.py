@@ -239,11 +239,13 @@ class SVMHogModel:
                 print(zonaDeInteres[4])
 
             # Salvare Imagine cu Predictiile Evidentiate
+            '''
             os.makedirs(adresaPredictiiRezultate + '/352_Capatina_Razvan/imagini_' + self.numePersonaj, exist_ok=True)
             for zonaDeInteres in zoneDeInteres:
                 cv.rectangle(imagineRezultat, (zonaDeInteres[0], zonaDeInteres[1]), (zonaDeInteres[2], zonaDeInteres[3]), (0, 0, 255), 2) # BGR
 
             cv.imwrite(adresaPredictiiRezultate + '/352_Capatina_Razvan/imagini_' + self.numePersonaj + '/' + fisierImagine, imagineRezultat)
+            '''
 
 
         # Salvare
