@@ -57,10 +57,10 @@ import CNNModel
 
 #cnnModelMom = CNNModel.CNNModel('mom', 'fisiere/iesire/hiperparametrii')
 
-#cnnModelMom.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegativeOriginal')
+#cnnModelMom.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegativeExtinse')
 #cnnModelMom.salveazaModel('fisiere/iesire/modele/CNNModel')
 
-#cnnModelMom.incarcaModel('fisiere/iesire/modele/CNNModel/mom_CNNModel_2025_1_18_20_7_2.h5')
+#cnnModelMom.incarcaModel('fisiere/iesire/modele/CNNModel/mom_CNNModel_2025_1_20_22_15_39.h5')
 
 #cnnModelMom.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
 

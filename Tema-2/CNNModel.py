@@ -36,7 +36,7 @@ class CNNModel:
         elif self.numePersonaj == 'dexter':
             self.PRAG_PREDICTIE_POZITIVA_CNN = 0.952
         else:# mom
-            self.PRAG_PREDICTIE_POZITIVA_CNN = 0.97
+            self.PRAG_PREDICTIE_POZITIVA_CNN = 0.87
 
         self.SCALAR_NORMALIZARE = 255.0
 
