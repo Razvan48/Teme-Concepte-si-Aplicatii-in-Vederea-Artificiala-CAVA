@@ -1,4 +1,4 @@
-ADNOTARI SCHIMBATE:
+Adnotari schimbate:
 
 in dad_annotations: 0455.jpg 250 57 425 311 dad  (era mom inainte)
 in deedee_annotations: 0347.jpg 288 39 413 133 deedee (era dexter inainte)
