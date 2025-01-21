@@ -3,7 +3,6 @@ import Utilitar
 import CNNModel
 
 
-
 #Utilitar.genereazaHiperparametriFereastraGlisanta('fisiere/antrenare', 'fisiere/iesire/hiperparametrii')
 #Utilitar.genereazaExempleNegative('fisiere/antrenare', 'fisiere/iesire/hiperparametrii', 'fisiere/iesire/exempleNegative', 20000)
 
@@ -66,15 +65,3 @@ import CNNModel
 
 
 
-
-
-
-
-
-# TODO:
-
-# de eliminat crearea de imagini pentru modele cand dau raspunsuri (era doar orientativ)
-
-
-# de facut documentatia (txt-ul)
-# de facut latex-ul
