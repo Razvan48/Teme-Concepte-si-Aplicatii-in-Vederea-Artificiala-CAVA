@@ -58,20 +58,29 @@ Instantele clasei CNNModel sunt de unica folosinta, trebuie realizata o noua ins
 Clasa CNNModel mai contine 2 metode:
 .salveazaModel(), care primeste o adresa unde sa salveze sub format .h5 modelul curent.
 .antreneaza(), care primeste adresa unde se afla fisierul de antrenare primit initial (si cu aceeasi ierarhie de fisiere, dad/deedee/dexter/mom, dad_annotations.txt, deedee_annotations.txt, etc.) si adresa
-unde se afla fisierul cu exemple negative ("iesire/exempleNegativeOriginal", cu 20.000 exemple si "iesire/exempleNegativeExtinse", cu 30.000 exemple).
+unde se afla fisierul cu exemple negative ("iesire/exempleNegativeOriginal", cu 20.000 exemple, folosit pentru Dad, DeeDee, Dexter si "iesire/exempleNegativeExtinse", cu 30.000 exemple, folosit pentru Task1 si Task2-Mom).
 
 
 
 
 
-Exemplu de cod:
+
+Exemplu de cod in main.py (deja scris in fisier):
 
 
+
+
+import Utilitar
+
+import CNNModel
 
 
 # CNN Model
 
 cnnModelUnknown = CNNModel.CNNModel('unknown', 'fisiere/iesire/hiperparametrii')
+
+#cnnModelUnknown.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegativeExtinse')
+#cnnModelUnknown.salveazaModel('fisiere/iesire/modele/CNNModel')
 
 cnnModelUnknown.incarcaModel('fisiere/iesire/modele/CNNModel/unknown_CNNModel_2025_1_20_0_4_49.h5')
 
@@ -81,6 +90,9 @@ cnnModelUnknown.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
 
 cnnModelDad = CNNModel.CNNModel('dad', 'fisiere/iesire/hiperparametrii')
 
+#cnnModelDad.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegativeOriginal')
+#cnnModelDad.salveazaModel('fisiere/iesire/modele/CNNModel')
+
 cnnModelDad.incarcaModel('fisiere/iesire/modele/CNNModel/dad_CNNModel_2025_1_18_0_20_2.h5')
 
 cnnModelDad.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
@@ -88,6 +100,9 @@ cnnModelDad.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
 # CNN doar DeeDee
 
 cnnModelDeeDee = CNNModel.CNNModel('deedee', 'fisiere/iesire/hiperparametrii')
+
+#cnnModelDeeDee.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegativeOriginal')
+#cnnModelDeeDee.salveazaModel('fisiere/iesire/modele/CNNModel')
 
 cnnModelDeeDee.incarcaModel('fisiere/iesire/modele/CNNModel/deedee_CNNModel_2025_1_18_18_56_49.h5')
 
@@ -97,6 +112,9 @@ cnnModelDeeDee.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
 
 cnnModelDexter = CNNModel.CNNModel('dexter', 'fisiere/iesire/hiperparametrii')
 
+#cnnModelDexter.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegativeOriginal')
+#cnnModelDexter.salveazaModel('fisiere/iesire/modele/CNNModel')
+
 cnnModelDexter.incarcaModel('fisiere/iesire/modele/CNNModel/dexter_CNNModel_2025_1_18_19_20_29.h5')
 
 cnnModelDexter.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
@@ -105,9 +123,24 @@ cnnModelDexter.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
 
 cnnModelMom = CNNModel.CNNModel('mom', 'fisiere/iesire/hiperparametrii')
 
+#cnnModelMom.antreneaza('fisiere/antrenare', 'fisiere/iesire/exempleNegativeExtinse')
+#cnnModelMom.salveazaModel('fisiere/iesire/modele/CNNModel')
+
 cnnModelMom.incarcaModel('fisiere/iesire/modele/CNNModel/mom_CNNModel_2025_1_20_22_15_39.h5')
 
 cnnModelMom.testeaza('fisiere/evaluare/fake_test', 'fisiere/iesire')
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
