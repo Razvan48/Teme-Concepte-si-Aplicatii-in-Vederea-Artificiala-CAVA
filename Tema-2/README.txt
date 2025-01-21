@@ -21,13 +21,15 @@ opencv-python==4.10.0 (4.10.0.84)
 copy
 datetime
 scikit-image==0.24.0
-pickle
+pickle==4.0
 
 tensorflow==2.17.0
 keras==3.5.0
 
 
 Mod de Utilizare:
+
+
 
 
 
