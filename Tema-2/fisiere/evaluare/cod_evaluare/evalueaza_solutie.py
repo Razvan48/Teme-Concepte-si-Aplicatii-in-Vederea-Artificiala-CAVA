@@ -170,13 +170,16 @@ def evaluate_results_task2(solution_path,ground_truth_path,character, verbose = 
 verbose = 0
 
 #change this on your machine
-solution_path_root = "../fisiere_solutie/352_Capatina_Razvan/"
-ground_truth_path_root = "../../validare/"
+#solution_path_root = "../fisiere_solutie/352_Capatina_Razvan_validare/"
+solution_path_root = "../fisiere_solutie/352_Capatina_Razvan_testare/"
+#ground_truth_path_root = "../../validare/"
+ground_truth_path_root = "../../testare-ground-truth/"
 
 #task1
 solution_path = solution_path_root + "task1/"
 #ground_truth_path = ground_truth_path_root + "task1_gt_validare20.txt"
-ground_truth_path = ground_truth_path_root + "task1_gt_validare.txt"
+#ground_truth_path = ground_truth_path_root + "task1_gt_validare.txt"
+ground_truth_path = ground_truth_path_root + "task1_gt_testare.txt"
 evaluate_results_task1(solution_path, ground_truth_path, verbose)
 
 
@@ -185,18 +188,22 @@ solution_path = solution_path_root + "task2/"
 
 
 #ground_truth_path = ground_truth_path_root + "task2_dad_gt_validare20.txt"
-ground_truth_path = ground_truth_path_root + "task2_dad_gt_validare.txt"
+#ground_truth_path = ground_truth_path_root + "task2_dad_gt_validare.txt"
+ground_truth_path = ground_truth_path_root + "task2_dad_gt_testare.txt"
 evaluate_results_task2(solution_path, ground_truth_path, "dad", verbose)
 
 
 #ground_truth_path = ground_truth_path_root + "task2_deedee_gt_validare20.txt"
-ground_truth_path = ground_truth_path_root + "task2_deedee_gt_validare.txt"
+#ground_truth_path = ground_truth_path_root + "task2_deedee_gt_validare.txt"
+ground_truth_path = ground_truth_path_root + "task2_deedee_gt_testare.txt"
 evaluate_results_task2(solution_path, ground_truth_path, "deedee", verbose)
 
 #ground_truth_path = ground_truth_path_root + "task2_dexter_gt_validare20.txt"
-ground_truth_path = ground_truth_path_root + "task2_dexter_gt_validare.txt"
+#ground_truth_path = ground_truth_path_root + "task2_dexter_gt_validare.txt"
+ground_truth_path = ground_truth_path_root + "task2_dexter_gt_testare.txt"
 evaluate_results_task2(solution_path, ground_truth_path, "dexter", verbose)
 
 #ground_truth_path = ground_truth_path_root + "task2_mom_gt_validare20.txt"
-ground_truth_path = ground_truth_path_root + "task2_mom_gt_validare.txt"
+#ground_truth_path = ground_truth_path_root + "task2_mom_gt_validare.txt"
+ground_truth_path = ground_truth_path_root + "task2_mom_gt_testare.txt"
 evaluate_results_task2(solution_path, ground_truth_path, "mom", verbose)
